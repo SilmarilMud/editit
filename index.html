@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EditIt (beta)</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/pico.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <!-- Toolbar -->
+        <header id="toolbar">
+            <button id="btn-new" class="outline">New</button>
+            <button id="btn-open">Open</button>
+            <div id="recent-container">
+                <button id="btn-recent" disabled>Recent</button>
+                <div id="recent-dropdown" class="hidden"></div>
+            </div>
+            <button id="btn-save" disabled>Save</button>
+            <button id="btn-download" disabled>Download</button>
+            <button id="btn-validate" disabled>Validate</button>
+            <button id="btn-shortcuts" class="outline secondary">?</button>
+            <div id="search-container">
+                <input type="search" id="search-input" placeholder="Search... (Ctrl+F)" autocomplete="off">
+                <div id="search-results" class="hidden"></div>
+            </div>
+        </header>
+
+        <!-- Split Layout: Tree + Forms -->
+        <div id="workspace">
+            <!-- Left Panel: Tree View -->
+            <aside id="tree-panel">
+                <div id="tree-header">
+                    <strong>Entities</strong>
+                    <button id="btn-expand-all" class="outline secondary small">+</button>
+                    <button id="btn-collapse-all" class="outline secondary small">-</button>
+                </div>
+                <div id="tree"></div>
+            </aside>
+
+            <!-- Right Panel: Tabs + Forms -->
+            <section id="form-panel">
+                <div id="tabs"></div>
+                <div id="tab-content">
+                    <div id="welcome-message">
+                        <p>Open a file to begin editing.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Validation Panel (hidden by default) -->
+        <div id="validation-panel" class="hidden">
+            <div class="validation-header">
+                <div class="validation-title">
+                    <h4>Validation Results</h4>
+                    <span id="validation-summary"></span>
+                </div>
+                <div class="validation-actions">
+                    <label class="validation-checkbox">
+                        <input type="checkbox" id="validate-on-save" checked>
+                        Validate on Save
+                    </label>
+                    <button id="btn-validate-clear" class="outline secondary small">Clear</button>
+                    <button id="btn-validate-close" class="outline secondary small">&times;</button>
+                </div>
+            </div>
+            <div class="validation-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn active" data-filter="error">🔴 Errors</button>
+                <button class="filter-btn active" data-filter="warning">🟡 Warnings</button>
+                <button class="filter-btn active" data-filter="info">ℹ️ Info</button>
+            </div>
+            <div id="validation-list"></div>
+        </div>
+
+        <!-- Status Message (for save feedback, errors) -->
+        <div id="status-message" class="status-message" style="display: none;"></div>
+        
+        <!-- Status Bar -->
+        <footer id="status">
+            <span id="status-file">No file open</span>
+            <span id="status-info"></span>
+        </footer>
+
+        <!-- Context Menu (hidden by default) -->
+        <div id="context-menu" class="hidden">
+            <button class="context-item" data-action="add">Add</button>
+            <button class="context-item" data-action="delete">Delete</button>
+            <button class="context-item" data-action="duplicate">Duplicate</button>
+        </div>
+        
+        <!-- Keyboard Shortcuts Help Modal -->
+        <dialog id="shortcuts-dialog">
+            <article>
+                <header>
+                    <button class="close" rel="prev"></button>
+                    <h3>Keyboard Shortcuts</h3>
+                </header>
+                <div class="shortcuts-content">
+                    <div class="shortcut-group">
+                        <h4>General</h4>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ S</kbd><span>Save</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ Shift S</kbd><span>Save as (download)</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ O</kbd><span>Open file</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ N</kbd><span>New area</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ F</kbd><span>Search</span></div>
+                    </div>
+                    <div class="shortcut-group">
+                        <h4>Editing</h4>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ Z</kbd><span>Undo</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ Y</kbd><span>Redo</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ D</kbd><span>Duplicate entity</span></div>
+                        <div class="shortcut-row"><kbd>Delete</kbd><span>Delete entity</span></div>
+                    </div>
+                    <div class="shortcut-group">
+                        <h4>Navigation</h4>
+                        <div class="shortcut-row"><kbd>Ctrl W</kbd><span>Close tab</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl Tab</kbd><span>Next tab</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl Shift Tab</kbd><span>Previous tab</span></div>
+                    </div>
+                    <div class="shortcut-group">
+                        <h4>View</h4>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ =</kbd><span>Expand all</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ -</kbd><span>Collapse all</span></div>
+                        <div class="shortcut-row"><kbd>F1</kbd><span>This help</span></div>
+                    </div>
+                </div>
+            </article>
+        </dialog>
+    </main>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

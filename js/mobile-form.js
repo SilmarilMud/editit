@@ -1,0 +1,390 @@
+/* mobile-form.js - Mobile (NPC) editor form for EditIt */
+
+import {
+    ACT_IS_NPC, ACT_DONT_SET, AFF_DONT_SET,
+    sexName, races, guildName, specFuncs, itemTypeName
+} from './constants.js';
+import { createFlagGroup } from './flags.js';
+import { showToast, escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
+
+/**
+ * Render mobile form
+ * @param {Object} mob - Mobile entity
+ * @param {Function} onChange - Callback when form changes: (mob) => void
+ * @param {Object} options
+ * @returns {HTMLElement}
+ */
+export function renderMobileForm(mob, onChange, options = {}) {
+    const { readonly = false } = options;
+    
+    const container = document.createElement('div');
+    container.className = 'mobile-form form-entity';
+    
+    // Build basic info flags data (exclude ACT_IS_NPC and DONT_SET flags)
+    const actFlagsData = [
+        { value: 2, label: 'Sentinel' },
+        { value: 4, label: 'Scavenger' },
+        { value: 8, label: 'To Vindicate' },
+        { value: 32, label: 'Aggressive' },
+        { value: 64, label: 'Stay Area' },
+        { value: 128, label: 'Wimpy' },
+        { value: 512, label: 'Train' },
+        { value: 1024, label: 'Practice' },
+        { value: 2048, label: 'Gamble' },
+        { value: 4096, label: 'Vindicative' },
+        { value: 8192, label: 'Peaceful' },
+        { value: 16384, label: 'Guard' },
+        { value: 536870912, label: 'Save Mob' },
+        { value: 1073741824, label: 'Special' }
+    ];
+    
+    const affFlagsData = [
+        { value: 1, label: 'Blind' },
+        { value: 2, label: 'Invisible' },
+        { value: 4, label: 'Detect Evil' },
+        { value: 8, label: 'Detect Invis' },
+        { value: 16, label: 'Detect Magic' },
+        { value: 32, label: 'Detect Hidden' },
+        { value: 64, label: 'Hold' },
+        { value: 128, label: 'Sanctuary' },
+        { value: 256, label: 'Faerie Fire' },
+        { value: 512, label: 'Infrared' },
+        { value: 1024, label: 'Curse' },
+        { value: 4096, label: 'Poison' },
+        { value: 8192, label: 'Protect' },
+        { value: 32768, label: 'Sneak' },
+        { value: 65536, label: 'Hide' },
+        { value: 131072, label: 'Sleep' },
+        { value: 262144, label: 'Charm' },
+        { value: 524288, label: 'Flying' },
+        { value: 1048576, label: 'Pass Door' },
+        { value: 2097152, label: 'Waterwalk' },
+        { value: 8388608, label: 'Mute' },
+        { value: 16777216, label: 'Gills' },
+        { value: 134217728, label: 'Flaming' },
+        { value: 536870912, label: 'Paralyzed' },
+        { value: 1073741824, label: 'Petrified' }
+    ];
+    
+    container.innerHTML = `
+        <div class="form-header">
+            <h3>#${mob.VNum}${mob.shortDescr ? ' - ' + escapeHtml(mob.shortDescr) : ''}</h3>
+        </div>
+        
+        <div class="form-tabs">
+            <button type="button" class="form-tab-btn active" data-tab="basic">Basic</button>
+            <button type="button" class="form-tab-btn" data-tab="combat">Combat</button>
+            <button type="button" class="form-tab-btn" data-tab="flags">Flags</button>
+            <button type="button" class="form-tab-btn" data-tab="shop">Shop</button>
+        </div>
+        
+        <div class="form-tab-content active" data-tab="basic">
+            <div class="form-section">
+                <label>Keywords <span class="hint">(space-separated)</span></label>
+                <input type="text" name="keywords" value="${escapeHtml(mob.keywords)}" 
+                       placeholder="keyword1 keyword2"
+                       ${readonly ? 'disabled' : ''}>
+            </div>
+            
+            <div class="form-section">
+                <label>Short Description <span class="hint">(shown in room)</span></label>
+                <input type="text" name="shortDescr" value="${escapeHtml(mob.shortDescr)}"
+                       placeholder="a shopkeeper"
+                       ${readonly ? 'disabled' : ''}>
+            </div>
+            
+            <div class="form-section">
+                <label>Long Description <span class="hint">(shown when looking)</span></label>
+                <textarea name="longDescr" rows="6"
+                          placeholder="A shopkeeper stands here."
+                          ${readonly ? 'disabled' : ''}>${escapeHtml(mob.longDescr)}</textarea>
+            </div>
+            
+            <div class="form-section">
+                <label>Description <span class="hint">(shown when examined)</span></label>
+                <textarea name="descr" rows="6"
+                          placeholder="Detailed description when examining..."
+                          ${readonly ? 'disabled' : ''}>${escapeHtml(mob.descr)}</textarea>
+            </div>
+            
+            <div class="form-section">
+                <label>Race</label>
+                <select name="race" ${readonly ? 'disabled' : ''}>
+                    <option value="">-- Select Race --</option>
+                    ${races.map(r => `<option value="${r.english}" ${mob.race === r.english ? 'selected' : ''}>${r.italian}</option>`).join('')}
+                </select>
+            </div>
+            
+            <div class="form-section">
+                <label>Sex</label>
+                <select name="sex" ${readonly ? 'disabled' : ''}>
+                    ${sexName.map(s => `<option value="${s.number}" ${mob.sex === s.number ? 'selected' : ''}>${s.name}</option>`).join('')}
+                </select>
+            </div>
+            
+            <div class="form-section">
+                <label>Special Function</label>
+                <select name="special" ${readonly ? 'disabled' : ''}>
+                    <option value="">-- None --</option>
+                    ${specFuncs.filter(s => s !== '').map(s => `<option value="${s}" ${mob.special === s ? 'selected' : ''}>${s}</option>`).join('')}
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-tab-content" data-tab="combat">
+            <div class="form-row">
+                <div class="form-section">
+                    <label>Level</label>
+                    <input type="number" name="level" value="${mob.level}" 
+                           min="1" max="87"
+                           ${readonly ? 'disabled' : ''}>
+                </div>
+                
+                <div class="form-section">
+                    <label>Alignment <span class="hint">(${getAlignLabel(mob.align)})</span></label>
+                    <input type="number" name="align" value="${mob.align}" 
+                           min="-1000" max="1000"
+                           ${readonly ? 'disabled' : ''}>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-section">
+                    <label>Gold</label>
+                    <input type="number" name="gold" value="${mob.gold}" 
+                           min="0"
+                           ${readonly ? 'disabled' : ''}>
+                </div>
+                
+                <div class="form-section">
+                    <label>Reputation</label>
+                    <input type="number" name="reputation" value="${mob.reputation}" 
+                           min="-1000" max="1000"
+                           ${readonly ? 'disabled' : ''}>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <label>Guild</label>
+                <select name="guild" ${readonly ? 'disabled' : ''}>
+                    ${guildName.map(g => `<option value="${g.number}" ${mob.guild === g.number ? 'selected' : ''}>${g.name}</option>`).join('')}
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-tab-content" data-tab="flags">
+            <div class="form-section">
+                <h4>Action Flags</h4>
+                <div id="mob-actflags"></div>
+            </div>
+            
+            <div class="form-section">
+                <h4>Affect Flags</h4>
+                <div id="mob-affflags"></div>
+            </div>
+        </div>
+        
+        <div class="form-tab-content" data-tab="shop">
+            <div class="form-section">
+                <label>
+                    <input type="checkbox" name="isShopKeeper" ${mob.isShopKeeper ? 'checked' : ''}
+                           ${readonly ? 'disabled' : ''}>
+                    Is Shop Keeper
+                </label>
+            </div>
+            
+            <div id="shop-settings" class="${mob.isShopKeeper ? '' : 'hidden'}">
+                <div class="form-section">
+                    <h4>Trade Types</h4>
+                    <div class="form-row">
+                        ${mob.buyType.map((bt, i) => `
+                            <div class="form-section">
+                                <label>Slot ${i + 1}</label>
+                                <select name="buyType_${i}" ${readonly ? 'disabled' : ''}>
+                                    <option value="0">-- None --</option>
+                                    ${itemTypeName.map(item => `<option value="${item.number}" ${bt === item.number ? 'selected' : ''}>${item.name}</option>`).join('')}
+                                </select>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-section">
+                        <label>Profit Buy (%) <span class="hint">(buying from players)</span></label>
+                        <input type="number" name="profitBuy" value="${mob.profitBuy}" 
+                               min="1" max="1000000"
+                               ${readonly ? 'disabled' : ''}>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label>Profit Sell (%) <span class="hint">(selling to players)</span></label>
+                        <input type="number" name="profitSell" value="${mob.profitSell}" 
+                               min="1" max="1000000"
+                               ${readonly ? 'disabled' : ''}>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-section">
+                        <label>Open Hour</label>
+                        <input type="number" name="openHour" value="${mob.openHour}" 
+                               min="0" max="23"
+                               ${readonly ? 'disabled' : ''}>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label>Close Hour</label>
+                        <input type="number" name="closeHour" value="${mob.closeHour}" 
+                               min="0" max="23"
+                               ${readonly ? 'disabled' : ''}>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add flag groups
+    const actContainer = container.querySelector('#mob-actflags');
+    if (actContainer) {
+        const flagGroup = createFlagGroup('actFlags', actFlagsData, mob.actFlags, (val) => {
+            mob.actFlags = val;
+            if (onChange) onChange(mob);
+        }, { columns: 3, disabled: readonly });
+        actContainer.appendChild(flagGroup.container);
+    }
+    
+    const affContainer = container.querySelector('#mob-affflags');
+    if (affContainer) {
+        const flagGroup = createFlagGroup('affFlags', affFlagsData, mob.affFlags, (val) => {
+            mob.affFlags = val;
+            if (onChange) onChange(mob);
+        }, { columns: 3, disabled: readonly });
+        affContainer.appendChild(flagGroup.container);
+    }
+    
+    // Setup tab switching
+    setupTabs(container);
+    
+    // Wrap description textareas with column guide
+    container.querySelectorAll('textarea[name="longDescr"]').forEach(ta => {
+        wrapTextareaWithGuide(ta, 80);
+    });
+    container.querySelectorAll('textarea[name="descr"]').forEach(ta => {
+        wrapTextareaWithGuide(ta, 75);
+    });
+    
+    // Attach change handlers
+    if (!readonly) {
+        attachChangeHandlers(container, mob, onChange);
+    }
+    
+    return container;
+}
+
+/**
+ * Setup tab switching
+ * @param {HTMLElement} container
+ */
+
+
+/**
+ * Attach change handlers
+ * @param {HTMLElement} container
+ * @param {Object} mob
+ * @param {Function} onChange
+ */
+function attachChangeHandlers(container, mob, onChange) {
+    const inputs = container.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        // Skip flag containers
+        if (input.closest('#mob-actflags') || input.closest('#mob-affflags')) return;
+        
+        // Validation rules: { min, max, warning }
+        const validationRules = {
+            align: { min: -1000, max: 1000, warning: 'Alignment must be between -1000 and 1000' },
+            level: { min: 0, max: 100, warning: 'Level must be between 0 and 100' },
+            reputation: { min: -1000, max: 1000, warning: 'Reputation must be between -1000 and 1000' },
+            openHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },
+            closeHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },
+            profitBuy: { min: 1, max: 1000000, warning: 'Profit buy must be between 1 and 1000000' },
+            profitSell: { min: 1, max: 1000000, warning: 'Profit sell must be between 1 and 1000000' },
+        };
+        
+        // Add blur validation for number fields
+        if (input.type === 'number' && validationRules[input.name]) {
+            input.addEventListener('blur', () => {
+                const rule = validationRules[input.name];
+                let val = parseInt(input.value, 10) || 0;
+                if (val < rule.min || val > rule.max) {
+                    showToast(`${rule.warning} (value: ${val})`, 'warning');
+                    val = Math.max(rule.min, Math.min(rule.max, val));
+                    input.value = val;
+                    mob[input.name] = val;
+                    if (onChange) onChange(mob);
+                }
+            });
+        }
+        
+        const handler = (e) => {
+            const field = e.target.name;
+            let value = e.target.value;
+            
+            // Handle checkbox
+            if (e.target.type === 'checkbox') {
+                if (field === 'isShopKeeper') {
+                    mob.isShopKeeper = e.target.checked ? 1 : 0;
+                    const shopSettings = container.querySelector('#shop-settings');
+                    if (shopSettings) {
+                        shopSettings.classList.toggle('hidden', !e.target.checked);
+                    }
+                }
+                if (onChange) onChange(mob);
+                return;
+            }
+            
+            // Parse number fields
+            if (['level', 'align', 'gold', 'reputation', 'guild', 'sex',
+                 'profitBuy', 'profitSell', 'openHour', 'closeHour'].includes(field)) {
+                value = parseInt(value, 10) || 0;
+            }
+            
+            // Handle buyType arrays
+            if (field.startsWith('buyType_')) {
+                const idx = parseInt(field.split('_')[1], 10);
+                mob.buyType[idx] = parseInt(value, 10) || 0;
+                if (onChange) onChange(mob);
+                return;
+            }
+            
+            // Update mob
+            mob[field] = value;
+            
+            // Update header
+            if (field === 'shortDescr') {
+                const header = container.querySelector('.form-header h3');
+                if (header) {
+                    header.textContent = value ? `#${mob.VNum} - ${value}` : `#${mob.VNum}`;
+                }
+            }
+            
+            if (onChange) onChange(mob);
+        };
+        
+        input.addEventListener('change', handler);
+        input.addEventListener('input', handler);
+    });
+}
+
+/**
+ * Get alignment label
+ * @param {number} align
+ * @returns {string}
+ */
+function getAlignLabel(align) {
+    if (align <= -500) return 'Evil';
+    if (align < -100) return 'Neutral Evil';
+    if (align <= 100) return 'Neutral';
+    if (align < 500) return 'Neutral Good';
+    return 'Good';
+}

@@ -1,0 +1,6 @@
+# Documentation
+*.md
+
+# Test files
+test-storage.js
+test-validation.js
