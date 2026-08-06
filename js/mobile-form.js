@@ -2,7 +2,7 @@
 
 import {
     ACT_IS_NPC, ACT_DONT_SET, AFF_DONT_SET,
-    sexName, races, guildName, specFuncs, itemTypeName
+    sexName, races, guildName, mobSpecFuncs, itemTypeName
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
 import { showToast, escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
@@ -126,7 +126,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
                 <label>Special Function</label>
                 <select name="special" ${readonly ? 'disabled' : ''}>
                     <option value="">-- None --</option>
-                    ${specFuncs.filter(s => s !== '').map(s => `<option value="${s}" ${mob.special === s ? 'selected' : ''}>${s}</option>`).join('')}
+                    ${mobSpecFuncs.filter(s => s !== '').map(s => `<option value="${s}" ${mob.special === s ? 'selected' : ''}>${s}</option>`).join('')}
                 </select>
             </div>
         </div>

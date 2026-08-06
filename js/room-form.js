@@ -86,9 +86,7 @@ export function renderRoomForm(room, onChange, options = {}) {
     container.querySelectorAll('textarea[name^="exit_descr"]').forEach(ta => {
         wrapTextareaWithGuide(ta, 80);
     });
-    container.querySelectorAll('textarea[name^="extra_descr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 80);
-    });
+    // Note: extra_descr textareas are wrapped in renderExtras > renderList
     
     if (!readonly) attachChangeHandlers(container, room, onChange);
     
@@ -147,6 +145,7 @@ function renderExits(container, room, onChange, readonly) {
                             <label>Lock Type</label>
                             <select name="exit_locktype_${i}" ${readonly ? 'disabled' : ''}>
                                 ${lockTypeName.map(l => `<option value="${l.number}" ${door.lockType===l.number?'selected':''}>${l.name}</option>`).join('')}
+                                ${!lockTypeName.some(l => l.number === door.lockType) ? `<option value="${door.lockType}" selected>Custom (${door.lockType})</option>` : ''}
                             </select>
                         </div>
                         <div class="form-section">

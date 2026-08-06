@@ -1,6 +1,6 @@
 /* specials-panel.js - Specials panel editor for EditIt */
 
-import { specFuncs } from './constants.js';
+import { mobSpecFuncs, objSpecFuncs } from './constants.js';
 import { esc } from './utils.js';
 
 let currentArea = null;
@@ -39,10 +39,11 @@ function renderSpecialsList(container) {
     const el = container.querySelector('#specials-list');
     if (!el) return;
     
-    // Get all mobs with specials
+    // Get all mobs and objs with specials
     const mobsWithSpecials = currentArea.mobs.filter(m => m.special && m.special !== '');
+    const objsWithSpecials = currentArea.objs.filter(o => o.special && o.special !== '');
     
-    if (mobsWithSpecials.length === 0) {
+    if (mobsWithSpecials.length === 0 && objsWithSpecials.length === 0) {
         el.innerHTML = '<p class="empty-contents">No specials assigned.</p>';
         return;
     }
@@ -51,11 +52,27 @@ function renderSpecialsList(container) {
     
     for (const mob of mobsWithSpecials) {
         html += `
-            <div class="special-item" data-vnum="${mob.VNum}">
+            <div class="special-item" data-type="M" data-vnum="${mob.VNum}">
                 <div class="special-info">
                     <span class="special-vnum">#${mob.VNum}</span>
                     <span class="special-name">${esc(mob.shortDescr)}</span>
                     <span class="special-func">${esc(mob.special)}</span>
+                </div>
+                <div class="special-actions">
+                    <button type="button" class="edit-special-btn" title="Edit">✏️</button>
+                    <button type="button" class="remove-special-btn" title="Remove">×</button>
+                </div>
+            </div>
+        `;
+    }
+    
+    for (const obj of objsWithSpecials) {
+        html += `
+            <div class="special-item" data-type="O" data-vnum="${obj.VNum}">
+                <div class="special-info">
+                    <span class="special-vnum">#${obj.VNum}</span>
+                    <span class="special-name">${esc(obj.shortDescr)}</span>
+                    <span class="special-func">${esc(obj.special)}</span>
                 </div>
                 <div class="special-actions">
                     <button type="button" class="edit-special-btn" title="Edit">✏️</button>
@@ -88,12 +105,15 @@ function setupEventListeners(container) {
         if (e.target.classList.contains('remove-special-btn')) {
             const item = e.target.closest('.special-item');
             if (item) {
+                const type = item.dataset.type;
                 const vnum = parseInt(item.dataset.vnum, 10);
-                const mob = currentArea.mobs.find(m => m.VNum === vnum);
-                if (mob && confirm(`Remove special from #${vnum} ${mob.shortDescr}?`)) {
-                    mob.special = '';
+                const entity = type === 'M'
+                    ? currentArea.mobs.find(m => m.VNum === vnum)
+                    : currentArea.objs.find(o => o.VNum === vnum);
+                if (entity && confirm(`Remove special from #${vnum} ${entity.shortDescr}?`)) {
+                    entity.special = '';
                     renderSpecialsList(container);
-                    if (onChangeCallback) onChangeCallback(mob);
+                    if (onChangeCallback) onChangeCallback(entity);
                 }
             }
         }
@@ -104,23 +124,26 @@ function setupEventListeners(container) {
  * Show edit form for a special
  */
 function showEditForm(container, item) {
+    const type = item.dataset.type;
     const vnum = parseInt(item.dataset.vnum, 10);
-    const mob = currentArea.mobs.find(m => m.VNum === vnum);
-    if (!mob) return;
+    const entity = type === 'M'
+        ? currentArea.mobs.find(m => m.VNum === vnum)
+        : currentArea.objs.find(o => o.VNum === vnum);
+    if (!entity) return;
     
     const formEl = container.querySelector('.special-edit-form');
     if (!formEl) return;
     
     formEl.classList.remove('hidden');
     
-    const specOpts = specFuncs
+    const specOpts = (type === 'M' ? mobSpecFuncs : objSpecFuncs)
         .filter(s => s !== '')
-        .map(s => `<option value="${s}" ${mob.special === s ? 'selected' : ''}>${s}</option>`)
+        .map(s => `<option value="${s}" ${entity.special === s ? 'selected' : ''}>${s}</option>`)
         .join('');
     
     formEl.innerHTML = `
         <div class="reset-form">
-            <h4>Edit Special for #${vnum} ${esc(mob.shortDescr)}</h4>
+            <h4>Edit Special for #${vnum} ${esc(entity.shortDescr)}</h4>
             <label>Special Function
                 <select name="special">${specOpts}</select>
             </label>
@@ -132,10 +155,10 @@ function showEditForm(container, item) {
     `;
     
     formEl.querySelector('.reset-save-btn').addEventListener('click', () => {
-        mob.special = formEl.querySelector('[name="special"]').value;
+        entity.special = formEl.querySelector('[name="special"]').value;
         formEl.classList.add('hidden');
         renderSpecialsList(container);
-        if (onChangeCallback) onChangeCallback(mob);
+        if (onChangeCallback) onChangeCallback(entity);
     });
     
     formEl.querySelector('.reset-cancel-btn').addEventListener('click', () => {

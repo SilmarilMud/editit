@@ -336,6 +336,7 @@ export const DOOR_NOT_RESET = -1;
 export const DOOR_OPEN_UNLOCKED = 0;
 export const DOOR_CLOSED_UNLOCKED = 1;
 export const DOOR_CLOSED_LOCKED = 2;
+export const DOOR_BASHED = 3;
 
 export const MAX_DIR = 5;
 
@@ -1056,6 +1057,7 @@ export const doorResetName = [
     { number: DOOR_OPEN_UNLOCKED,    name: "Aperta" },
     { number: DOOR_CLOSED_UNLOCKED,  name: "Chiusa" },
     { number: DOOR_CLOSED_LOCKED,    name: "Chiusa e bloccata" },
+    { number: DOOR_BASHED,            name: "Sfondata" },
 ];
 
 export const exitFlagsName = [
@@ -1246,6 +1248,7 @@ export const spells = [
     "giant strength",
     "harm",
     "heal",
+    "heroes feast",
     "high explosive",
     "identify",
     "immortal revenge",
@@ -1299,7 +1302,7 @@ export const spells = [
     "word of recall",
 ];
 
-export const specFuncs = [
+export const mobSpecFuncs = [
     "",
     "spec_breath_any",
     "spec_breath_acid",
@@ -1329,6 +1332,13 @@ export const specFuncs = [
     "spec_gate_repair",
     "spec_assassin",
     "spec_bowman",
+];
+
+export const objSpecFuncs = [
+    "",
+    "obj_spec_guillotine",
+    "obj_spec_cauldron",
+    "obj_spec_event_heroes",
 ];
 
 export const dirName = ["a NORD", "a EST", "a SUD", "a OVEST", "in ALTO", "in BASSO"];
@@ -1446,6 +1456,7 @@ export function createObject() {
         wearOffMsg: "",
         extraDescr: [],
         applyType: [],
+        special: '',
     };
 }
 

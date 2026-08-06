@@ -657,9 +657,19 @@ export async function clearAutoSave() {
     try {
         await dbDelete('areas', AUTOSAVE_KEY);
         await dbDelete('areas', AUTOSAVE_HISTORY_KEY);
+        await dbDelete('areas', 'corrupt');
         if (DEBUG) console.log('Auto-save cleared');
     } catch (error) {
         console.error('Clear auto-save failed:', error);
+    }
+}
+
+export async function getCorruptAutoSave() {
+    if (!hasIndexedDB()) return null;
+    try {
+        return await dbGet('areas', 'corrupt');
+    } catch (error) {
+        return null;
     }
 }
 

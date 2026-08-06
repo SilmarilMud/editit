@@ -2,12 +2,12 @@
 
 import {
     MAX_VNUM, MAXLEVEL, ITEM_MASK, ITEM_WEAR_MASK, ROOM_MASK,
-    SECT_ROAD, EX_ISDOOR, EX_CLOSED, EX_LOCKED,
+    SECT_ROAD, EX_ISDOOR, EX_CLOSED, EX_LOCKED, EX_BASHED, EX_BASHPROOF, EX_PICKPROOF, EX_PASSPROOF,
     LOCK_NONE, LOCK_NPICK_NBASH_NPASS,
     DOOR_NOT_RESET, DOOR_CLOSED_LOCKED,
     ITEM_CONTAINER, ITEM_LIGHT,
     SEX_NEUTRAL, SEX_FEMALE, WEAR_NONE,
-    spells, specFuncs, races,
+    spells, mobSpecFuncs, objSpecFuncs, races,
     itemTypeName, itemWeaponName, itemContainerFlagsName,
     itemLiquidName, itemPoisonName, itemFurnitureFlagsName,
     itemTrapType, itemTrapDamage,
@@ -190,10 +190,10 @@ function checkMobiles(mobs) {
     if (!mobs || !Array.isArray(mobs)) return issues;
 
     for (const mob of mobs) {
-        // Level range
-        if (mob.level < 0 || mob.level > MAXLEVEL) {
+        // Level range (no upper limit, matching C++ behavior)
+        if (mob.level < 0) {
             issues.push(issue('W-FIELD-RANGE', 'mob', mob.VNum, 'level', {
-                message: `Level ${mob.level} outside range (0-${MAXLEVEL})`
+                message: `Level ${mob.level} is negative`
             }));
         }
 
@@ -234,7 +234,7 @@ function checkMobiles(mobs) {
 
         // Special function validation
         if (mob.special && mob.special !== '') {
-            if (!specFuncs.some(s => s === mob.special)) {
+            if (!mobSpecFuncs.some(s => s === mob.special)) {
                 issues.push(issue('W-SPECIAL-REF', 'mob', mob.VNum, 'special', {
                     message: `Special function "${mob.special}" not in known list`
                 }));
@@ -282,12 +282,7 @@ function checkObjects(objs) {
             }));
         }
 
-        // Cost range
-        if (obj.cost < 0 || obj.cost > 999999) {
-            issues.push(issue('W-FIELD-RANGE', 'object', obj.VNum, 'cost', {
-                message: `Cost ${obj.cost} outside range (0-999999)`
-            }));
-        }
+
 
         // Validate values based on type
         const valueInfo = itemValues.find(v => v.itemType === obj.type);
@@ -371,6 +366,15 @@ function checkObjects(objs) {
                 }
             }
         }
+
+        // Special function validation
+        if (obj.special && obj.special !== '') {
+            if (!objSpecFuncs.some(s => s === obj.special)) {
+                issues.push(issue('W-SPECIAL-REF', 'obj', obj.VNum, 'special', {
+                    message: `Special function "${obj.special}" not in known list`
+                }));
+            }
+        }
     }
 
     return issues;
@@ -404,9 +408,9 @@ function checkRooms(rooms) {
             const door = room.doors[dir];
 
             // Lock type validation
-            if (door.lockType < LOCK_NONE || door.lockType > LOCK_NPICK_NBASH_NPASS) {
+            if (door.lockType < 0) {
                 issues.push(issue('W-INVALID-LOCK', 'room', room.VNum, `doors[${dir}].lockType`, {
-                    message: `Direction ${dirStr(dir)}: Lock type ${door.lockType} is not valid`
+                    message: `Direction ${dirStr(dir)}: Lock type ${door.lockType} is negative`
                 }));
             }
 

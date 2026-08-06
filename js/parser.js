@@ -11,7 +11,7 @@ import {
     MAX_VNUM, MAX_DIR, SHOPMAXTRADE,
     sexName, guildName, races, itemTypeName, itemWeaponName, itemContainerFlagsName,
     itemLiquidName, itemPoisonName, itemFurnitureFlagsName, itemTrapType,
-    itemTrapDamage, applyName, spells, specFuncs, sectTypeName, lockTypeName,
+    itemTrapDamage, applyName, spells, mobSpecFuncs, objSpecFuncs, sectTypeName, lockTypeName,
     wearName, doorResetName, itemValues,
     VALUE_IS_UNUSED, VALUE_IS_LIGHT, VALUE_IS_SPELL, VALUE_IS_NUMBER_FROM_0,
     VALUE_IS_WEAPON, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_VNUM, VALUE_IS_LIQUID,
@@ -407,11 +407,14 @@ class Parser {
             for (;;) {
                 const l = this.readLetter();
                 if (l === 'A') {
-                    const apply = createApply();
                     const at = this.readNumber();
-                    if (at !== 0 && lookupNumber(at, applyName) === LOOKUPNOTFOUND)
-                        throw new Error(`LoadObjects: VNum ${vnum} invalid apply type (${at})`);
-                    apply.type = at; apply.value = this.readNumber();
+                    const av = this.readNumber();
+                    if (at !== 0 && lookupNumber(at, applyName) === LOOKUPNOTFOUND) {
+                        console.warn(`LoadObjects: VNum ${vnum} apply type ${at} not supported, skipping`);
+                        continue;
+                    }
+                    const apply = createApply();
+                    apply.type = at; apply.value = av;
                     obj.applyType.push(apply);
                 } else if (l === 'E') {
                     const ed = createExtraDescr();
@@ -439,9 +442,14 @@ class Parser {
                     case VALUE_IS_UNUSED: obj.value[i] = 0; break;
                     case VALUE_IS_LIGHT: obj.value[i] = val < 0 ? -1 : val; break;
                     case VALUE_IS_SPELL:
-                        if (lookupTable(value[i], spells) === LOOKUPNOTFOUND)
+                        if (value[i] === '0' || value[i] === '') {
+                            obj.value[i] = 0; // no spell
+                        } else if (lookupTable(value[i], spells) === LOOKUPNOTFOUND) {
                             throw new Error(`LoadObjects: VNum ${vnum} val ${i+1} invalid spell "${value[i]}"`);
-                        obj.value[i] = lookupTable(value[i], spells); break;
+                        } else {
+                            obj.value[i] = lookupTable(value[i], spells);
+                        }
+                        break;
                     case VALUE_IS_NUMBER_FROM_0:
                         if (val < 0) throw new Error(`LoadObjects: VNum ${vnum} val ${i+1} negative`);
                         obj.value[i] = val; break;
@@ -605,7 +613,10 @@ class Parser {
                     for (let i = loadedObjs.length - 1; i >= 0; i--) {
                         if (loadedObjs[i].VNum === arg3) { idx = i; break; }
                     }
-                    if (idx < 0) throw new Error(`LoadResets: 'P' container ${arg3} not loaded`);
+                    if (idx < 0) {
+                        console.warn(`LoadResets: 'P' container ${arg3} not loaded, skipping`);
+                        break;
+                    }
                     const lo = createLoadedObject();
                     lo.VNum = arg1; lo.level = arg2; lo.limit = arg4 !== undefined ? arg4 : 1;
                     lo.UniqueId = uniqueId++;
@@ -629,7 +640,10 @@ class Parser {
                     let rm = getRoomByVNum(rooms, arg1);
                     if (!rm) { rm = createResetOnlyRoom(arg1); rooms.push(rm); }
                     if (arg2 < 0 || arg2 > 5) throw new Error(`LoadResets: 'D' invalid door`);
-                    if (rm.doors[arg2].VNumTo === -1) throw new Error(`LoadResets: 'D' exit ${arg2} undefined`);
+                    if (rm.doors[arg2].VNumTo === -1) {
+                        console.warn(`LoadResets: 'D' room ${arg1} exit ${arg2} undefined, skipping`);
+                        break;
+                    }
                     if (lookupNumber(arg3, doorResetName) === LOOKUPNOTFOUND)
                         throw new Error(`LoadResets: 'D' invalid reset type`);
                     rm.doors[arg2].resetType = arg3;
@@ -652,9 +666,10 @@ class Parser {
         for (;;) {
             const letter = this.readLetter();
             if (letter === 'S') break;
+            if (letter === '*') { this.readToEol(); continue; }
+            this.readNumber(); // if_flag (ignored in editor)
             let arg1, arg2, arg3, arg4, arg5;
             switch (letter) {
-                case '*': this.readToEol(); continue;
                 case 'M':
                     arg1 = this.readNumber(); arg2 = this.readNumber(); arg3 = this.readNumber();
                     arg4 = this.readOptionalNumber(0); arg5 = this.readOptionalNumberToEol(23);
@@ -702,7 +717,10 @@ class Parser {
                     for (let i = loadedObjs.length - 1; i >= 0; i--) {
                         if (loadedObjs[i].VNum === arg3) { idx = i; break; }
                     }
-                    if (idx < 0) throw new Error(`LoadResets: 'P' container ${arg3} not loaded`);
+                    if (idx < 0) {
+                        console.warn(`LoadResets: 'P' container ${arg3} not loaded, skipping`);
+                        break;
+                    }
                     const lo = createLoadedObject();
                     lo.VNum = arg1; lo.level = arg2; lo.limit = arg4;
                     lo.UniqueId = uniqueId++;
@@ -727,7 +745,10 @@ class Parser {
                     let rm = getRoomByVNum(rooms, arg1);
                     if (!rm) { rm = createResetOnlyRoom(arg1); rooms.push(rm); }
                     if (arg2 < 0 || arg2 > 5) throw new Error(`LoadResets: 'D' invalid door`);
-                    if (rm.doors[arg2].VNumTo === -1) throw new Error(`LoadResets: 'D' exit ${arg2} undefined`);
+                    if (rm.doors[arg2].VNumTo === -1) {
+                        console.warn(`LoadResets: 'D' room ${arg1} exit ${arg2} undefined, skipping`);
+                        break;
+                    }
                     if (lookupNumber(arg3, doorResetName) === LOOKUPNOTFOUND)
                         throw new Error(`LoadResets: 'D' invalid reset type`);
                     rm.doors[arg2].resetType = arg3;
@@ -765,7 +786,7 @@ class Parser {
             this.readToEol();
         }
     }
-    loadSpecials(mobs) {
+    loadSpecials(mobs, objs) {
         for (;;) {
             const letter = this.readLetter();
             switch (letter) {
@@ -776,8 +797,17 @@ class Parser {
                     const mob = getMobByVNum(mobs, vnum);
                     if (!mob) throw new Error(`LoadSpecials: Mob ${vnum} not defined`);
                     mob.special = this.readWord();
-                    if (lookupTable(mob.special, specFuncs) === LOOKUPNOTFOUND)
-                        throw new Error(`LoadSpecials: Mob ${vnum} invalid special "${mob.special}"`);
+                    if (lookupTable(mob.special, mobSpecFuncs) === LOOKUPNOTFOUND)
+                        console.warn(`LoadSpecials: Mob ${vnum} special "${mob.special}" not in known list`);
+                    break;
+                }
+                case 'O': {
+                    const vnum = this.readNumber();
+                    const obj = getObjByVNum(objs, vnum);
+                    if (!obj) throw new Error(`LoadSpecials: Obj ${vnum} not defined`);
+                    obj.special = this.readWord();
+                    if (lookupTable(obj.special, objSpecFuncs) === LOOKUPNOTFOUND)
+                        console.warn(`LoadSpecials: Obj ${vnum} special "${obj.special}" not in known list`);
                     break;
                 }
                 default: throw new Error(`LoadSpecials: Invalid command '${letter}' (line ${this.fileRow})`);
@@ -827,7 +857,7 @@ export function parseFile(text) {
         else if (wl === 'rooms') parser.loadRooms(data.rooms, data.general);
         else if (wl === 'resets') parser.loadResets(data.rooms, data.mobs, data.objs, data.general);
         else if (wl === 'shops') parser.loadShops(data.mobs);
-        else if (wl === 'specials') parser.loadSpecials(data.mobs);
+        else if (wl === 'specials') parser.loadSpecials(data.mobs, data.objs);
         else throw new Error(`Unknown section "${word}" (line ${parser.fileRow})`);
     }
 

@@ -8,7 +8,7 @@ import {
     itemTypeName, itemExtraFlagsName, itemWearFlagsName, applyName,
     itemValues, itemWeaponName, itemContainerFlagsName, itemLiquidName,
     itemPoisonName, itemFurnitureFlagsName, itemTrapType, itemTrapDamage,
-    spells
+    spells, objSpecFuncs
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
 import { escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
@@ -57,11 +57,20 @@ export function renderObjectForm(obj, onChange, options = {}) {
                 <label>Action Description <span class="hint">(wand/staff/instrument/trap)</span></label>
                 <textarea name="action" rows="3" ${readonly ? 'disabled' : ''}>${escapeHtml(obj.action)}</textarea>
             </div>
-            <div class="form-section">
-                <label>Object Type</label>
-                <select name="type" ${readonly ? 'disabled' : ''}>
-                    ${itemTypeName.map(t => `<option value="${t.number}" ${obj.type === t.number ? 'selected' : ''}>${t.name}</option>`).join('')}
-                </select>
+            <div class="form-row">
+                <div class="form-section">
+                    <label>Object Type</label>
+                    <select name="type" ${readonly ? 'disabled' : ''}>
+                        ${itemTypeName.map(t => `<option value="${t.number}" ${obj.type === t.number ? 'selected' : ''}>${t.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-section">
+                    <label>Special Function</label>
+                    <select name="special" ${readonly ? 'disabled' : ''}>
+                        <option value="">-- None --</option>
+                        ${objSpecFuncs.filter(s => s !== '').map(s => `<option value="${s}" ${obj.special === s ? 'selected' : ''}>${s}</option>`).join('')}
+                    </select>
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-section">
@@ -114,9 +123,7 @@ export function renderObjectForm(obj, onChange, options = {}) {
     container.querySelectorAll('textarea[name="longDescr"], textarea[name="action"]').forEach(ta => {
         wrapTextareaWithGuide(ta, 80);
     });
-    container.querySelectorAll('textarea[name^="extra_descr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 80);
-    });
+    // Note: extra_descr textareas are wrapped in renderExtras > renderList
     
     if (!readonly) attachChangeHandlers(container, obj, onChange, readonly);
     
@@ -137,7 +144,7 @@ function renderValues(container, obj, onChange, readonly) {
         if (t === VALUE_IS_UNUSED) {
             input = `<input type="number" name="value_${i}" value="${obj.value[i]}" disabled>`;
         } else if (t === VALUE_IS_SPELL) {
-            input = `<select name="value_${i}" ${readonly ? 'disabled' : ''}><option value="0">-- None --</option>${spells.map((s,idx) => `<option value="${idx}" ${obj.value[i]===idx?'selected':''}>${s}</option>`).join('')}</select>`;
+            input = `<select name="value_${i}" ${readonly ? 'disabled' : ''}><option value="0">-- None --</option>${spells.slice(1).map((s,idx) => `<option value="${idx+1}" ${obj.value[i]===idx+1?'selected':''}>${s}</option>`).join('')}</select>`;
         } else if (t === VALUE_IS_WEAPON) {
             input = `<select name="value_${i}" ${readonly ? 'disabled' : ''}>${itemWeaponName.map(w => `<option value="${w.number}" ${obj.value[i]===w.number?'selected':''}>${w.name}</option>`).join('')}</select>`;
         } else if (t === VALUE_IS_CONTAINER_FLAGS) {

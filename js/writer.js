@@ -245,15 +245,9 @@ class Writer {
                     out += 'D ' + j + '\n';
                     out += room.doors[j].descr + '~\n';
                     out += room.doors[j].keywords + '~\n';
-                    if (isNew) {
-                        out += 'B' + room.doors[j].lockType + ' '
-                             + room.doors[j].keyVNum + ' '
-                             + room.doors[j].VNumTo + '\n';
-                    } else {
-                        out += room.doors[j].lockType + ' '
-                             + room.doors[j].keyVNum + ' '
-                             + room.doors[j].VNumTo + '\n';
-                    }
+                    out += 'B' + room.doors[j].lockType + ' '
+                         + room.doors[j].keyVNum + ' '
+                         + room.doors[j].VNumTo + '\n';
                 }
             }
             for (const ed of room.extraDescr) {
@@ -276,11 +270,7 @@ class Writer {
     saveContainedObjects(obj, emit, isNew) {
         for (const child of obj.contain) {
             const level = child.level > 0 ? child.level : 0;
-            if (isNew) {
-                emit('P ' + child.VNum + ' ' + level + ' ' + obj.VNum);
-            } else {
-                emit('P 0 ' + child.VNum + ' ' + level + ' ' + obj.VNum);
-            }
+            emit('P 0 ' + child.VNum + ' ' + level + ' ' + obj.VNum);
             if (child.limit > 1) {
                 emit(' ' + child.limit);
             }
@@ -393,12 +383,12 @@ class Writer {
                 out += '* Stanza ' + (room.name || '').substring(0, 30)
                      + ' (' + room.VNum + ') generale\n';
                 if (room.isRandom) {
-                    out += 'R ' + room.VNum + ' ' + room.randomLevel + '\n';
+                    out += 'R 0 ' + room.VNum + ' ' + room.randomLevel + '\n';
                 }
                 for (let j = 0; j <= 5; j++) {
                     if (room.doors[j].VNumTo >= 0
                         && room.doors[j].resetType !== -1) {
-                        out += 'D ' + room.VNum + ' ' + j + ' '
+                        out += 'D 0 ' + room.VNum + ' ' + j + ' '
                              + room.doors[j].resetType + '\n';
                     }
                 }
@@ -408,7 +398,7 @@ class Writer {
                      + ' (' + room.VNum + ') oggetti\n';
                 for (const obj of room.objs) {
                     const level = obj.level > 0 ? obj.level : 0;
-                    out += 'O ' + obj.VNum + ' ' + level + ' ' + room.VNum;
+                    out += 'O 0 ' + obj.VNum + ' ' + level + ' ' + room.VNum;
                     if (obj.limit > 1) out += ' ' + obj.limit;
                     const fullObj = this.getObjData(obj.VNum);
                     if (fullObj) {
@@ -422,7 +412,7 @@ class Writer {
                 out += '* Stanza ' + (room.name || '').substring(0, 30)
                      + ' (' + room.VNum + ') mobs\n';
                 for (const mob of room.mobs) {
-                    out += 'M ' + mob.VNum + ' ' + mob.limit + ' ' + room.VNum;
+                    out += 'M 0 ' + mob.VNum + ' ' + mob.limit + ' ' + room.VNum;
                     if (mob.awake !== 0 || mob.sleep !== 23) {
                         out += ' ' + mob.awake + ' ' + mob.sleep;
                     }
@@ -434,12 +424,12 @@ class Writer {
                     for (const item of mob.contain) {
                         if (item.wearLoc === WEAR_NONE) {
                             const level = item.level > 0 ? item.level : 0;
-                            out += 'G ' + item.VNum + ' ' + level;
+                            out += 'G 0 ' + item.VNum + ' ' + level;
                             if (fullMob && fullMob.isShopKeeper) {
                                 out += ' ' + item.storage;
                             }
                         } else {
-                            out += 'E ' + item.VNum + ' ' + item.wearLoc;
+                            out += 'E 0 ' + item.VNum + ' ' + item.wearLoc;
                         }
                         const fullObj = this.getObjData(item.VNum);
                         if (fullObj) {
@@ -474,11 +464,17 @@ class Writer {
 
     saveSpecials() {
         const mobs = this.area.mobs;
+        const objs = this.area.objs;
         let out = '#SPECIALS\n\n';
         for (const mob of mobs) {
             if (!mob.special || mob.special.length === 0) continue;
             out += 'M ' + mob.VNum + ' ' + mob.special
                  + ' \t' + (mob.shortDescr || '') + '\n';
+        }
+        for (const obj of objs) {
+            if (!obj.special || obj.special.length === 0) continue;
+            out += 'O ' + obj.VNum + ' ' + obj.special
+                 + ' \t' + (obj.shortDescr || '') + '\n';
         }
         out += 'S\n\n';
         return out;

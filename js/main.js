@@ -15,6 +15,9 @@ import {
     getAutoSave,
     getAutoSaveHistory,
     clearAutoSave,
+    getCorruptAutoSave,
+    dbPut,
+    dbDelete,
     addRecent,
     getRecent,
     clearRecent,
@@ -1147,6 +1150,40 @@ function showMessage(message, type = 'success') {
     showToast(message, type, 3000);
 }
 
+function showCorruptBackup(corrupt) {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+        <div class="modal" style="max-width: 700px;">
+            <h3>Corrupt Backup Found</h3>
+            <p>File: <strong>${escapeHtml(corrupt.originalFilename)}</strong></p>
+            <p>Error: ${escapeHtml(corrupt.error || 'unknown')}</p>
+            <p>You can copy the text below, create a new file, and paste it to recover:</p>
+            <textarea readonly style="width:100%; height:300px; font-family:monospace; font-size:12px;">${escapeHtml(corrupt.text || '')}</textarea>
+            <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end;">
+                <button id="corrupt-copy">Copy to Clipboard</button>
+                <button id="corrupt-dismiss">Dismiss</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.querySelector('#corrupt-copy').addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(corrupt.text);
+            showMessage('Copied to clipboard', 'success');
+        } catch {
+            showMessage('Copy failed — select text manually', 'warning');
+        }
+    });
+    overlay.querySelector('#corrupt-dismiss').addEventListener('click', async () => {
+        overlay.remove();
+        await dbDelete('areas', 'corrupt');
+    });
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.querySelector('#corrupt-dismiss').click();
+    });
+}
+
 /**
  * Open file handler
  */
@@ -2022,7 +2059,15 @@ async function checkAutoSave() {
             } catch (e) {
                 console.error('Auto-save parse error:', e.message);
                 if (DEBUG) console.log('Auto-save text:', JSON.stringify(autoSaved.text));
-                // Start fresh if auto-save is corrupt
+                // Preserve corrupt auto-save for recovery
+                await dbPut('areas', 'corrupt', {
+                    filename: 'corrupt',
+                    originalFilename: autoSaved.originalFilename,
+                    text: autoSaved.text,
+                    lastModified: autoSaved.lastModified,
+                    error: e.message
+                });
+                // Start fresh
                 state.area = {
                     general: createArea(),
                     helps: [],
@@ -2030,7 +2075,7 @@ async function checkAutoSave() {
                     objs: [],
                     rooms: []
                 };
-                showMessage('Auto-save was corrupt, starting fresh', 'warning');
+                showMessage('Auto-save was corrupt (saved as backup), starting fresh', 'warning');
             }
             
             markDirty();
@@ -2052,6 +2097,12 @@ async function checkAutoSave() {
         } else {
             await clearAutoSave();
         }
+    }
+    
+    // Check for corrupt backup
+    const corrupt = await getCorruptAutoSave();
+    if (corrupt && corrupt.originalFilename) {
+        showCorruptBackup(corrupt);
     }
 }
 
