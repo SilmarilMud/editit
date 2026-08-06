@@ -71,6 +71,7 @@ const SECTOR_BORDER = {
 // ---------------------------------------------------------------- state
 let graph = null;
 let floors = [];                // sorted ascending, each { z, sections, bounds }
+let metrics = null;             // shared coordinate frame for every floor
 let floorIndex = 0;
 let minFloor = 0, maxFloor = 0;
 let zoomLevel = 1;
@@ -273,100 +274,192 @@ function translate(section, ox, oy) {
     for (const m of section.members) { m.x += ox; m.y += oy; }
 }
 
-// Pack section boxes onto the floor. Sections that own a staircase leading to an
-// already laid out floor are anchored so the stairwell lines up vertically
-// across floors; everything else is shelf-packed into a roughly square block.
-function packFloor(nodes, sections) {
-    const anchored = [], loose = [];
-    for (const s of sections) {
-        let anchor = null;
-        for (const m of s.members) {
+function finalizeSection(s) {
+    s.bounds = bboxOf(s.members);
+    // Coordinates move during packing/realignment: rebuild the cell index.
+    s.occ = new Map();
+    for (const m of s.members) {
+        m.section = s;
+        m.laidOut = true;
+        s.occ.set(m.x + ',' + m.y, m);
+    }
+}
+
+// Stair links between two sections, reduced to the single translation that
+// registers the most of them.
+//
+// For a link room m (in section u) -> room t (in section v), lining them up
+// means shift(v) = shift(u) + (m - t). Several stairwells between the same two
+// districts usually agree; when they disagree we take the majority.
+function stairLinks(nodes, sections) {
+    const pairs = new Map();
+    for (const u of sections) {
+        for (const m of u.members) {
             for (const e of nodes.get(m.vnum).upDown) {
                 const t = nodes.get(e.to);
-                if (t && t.laidOut) { anchor = { mine: m, at: { x: t.x, y: t.y } }; break; }
-            }
-            if (anchor) break;
-        }
-        (anchor ? anchored : loose).push(Object.assign(s, { anchor }));
-    }
-    anchored.sort((a, b) => b.members.length - a.members.length);
-    // Shelf packing works best first-fit-decreasing by height.
-    loose.sort((a, b) => {
-        const ba = bboxOf(a.members), bb = bboxOf(b.members);
-        return bb.h - ba.h || bb.w - ba.w;
-    });
-
-    const taken = new Map();
-    const claim = s => { for (const m of s.members) taken.set(m.x + ',' + m.y, m); };
-    const collides = (s, ox, oy) => {
-        for (const m of s.members) {
-            const x = m.x + ox, y = m.y + oy;
-            for (let gx = -1; gx <= 1; gx++) for (let gy = -1; gy <= 1; gy++) {
-                if (taken.has((x + gx) + ',' + (y + gy))) return true;
+                if (!t || !t.section || t.section === u) continue;
+                const v = t.section;
+                if (u.seq > v.seq) continue;            // record each pair once
+                const key = u.seq + '|' + v.seq;
+                let rec = pairs.get(key);
+                if (!rec) { rec = { u, v, offsets: new Map(), total: 0 }; pairs.set(key, rec); }
+                const dx = m.x - t.x, dy = m.y - t.y;
+                const k = dx + ',' + dy;
+                const o = rec.offsets.get(k) || { dx, dy, n: 0 };
+                o.n++;
+                rec.offsets.set(k, o);
+                rec.total++;
             }
         }
-        return false;
-    };
+    }
+    const links = [];
+    for (const rec of pairs.values()) {
+        let best = null;
+        for (const o of rec.offsets.values()) if (!best || o.n > best.n) best = o;
+        links.push({ u: rec.u, v: rec.v, dx: best.dx, dy: best.dy, weight: best.n, total: rec.total });
+    }
+    return links;
+}
 
-    for (const s of anchored) {
-        let ox = s.anchor.at.x - s.anchor.mine.x;
-        let oy = s.anchor.at.y - s.anchor.mine.y;
-        // Nudge outward in a spiral until the district no longer overlaps
-        let r = 0, ok = false;
-        while (r < 80 && !ok) {
-            for (let dx = -r; dx <= r && !ok; dx++) for (let dy = -r; dy <= r && !ok; dy++) {
-                if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-                if (!collides(s, ox + dx, oy + dy)) { ox += dx; oy += dy; ok = true; }
+// Put every district into one shared coordinate frame so stairwells sit exactly
+// on top of each other.
+//
+// The districts and their stair links form a graph. We grow a maximum spanning
+// forest over it (heaviest link first, seeded from the biggest district) and
+// propagate a translation along every tree edge. Each tree edge is then
+// perfectly registered, which is the most any single layout can guarantee -
+// remaining links are cycles whose geometry genuinely disagrees.
+//
+// The earlier greedy "move one section at a time if it improves" pass could not
+// do this: it refused any move blocked by a neighbour, and never moved two
+// districts together.
+function registerStairwells(nodes, floorList) {
+    const sections = [];
+    for (const f of floorList) for (const s of f.sections) sections.push(s);
+    sections.forEach((s, i) => { s.seq = i; s.shift = null; s.linkWeight = 0; });
+    if (sections.length < 2) {
+        for (const s of sections) s.shift = { x: 0, y: 0 };
+        return;
+    }
+
+    const links = stairLinks(nodes, sections);
+    const adj = new Map();
+    for (const s of sections) adj.set(s, []);
+    for (const l of links) {
+        adj.get(l.u).push({ to: l.v, dx: l.dx, dy: l.dy, w: l.weight });
+        adj.get(l.v).push({ to: l.u, dx: -l.dx, dy: -l.dy, w: l.weight });
+        l.u.linkWeight += l.weight;
+        l.v.linkWeight += l.weight;
+    }
+
+    // Seed from the largest district, then keep attaching whichever unplaced
+    // district hangs off the heaviest link (Prim, max weight).
+    const roots = [...sections].sort((a, b) => b.members.length - a.members.length);
+    for (const root of roots) {
+        if (root.shift) continue;
+        root.shift = { x: 0, y: 0 };
+        const frontier = [];
+        const push = (s) => {
+            for (const e of adj.get(s)) {
+                if (e.to.shift) continue;
+                frontier.push({ from: s, ...e });
             }
-            r++;
-        }
-        translate(s, ox, oy);
-        claim(s);
-    }
-
-    let originY = 0;
-    if (taken.size) {
-        let maxY = -Infinity;
-        for (const m of taken.values()) if (m.y > maxY) maxY = m.y;
-        originY = maxY + SECTION_GAP + 1;
-    }
-    let minXAll = 0;
-    if (taken.size) {
-        minXAll = Infinity;
-        for (const m of taken.values()) if (m.x < minXAll) minXAll = m.x;
-    }
-
-    // Choose a shelf width that makes the finished floor roughly 16:10 on screen
-    // (cells are wider than they are tall, so this is not a square in cell units).
-    const cellArea = loose.reduce((sum, s) => {
-        const bb = bboxOf(s.members);
-        return sum + (bb.w + SECTION_GAP) * (bb.h + SECTION_GAP);
-    }, 0);
-    const TARGET_ASPECT = 1.6;
-    const rowsEst = Math.sqrt((cellArea / 0.8) / (TARGET_ASPECT * CELL_H / CELL_W));
-    const targetW = Math.max(8, Math.ceil(rowsEst * TARGET_ASPECT * CELL_H / CELL_W));
-    let shelfX = minXAll, shelfY = originY, shelfH = 0;
-    for (const s of loose) {
-        const bb = bboxOf(s.members);
-        if (shelfX > minXAll && shelfX + bb.w - minXAll > targetW) {
-            shelfX = minXAll; shelfY += shelfH + SECTION_GAP; shelfH = 0;
-        }
-        translate(s, shelfX - bb.minX, shelfY - bb.minY);
-        claim(s);
-        shelfX += bb.w + SECTION_GAP;
-        shelfH = Math.max(shelfH, bb.h);
-    }
-
-    for (const s of sections) {
-        s.bounds = bboxOf(s.members);
-        // Coordinates moved during packing: rebuild the cell index used by hit-testing.
-        s.occ = new Map();
-        for (const m of s.members) {
-            m.section = s;
-            m.laidOut = true;
-            s.occ.set(m.x + ',' + m.y, m);
+        };
+        push(root);
+        while (frontier.length) {
+            frontier.sort((a, b) => b.w - a.w);
+            const e = frontier.shift();
+            if (e.to.shift) continue;
+            e.to.shift = { x: e.from.shift.x + e.dx, y: e.from.shift.y + e.dy };
+            e.to.anchored = true;
+            push(e.to);
         }
     }
+    for (const s of sections) if (!s.shift) s.shift = { x: 0, y: 0 };
+    for (const s of sections) translate(s, s.shift.x, s.shift.y);
+    for (const s of sections) finalizeSection(s);
+}
+
+// `halo` keeps a ring of empty cells around a district so its dashed frame has
+// room to breathe. It must be 0 for stair-registered districts: their position
+// is real, and a tomb directly under the crypt above it is legitimately
+// adjacent to the tomb next door.
+function sectionFits(taken, section, ox, oy, halo = 1) {
+    for (const m of section.members) {
+        const x = m.x + ox, y = m.y + oy;
+        for (let gx = -halo; gx <= halo; gx++) for (let gy = -halo; gy <= halo; gy++) {
+            if (taken.has((x + gx) + ',' + (y + gy))) return false;
+        }
+    }
+    return true;
+}
+
+// Registration ignores collisions, so two districts on the same floor can now
+// overlap. Resolve per floor: the district with the strongest stair support
+// keeps its registered position, weaker ones spiral out to the nearest free
+// spot, and districts with no stairs at all are shelf-packed into the margin.
+function resolveFloorCollisions(floorList) {
+    for (const floor of floorList) {
+        const linked = floor.sections.filter(s => s.linkWeight > 0);
+        const free = floor.sections.filter(s => s.linkWeight === 0);
+        linked.sort((a, b) => b.linkWeight - a.linkWeight || b.members.length - a.members.length);
+        free.sort((a, b) => {
+            const ba = bboxOf(a.members), bb = bboxOf(b.members);
+            return bb.h - ba.h || bb.w - ba.w;
+        });
+
+        const taken = new Map();
+        const claim = s => { for (const m of s.members) taken.set(m.x + ',' + m.y, m); };
+
+        for (const s of linked) {
+            // Registered districts only have to avoid real cell overlap.
+            if (sectionFits(taken, s, 0, 0, 0)) { s.registered = true; claim(s); continue; }
+            let ox = 0, oy = 0, ok = false;
+            for (let r = 1; r < 120 && !ok; r++) {
+                for (let dx = -r; dx <= r && !ok; dx++) for (let dy = -r; dy <= r && !ok; dy++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+                    if (sectionFits(taken, s, dx, dy, 1)) { ox = dx; oy = dy; ok = true; }
+                }
+            }
+            translate(s, ox, oy);
+            s.anchored = false;
+            s.registered = false;
+            finalizeSection(s);
+            claim(s);
+        }
+
+        if (!free.length) continue;
+        let originY = 0, minXAll = 0;
+        if (taken.size) {
+            let maxY = -Infinity; minXAll = Infinity;
+            for (const m of taken.values()) {
+                if (m.y > maxY) maxY = m.y;
+                if (m.x < minXAll) minXAll = m.x;
+            }
+            originY = maxY + SECTION_GAP + 1;
+        }
+        const cellArea = free.reduce((sum, s) => {
+            const bb = bboxOf(s.members);
+            return sum + (bb.w + SECTION_GAP) * (bb.h + SECTION_GAP);
+        }, 0);
+        const TARGET_ASPECT = 1.6;
+        const rowsEst = Math.sqrt((cellArea / 0.8) / (TARGET_ASPECT * CELL_H / CELL_W));
+        const targetW = Math.max(8, Math.ceil(rowsEst * TARGET_ASPECT * CELL_H / CELL_W));
+
+        let shelfX = minXAll, shelfY = originY, shelfH = 0;
+        for (const s of free) {
+            const bb = bboxOf(s.members);
+            if (shelfX > minXAll && shelfX + bb.w - minXAll > targetW) {
+                shelfX = minXAll; shelfY += shelfH + SECTION_GAP; shelfH = 0;
+            }
+            translate(s, shelfX - bb.minX, shelfY - bb.minY);
+            finalizeSection(s);
+            claim(s);
+            shelfX += bb.w + SECTION_GAP;
+            shelfH = Math.max(shelfH, bb.h);
+        }
+    }
+    for (const floor of floorList) floor.bounds = bboxOf(floor.rooms);
 }
 
 function labelForSection(s) {
@@ -385,19 +478,26 @@ function layout(g) {
         if (!byFloor.has(n.z)) byFloor.set(n.z, []);
         byFloor.get(n.z).push(n);
     }
-    // Lay out floors from ground outwards so stair anchors resolve against an
-    // already positioned neighbour floor.
-    const zs = [...byFloor.keys()].sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);
+    const zs = [...byFloor.keys()].sort((a, b) => a - b);
     const result = new Map();
+
+    // 1. Cut each floor into districts with exact dead-reckoning coordinates.
+    //    Every district still sits in its own local frame at this point.
     for (const z of zs) {
         const list = byFloor.get(z).sort((a, b) => a.vnum - b.vnum);
         let sections = sectionFloor(g.nodes, list);
         sections = absorbSatellites(g.nodes, sections);
-        packFloor(g.nodes, sections);
         sections.forEach((s, i) => { s.id = z + '.' + i; s.label = labelForSection(s); });
+        for (const s of sections) finalizeSection(s);
         result.set(z, { z, sections, rooms: list, bounds: bboxOf(list) });
     }
-    return [...result.values()].sort((a, b) => a.z - b.z);
+    const floorList = [...result.values()].sort((a, b) => a.z - b.z);
+
+    // 2. Slide the districts into one shared frame so stairwells register.
+    registerStairwells(g.nodes, floorList);
+    // 3. Registration ignores collisions; separate whatever now overlaps.
+    resolveFloorCollisions(floorList);
+    return floorList;
 }
 
 // Classify each horizontal edge once, at layout time.
@@ -417,19 +517,20 @@ function cellCenter(x, y, ox, oy) {
     return { x: ox + x * CELL_W + CELL_W / 2, y: oy + y * CELL_H + CELL_H / 2 };
 }
 
-// Bounds of one floor, optionally widened to cover the ghost floors so an
-// upper level is drawn in register with the level below it.
-function floorMetrics(floor, ghostNeighbours) {
+// One shared coordinate frame for the whole area.
+//
+// Every floor is drawn on an identically sized canvas with the same origin, so
+// grid cell (x,y) always lands on the same pixel. That is what makes "this room
+// sits directly above that one" verifiable: floors stay in register, the view
+// does not jump when you change level, and the scroll position is preserved.
+function areaMetrics(floorList) {
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    const accumulate = (f) => {
-        if (!f) return;
+    for (const f of floorList) {
         for (const s of f.sections) {
             minX = Math.min(minX, s.bounds.minX); minY = Math.min(minY, s.bounds.minY);
             maxX = Math.max(maxX, s.bounds.maxX); maxY = Math.max(maxY, s.bounds.maxY);
         }
-    };
-    accumulate(floor);
-    if (ghostNeighbours) for (const f of ghostNeighbours) accumulate(f);
+    }
     if (minX === Infinity) { minX = minY = 0; maxX = maxY = 0; }
     const cols = maxX - minX + 1, rows = maxY - minY + 1;
     return {
@@ -476,10 +577,15 @@ function drawGhostFloor(ctx, floor, m, color) {
     ctx.restore();
 }
 
+// Only districts whose position is arbitrary get a frame. A district pinned by
+// a staircase sits where it really belongs, so boxing it would be misleading -
+// and on a floor of small stair-linked rooms (a crypt, a row of tombs) it would
+// bury the map in dashed rectangles.
 function drawSectionFrames(ctx, floor, m) {
-    if (floor.sections.length < 2) return;
+    const framed = floor.sections.filter(s => !s.registered);
+    if (framed.length < 2 && floor.sections.length < 2) return;
     ctx.save();
-    for (const s of floor.sections) {
+    for (const s of framed) {
         const a = cellCenter(s.bounds.minX, s.bounds.minY, m.ox, m.oy);
         const b = cellCenter(s.bounds.maxX, s.bounds.maxY, m.ox, m.oy);
         const x = a.x - NODE_W / 2 - SECTION_PAD;
@@ -752,10 +858,7 @@ function drawFloor(ctx, floorIdx, m, opts = {}) {
 
 // ------------------------------------------------------------------- api
 function currentMetrics() {
-    const floor = floors[floorIndex];
-    if (!floor) return null;
-    const ghosts = showGhosts ? [floors[floorIndex - 1], floors[floorIndex + 1]] : null;
-    return floorMetrics(floor, ghosts);
+    return metrics;
 }
 
 function renderCurrentFloor() {
@@ -763,6 +866,8 @@ function renderCurrentFloor() {
     if (!canvas || !graph) return;
     const m = currentMetrics();
     if (!m) return;
+    // Canvas geometry is identical on every floor, so switching level never
+    // reflows the view: only the painted content changes.
     const dpr = window.devicePixelRatio || 1;
     // Scale down (never crop) if the floor exceeds the canvas limit.
     const fit = Math.min(1, MAX_CANVAS_DIM / (Math.max(m.width, m.height) * dpr));
@@ -862,6 +967,7 @@ export function openMap(area) {
     assignFloors(graph.nodes);
     floors = layout(graph);
     classifyEdges(graph);
+    metrics = areaMetrics(floors);
 
     minFloor = floors.length ? floors[0].z : 0;
     maxFloor = floors.length ? floors[floors.length - 1].z : 0;
@@ -887,6 +993,7 @@ export function closeMap() {
     if (panel) panel.classList.add('hidden');
     graph = null;
     floors = [];
+    metrics = null;
 }
 
 export function isMapOpen() {
@@ -967,8 +1074,9 @@ export function exportAllFloorsPNG() {
     if (!graph || !floors.length) return;
     const safe = (currentAreaName || 'area').toLowerCase()
         .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'area';
+    // Same frame for every image, so the exported floors can be stacked.
+    const m = metrics;
     floors.forEach((floor, idx) => {
-        const m = floorMetrics(floor, showGhosts ? [floors[idx - 1], floors[idx + 1]] : null);
         const fit = Math.min(1, MAX_CANVAS_DIM / Math.max(m.width, m.height));
         const c = document.createElement('canvas');
         c.width = Math.round(m.width * fit);
