@@ -82,6 +82,12 @@ let hoverVnum = null;
 let selectedVnum = null;
 const ZOOM_MIN = 0.1, ZOOM_MAX = 3.0, ZOOM_STEP = 0.15;
 
+// Survives closing the map, so clicking a room to edit it and coming back does
+// not dump you at the top-left of floor 0 again. Keyed by a structural
+// signature of the area: if the rooms or their exits changed the cached layout
+// is stale and gets rebuilt.
+let session = null;
+
 // ---------------------------------------------------------------- graph
 function usableExit(door) {
     return door && door.VNumTo > 0 && !(door.exitFlags & EX_WINDOW);
@@ -866,21 +872,23 @@ function renderCurrentFloor() {
     if (!canvas || !graph) return;
     const m = currentMetrics();
     if (!m) return;
+    // Zoom resizes the element's own box rather than applying a CSS transform.
+    // A transform does not change the layout box, so the scroll range stayed
+    // wrong at any zoom other than 100% - which also made a saved scroll
+    // position impossible to restore faithfully.
+    const dpr = window.devicePixelRatio || 1;
+    const cap = MAX_CANVAS_DIM / Math.max(m.width, m.height);
+    const scale = Math.min(dpr * zoomLevel, cap);   // bitmap resolution
     // Canvas geometry is identical on every floor, so switching level never
     // reflows the view: only the painted content changes.
-    const dpr = window.devicePixelRatio || 1;
-    // Scale down (never crop) if the floor exceeds the canvas limit.
-    const fit = Math.min(1, MAX_CANVAS_DIM / (Math.max(m.width, m.height) * dpr));
-    const scale = dpr * fit;
     canvas.width = Math.round(m.width * scale);
     canvas.height = Math.round(m.height * scale);
-    canvas.style.width = (m.width * fit) + 'px';
-    canvas.style.height = (m.height * fit) + 'px';
+    canvas.style.width = Math.round(m.width * zoomLevel) + 'px';
+    canvas.style.height = Math.round(m.height * zoomLevel) + 'px';
     const ctx = canvas.getContext('2d');
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
     drawFloor(ctx, floorIndex, m);
     canvas._mapMetrics = m;
-    canvas._mapFit = fit;
 }
 
 function hitTest(clientX, clientY) {
@@ -958,39 +966,129 @@ function updateHint(n) {
     el.textContent = '#' + n.vnum + ' ' + (n.room.name || '') + '   ' + exits.join('  ');
 }
 
+// Cheap structural fingerprint: room set plus every exit target. Renaming a
+// room or editing its description keeps the layout valid; adding a room or
+// repointing an exit does not.
+function areaSignature(area) {
+    const parts = [area.general ? area.general.areaName || '' : ''];
+    for (const r of area.rooms) {
+        if (r.resetOnly) continue;
+        parts.push(r.VNum);
+        for (let d = 0; d <= 5; d++) {
+            const door = r.doors[d];
+            parts.push(door && door.VNumTo > 0 ? door.VNumTo + ':' + (door.exitFlags || 0) : '');
+        }
+    }
+    return parts.join(',');
+}
+
+function saveSession() {
+    if (!session || !graph) return;
+    const container = document.getElementById('map-canvas-container');
+    session.view = {
+        floorIndex,
+        zoomLevel,
+        scrollLeft: container ? container.scrollLeft : 0,
+        scrollTop: container ? container.scrollTop : 0,
+        selectedVnum,
+        showGhosts,
+        showLongLinks,
+    };
+}
+
 export function openMap(area) {
     if (!area || !area.rooms || area.rooms.length === 0) return;
     const panel = document.getElementById('map-panel');
     if (!panel) return;
 
-    graph = buildGraph(area.rooms);
-    assignFloors(graph.nodes);
-    floors = layout(graph);
-    classifyEdges(graph);
-    metrics = areaMetrics(floors);
+    const sig = areaSignature(area);
+    // Same document? main.js swaps state.area for a new object when a file is
+    // loaded, while edits mutate it in place - so object identity separates
+    // "user edited an exit" from "user opened another area".
+    const sameArea = !!session && session.area === area;
+    const reuse = sameArea && session.key === sig;
+    const view = sameArea ? session.view : null;
 
-    minFloor = floors.length ? floors[0].z : 0;
-    maxFloor = floors.length ? floors[floors.length - 1].z : 0;
-    floorIndex = Math.max(0, floors.findIndex(f => f.z === 0));
+    if (reuse) {
+        // Same area, same topology: keep the exact layout so a restored scroll
+        // position still points at the same rooms.
+        graph = session.graph;
+        floors = session.floors;
+        metrics = session.metrics;
+    } else {
+        graph = buildGraph(area.rooms);
+        assignFloors(graph.nodes);
+        floors = layout(graph);
+        classifyEdges(graph);
+        metrics = areaMetrics(floors);
+        session = { area, key: sig, graph, floors, metrics, view };
+    }
+
+    if (!floors.length) return;
+    minFloor = floors[0].z;
+    maxFloor = floors[floors.length - 1].z;
     hoverVnum = null;
-    selectedVnum = null;
+
+    if (view) {
+        floorIndex = Math.min(Math.max(0, view.floorIndex), floors.length - 1);
+        zoomLevel = view.zoomLevel;
+        selectedVnum = view.selectedVnum;
+        showGhosts = view.showGhosts;
+        showLongLinks = view.showLongLinks;
+    } else {
+        floorIndex = Math.max(0, floors.findIndex(f => f.z === 0));
+        zoomLevel = 1;
+        selectedVnum = null;
+    }
+    syncToggleUI();
 
     currentAreaName = area.general ? (area.general.areaName || 'area') : 'area';
     const nameEl = document.getElementById('map-area-name');
     if (nameEl) nameEl.textContent = currentAreaName;
 
     panel.classList.remove('hidden');
-    zoomLevel = 1;
+
+    if (!reuse && selectedVnum !== null) {
+        // The rebuilt layout may have moved that room to another floor.
+        const n = graph.nodes.get(selectedVnum);
+        if (n) {
+            const i = floors.findIndex(f => f.z === n.z);
+            if (i >= 0) floorIndex = i;
+        }
+    }
+
     updateFloorUI();
     updateStats();
-    renderCurrentFloor();
-    zoomFit();
+
+    const container = document.getElementById('map-canvas-container');
+    if (!view) {
+        zoomFit();
+    } else if (reuse) {
+        applyZoom();                       // renders at the restored zoom
+        container.scrollLeft = view.scrollLeft;
+        container.scrollTop = view.scrollTop;
+    } else {
+        // Layout was rebuilt, so the old scroll offset is meaningless. Fall back
+        // to keeping the room you were last on in view.
+        applyZoom();
+        if (!centerOnRoom(selectedVnum)) zoomFit();
+    }
     panel.focus();
+}
+
+function syncToggleUI() {
+    const g = document.getElementById('map-ghosts');
+    if (g) g.checked = showGhosts;
+    const l = document.getElementById('map-long-links');
+    if (l) l.checked = showLongLinks;
 }
 
 export function closeMap() {
     const panel = document.getElementById('map-panel');
+    if (panel && panel.classList.contains('hidden')) return;
+    saveSession();
     if (panel) panel.classList.add('hidden');
+    // Keep graph/floors/metrics alive in `session` for the next open.
     graph = null;
     floors = [];
     metrics = null;
@@ -1040,16 +1138,14 @@ export function mapFloorDown() {
 }
 
 function applyZoom(cursorX, cursorY, oldZoom) {
-    const canvas = document.getElementById('map-canvas');
     const container = document.getElementById('map-canvas-container');
-    if (!canvas || !container) return;
+    if (!container) return;
+    renderCurrentFloor();                     // resizes the box, so scroll range is valid
     if (cursorX !== undefined && oldZoom) {
         const s = zoomLevel / oldZoom;
         container.scrollLeft = cursorX * s - (cursorX - container.scrollLeft);
         container.scrollTop = cursorY * s - (cursorY - container.scrollTop);
     }
-    canvas.style.transform = 'scale(' + zoomLevel + ')';
-    canvas.style.transformOrigin = 'top left';
     const label = document.getElementById('map-zoom-label');
     if (label) label.textContent = Math.round(zoomLevel * 100) + '%';
 }
@@ -1059,15 +1155,24 @@ export function zoomOut() { zoomLevel = Math.max(ZOOM_MIN, zoomLevel - ZOOM_STEP
 
 export function zoomFit() {
     const container = document.getElementById('map-canvas-container');
-    const canvas = document.getElementById('map-canvas');
-    if (!container || !canvas) return;
-    const pw = parseFloat(canvas.style.width) || canvas.width;
-    const ph = parseFloat(canvas.style.height) || canvas.height;
-    if (!pw || !ph) return;
-    zoomLevel = Math.max(ZOOM_MIN, Math.min(container.clientWidth / pw, container.clientHeight / ph, 1));
+    if (!container || !metrics) return;
+    zoomLevel = Math.max(ZOOM_MIN, Math.min(
+        container.clientWidth / metrics.width,
+        container.clientHeight / metrics.height, 1));
     applyZoom();
     container.scrollLeft = 0;
     container.scrollTop = 0;
+}
+
+// Scroll so a given room sits in the middle of the viewport.
+function centerOnRoom(vnum) {
+    const container = document.getElementById('map-canvas-container');
+    const n = graph && graph.nodes.get(vnum);
+    if (!container || !n || !metrics) return false;
+    const c = cellCenter(n.x, n.y, metrics.ox, metrics.oy);
+    container.scrollLeft = c.x * zoomLevel - container.clientWidth / 2;
+    container.scrollTop = c.y * zoomLevel - container.clientHeight / 2;
+    return true;
 }
 
 export function exportAllFloorsPNG() {
