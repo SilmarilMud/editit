@@ -70,6 +70,7 @@ import {
 } from './validation.js';
 import { undoManager, ActionType, describeAction } from './undo.js';
 import { searchArea, getContextSnippet, highlightMatch, ENTITY_TYPE_ICONS, ENTITY_TYPE_NAMES } from './search.js';
+import { initMap, openMap, closeMap, isMapOpen, mapFloorUp, mapFloorDown, zoomIn, zoomOut, zoomFit } from './map.js';
 
 // Entity type icons
 const TYPE_ICONS = {
@@ -1099,6 +1100,7 @@ function updateButtonStates() {
     document.getElementById('btn-save').disabled = !hasArea;
     document.getElementById('btn-download').disabled = !hasArea;
     document.getElementById('btn-validate').disabled = !hasArea;
+    document.getElementById('btn-map').disabled = !hasArea;
 }
 
 /**
@@ -1431,6 +1433,18 @@ function handleValidate() {
         return;
     }
     runValidation(state.area);
+}
+
+/**
+ * Handle map button
+ */
+function handleMap() {
+    if (!state.area) return;
+    if (isMapOpen()) {
+        closeMap();
+    } else {
+        openMap(state.area);
+    }
 }
 
 /**
@@ -2166,6 +2180,9 @@ async function init() {
     // Initialize search
     initSearch();
     
+    // Initialize map
+    initMap();
+    
     // Initialize recent files
     initRecent();
     
@@ -2178,7 +2195,14 @@ async function init() {
     document.getElementById('btn-save')?.addEventListener('click', handleSave);
     document.getElementById('btn-download')?.addEventListener('click', handleDownload);
     document.getElementById('btn-validate')?.addEventListener('click', handleValidate);
+    document.getElementById('btn-map')?.addEventListener('click', handleMap);
     document.getElementById('btn-shortcuts')?.addEventListener('click', toggleShortcutsDialog);
+    document.getElementById('map-close')?.addEventListener('click', closeMap);
+    document.getElementById('map-floor-up')?.addEventListener('click', mapFloorUp);
+    document.getElementById('map-floor-down')?.addEventListener('click', mapFloorDown);
+    document.getElementById('map-zoom-in')?.addEventListener('click', zoomIn);
+    document.getElementById('map-zoom-out')?.addEventListener('click', zoomOut);
+    document.getElementById('map-zoom-fit')?.addEventListener('click', zoomFit);
     
     // Setup tree toolbar buttons
     document.getElementById('btn-expand-all')?.addEventListener('click', expandAll);
@@ -2256,6 +2280,18 @@ async function init() {
         if (mod && e.key === '-') {
             e.preventDefault();
             collapseAll();
+        }
+        // Ctrl+M to open map
+        if (mod && e.key === 'm') {
+            e.preventDefault();
+            handleMap();
+        }
+        // Escape to close map (or other overlays)
+        if (e.key === 'Escape') {
+            if (isMapOpen()) {
+                e.preventDefault();
+                closeMap();
+            }
         }
     });
     

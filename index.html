@@ -20,6 +20,7 @@
             </div>
             <button id="btn-save" disabled>Save</button>
             <button id="btn-download" disabled>Download</button>
+            <button id="btn-map" disabled>Map</button>
             <button id="btn-validate" disabled>Validate</button>
             <button id="btn-shortcuts" class="outline secondary">?</button>
             <div id="search-container">
@@ -92,6 +93,40 @@
             <button class="context-item" data-action="duplicate">Duplicate</button>
         </div>
         
+        <!-- Map Panel (hidden by default) -->
+        <div id="map-panel" class="hidden">
+            <div id="map-header">
+                <div id="map-title">
+                    <span>🗺️ Area Map</span>
+                    <span id="map-area-name"></span>
+                </div>
+                <div id="map-controls">
+                    <button id="map-floor-up" class="outline secondary small">▲ Up</button>
+                    <span id="map-floor-label">Floor 0</span>
+                    <button id="map-floor-down" class="outline secondary small">▼ Down</button>
+                    <span class="map-separator">|</span>
+                    <button id="map-zoom-out" class="outline secondary small">−</button>
+                    <span id="map-zoom-label">100%</span>
+                    <button id="map-zoom-in" class="outline secondary small">+</button>
+                    <button id="map-zoom-fit" class="outline secondary small">Fit</button>
+                </div>
+                <div id="map-stats">
+                    <span id="map-room-count"></span>
+                    <span id="map-exit-count"></span>
+                </div>
+                <button id="map-close" class="outline secondary small">✕</button>
+            </div>
+            <div id="map-canvas-container">
+                <canvas id="map-canvas"></canvas>
+            </div>
+            <div id="map-legend">
+                <span class="legend-item">↔ Bidirectional exit</span>
+                <span class="legend-item">→ Unidirectional exit</span>
+                <span class="legend-item">⬆ Up exit (to higher floor)</span>
+                <span class="legend-item">⬇ Down exit (to lower floor)</span>
+            </div>
+        </div>
+
         <!-- Keyboard Shortcuts Help Modal -->
         <dialog id="shortcuts-dialog">
             <article>
@@ -107,6 +142,7 @@
                         <div class="shortcut-row"><kbd>Ctrl/⌘ O</kbd><span>Open file</span></div>
                         <div class="shortcut-row"><kbd>Ctrl/⌘ N</kbd><span>New area</span></div>
                         <div class="shortcut-row"><kbd>Ctrl/⌘ F</kbd><span>Search</span></div>
+                        <div class="shortcut-row"><kbd>Ctrl/⌘ M</kbd><span>Area map</span></div>
                     </div>
                     <div class="shortcut-group">
                         <h4>Editing</h4>

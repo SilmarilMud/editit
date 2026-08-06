@@ -1761,7 +1761,106 @@ input[type="number"] {
     min-width: 4px;
 }
 
-/* Modal overlay */
+/* ========================================
+   Map Panel
+   ======================================== */
+#map-panel {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 2000;
+    background: var(--pico-background-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#map-panel.hidden {
+    display: none;
+}
+
+#map-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--pico-muted-border-color);
+    background: var(--pico-card-background-color);
+    flex-shrink: 0;
+}
+
+#map-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+#map-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#map-floor-label {
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+}
+
+.map-separator {
+    color: var(--pico-muted-border-color);
+    margin: 0 0.25rem;
+}
+
+#map-zoom-label {
+    font-weight: 500;
+    min-width: 40px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+#map-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--pico-muted-color);
+    margin-left: auto;
+}
+
+#map-close {
+    padding: 0.25rem 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+#map-canvas-container {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+}
+
+#map-canvas {
+    display: block;
+}
+
+#map-legend {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--pico-muted-border-color);
+    background: var(--pico-card-background-color);
+    font-size: 0.75rem;
+    color: var(--pico-muted-color);
+    flex-shrink: 0;
+}
+
+.legend-item {
+    white-space: nowrap;
+}
+
+/* ========================================
+   Modal overlay
+   ======================================== */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
