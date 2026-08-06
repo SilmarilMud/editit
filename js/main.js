@@ -2272,14 +2272,14 @@ async function init() {
             e.preventDefault();
             deleteSelected();
         }
-        // Ctrl+= to expand all, Ctrl+- to collapse all
+        // Ctrl+=/+- to expand/collapse tree, or zoom in/out when map is open
         if (mod && (e.key === '=' || e.key === '+')) {
             e.preventDefault();
-            expandAll();
+            if (isMapOpen()) zoomIn(); else expandAll();
         }
         if (mod && e.key === '-') {
             e.preventDefault();
-            collapseAll();
+            if (isMapOpen()) zoomOut(); else collapseAll();
         }
         // Ctrl+M to open map
         if (mod && e.key === 'm') {

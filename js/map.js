@@ -43,6 +43,7 @@ let currentFloor = 0;
 let minFloor = 0;
 let maxFloor = 0;
 let graph = null;
+let globalBounds = null;
 let zoomLevel = 1.0;
 const ZOOM_MIN = 0.1;
 const ZOOM_MAX = 3.0;
@@ -51,97 +52,118 @@ const ZOOM_STEP = 0.15;
 function buildGraph(rooms) {
     const nodeMap = new Map();
     const edges = [];
-
     for (const room of rooms) {
         if (room.resetOnly) continue;
         nodeMap.set(room.VNum, {
-            vnum: room.VNum,
-            room,
-            floor: 0,
-            gridX: 0,
-            gridY: 0,
-            placed: false,
+            vnum: room.VNum, room, floor: 0,
+            gridX: 0, gridY: 0, placed: false, parentVnum: null,
         });
     }
-
     const sortedVnums = [...nodeMap.keys()].sort((a, b) => a - b);
     if (sortedVnums.length === 0) return { nodeMap, edges };
-
     const startVnum = sortedVnums[0];
     const visited = new Set();
     const queue = [startVnum];
     visited.add(startVnum);
     nodeMap.get(startVnum).floor = 0;
-
     while (queue.length > 0) {
         const vnum = queue.shift();
         const node = nodeMap.get(vnum);
         const room = node.room;
-
         for (let d = 0; d <= 5; d++) {
             const door = room.doors[d];
             if (door.VNumTo === -1) continue;
-            // Skip window exits - they are look-only, not walkable passages
             if (door.exitFlags & EX_WINDOW) continue;
             const destNode = nodeMap.get(door.VNumTo);
-            if (!destNode) continue;
-
-            if (d === DIR_U) destNode.floor = node.floor + 1;
-            else if (d === DIR_D) destNode.floor = node.floor - 1;
-            else destNode.floor = node.floor; // N/E/S/W inherit parent floor
-
+            if (!destNode) {
+                // External room: exit points outside this area
+                const extNode = {
+                    vnum: door.VNumTo,
+                    room: { VNum: door.VNumTo, name: 'Altra area', sectorType: -1, resetOnly: false,
+                             doors: [{VNumTo:-1},{VNumTo:-1},{VNumTo:-1},{VNumTo:-1},{VNumTo:-1},{VNumTo:-1}] },
+                    floor: 0, gridX: 0, gridY: 0, placed: false, parentVnum: null, external: true,
+                };
+                nodeMap.set(door.VNumTo, extNode);
+            }
+            const destFinal = nodeMap.get(door.VNumTo);
+            if (d === DIR_U) destFinal.floor = node.floor + 1;
+            else if (d === DIR_D) destFinal.floor = node.floor - 1;
+            else destFinal.floor = node.floor;
             if (!visited.has(door.VNumTo)) {
                 visited.add(door.VNumTo);
                 queue.push(door.VNumTo);
+                if (d === DIR_U || d === DIR_D) destFinal.parentVnum = vnum;
             }
-
             if (d <= DIR_W) {
-                const reverseDoor = destNode.room.doors[OPPOSITE[d]];
+                const reverseDoor = destFinal.room.doors[OPPOSITE[d]];
                 const bidir = reverseDoor && reverseDoor.VNumTo === vnum;
                 const exists = edges.some(e =>
                     (e.fromVnum === vnum && e.toVnum === door.VNumTo) ||
                     (e.fromVnum === door.VNumTo && e.toVnum === vnum)
                 );
-                if (!exists) {
-                    edges.push({ fromVnum: vnum, toVnum: door.VNumTo, dir: d, bidirectional: bidir });
-                }
+                if (!exists) edges.push({ fromVnum: vnum, toVnum: door.VNumTo, dir: d, bidirectional: bidir });
             }
         }
     }
-
     for (const [, node] of nodeMap) {
         if (!visited.has(node.vnum)) node.floor = 0;
     }
-
     return { nodeMap, edges };
+}
+
+function floorOrder(minF, maxF) {
+    const order = [];
+    let lo = 0, hi = 0;
+    order.push(0);
+    while (lo > minF || hi < maxF) {
+        lo--; if (lo >= minF) order.push(lo);
+        hi++; if (hi <= maxF) order.push(hi);
+    }
+    return order;
 }
 
 function layoutGrid(g) {
     const { nodeMap } = g;
     const floorNodes = new Map();
-
     for (const [, node] of nodeMap) {
         const f = node.floor;
         if (!floorNodes.has(f)) floorNodes.set(f, []);
         floorNodes.get(f).push(node);
     }
-
-    for (const [, nodes] of floorNodes) {
+    let minF = Infinity, maxF = -Infinity;
+    for (const f of floorNodes.keys()) {
+        if (f < minF) minF = f;
+        if (f > maxF) maxF = f;
+    }
+    if (minF === Infinity) { minF = 0; maxF = 0; }
+    const order = floorOrder(minF, maxF);
+    for (const floor of order) {
+        const nodes = floorNodes.get(floor);
+        if (!nodes) continue;
         nodes.sort((a, b) => a.vnum - b.vnum);
         for (const n of nodes) { n.placed = false; n.gridX = 0; n.gridY = 0; }
-
-        const start = nodes[0];
-        start.placed = true;
-        const q = [start];
-
+        // Phase 1: seed rooms anchored to already-placed up/down parent
+        for (const n of nodes) {
+            if (n.parentVnum != null) {
+                const parent = nodeMap.get(n.parentVnum);
+                if (parent && parent.placed) {
+                    n.gridX = parent.gridX;
+                    n.gridY = parent.gridY;
+                    n.placed = true;
+                }
+            }
+        }
+        // Phase 2: BFS from all placed rooms to fill N/E/S/W connections
+        const q = nodes.filter(n => n.placed);
         while (q.length > 0) {
             const node = q.shift();
             const room = node.room;
             for (let d = DIR_N; d <= DIR_W; d++) {
                 const door = room.doors[d];
                 if (door.VNumTo === -1) continue;
+                if (door.exitFlags & EX_WINDOW) continue;
                 const dest = nodeMap.get(door.VNumTo);
-                if (!dest || dest.floor !== node.floor || dest.placed) continue;
+                if (!dest || dest.floor !== floor || dest.placed) continue;
                 const delta = DIR_DELTA[d];
                 if (!delta) continue;
                 dest.gridX = node.gridX + delta.dx;
@@ -150,11 +172,9 @@ function layoutGrid(g) {
                 q.push(dest);
             }
         }
-
-        // Place disconnected rooms in a compact 2D grid
+        // Phase 3: disconnected rooms in a compact 2D grid
         const DISCONNECTED_COLS = 10;
         let extraIdx = 0;
-        // Find a safe Y offset below all placed rooms on this floor
         let maxYPlaced = 0;
         for (const n of nodes) {
             if (n.placed && n.gridY > maxYPlaced) maxYPlaced = n.gridY;
@@ -162,8 +182,8 @@ function layoutGrid(g) {
         const disconnectBaseY = maxYPlaced + 2;
         for (const n of nodes) {
             if (!n.placed) {
-                n.gridX = (extraIdx % DISCONNECTED_COLS) * 2;
-                n.gridY = disconnectBaseY + Math.floor(extraIdx / DISCONNECTED_COLS) * 2;
+                n.gridX = (extraIdx % DISCONNECTED_COLS);
+                n.gridY = disconnectBaseY + Math.floor(extraIdx / DISCONNECTED_COLS);
                 n.placed = true;
                 extraIdx++;
             }
@@ -171,26 +191,22 @@ function layoutGrid(g) {
     }
 }
 
-function getFloorBounds(floor) {
+function computeGlobalBounds() {
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    let count = 0;
     for (const [, node] of graph.nodeMap) {
-        if (node.floor !== floor) continue;
-        count++;
         if (node.gridX < minX) minX = node.gridX;
         if (node.gridY < minY) minY = node.gridY;
         if (node.gridX > maxX) maxX = node.gridX;
         if (node.gridY > maxY) maxY = node.gridY;
     }
-    console.log('[Map] getFloorBounds:', { floor, count, minX, minY, maxX, maxY });
-    return count === 0 ? null : { minX, minY, maxX, maxY };
+    if (minX === Infinity) return null;
+    return { minX, minY, maxX, maxY };
 }
 
 function renderFloor(canvas, floor) {
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    const bounds = getFloorBounds(floor);
-
+    const bounds = globalBounds;
     if (!bounds) {
         canvas.style.width = '400px';
         canvas.style.height = '100px';
@@ -205,39 +221,29 @@ function renderFloor(canvas, floor) {
         ctx.fillText('No rooms on this floor', 200, 50);
         return;
     }
-
     const { minX, minY, maxX, maxY } = bounds;
     const cols = maxX - minX + 1;
     const rows = maxY - minY + 1;
     const logicalW = cols * GRID_SPACING_X + PADDING * 2;
     const logicalH = rows * GRID_SPACING_Y + PADDING * 2;
-
-    console.log('[Map] floor:', floor, 'bounds:', bounds, 'cols:', cols, 'rows:', rows, 'logicalW:', logicalW, 'logicalH:', logicalH, 'dpr:', dpr);
-
-    // Safeguard: limit canvas size to prevent browser issues
     const MAX_CANVAS_DIM = 8000;
     const finalLogicalW = Math.min(logicalW, MAX_CANVAS_DIM);
     const finalLogicalH = Math.min(logicalH, MAX_CANVAS_DIM);
-
     canvas.width = Math.round(finalLogicalW * dpr);
     canvas.height = Math.round(finalLogicalH * dpr);
     canvas.style.width = finalLogicalW + 'px';
     canvas.style.height = finalLogicalH + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
     ctx.fillStyle = '#fafafa';
-    ctx.fillRect(0, 0, logicalW, logicalH);
-
+    ctx.fillRect(0, 0, finalLogicalW, finalLogicalH);
     const ox = PADDING - minX * GRID_SPACING_X;
     const oy = PADDING - minY * GRID_SPACING_Y;
-
     function toPixel(gx, gy) {
         return {
             x: ox + gx * GRID_SPACING_X + GRID_SPACING_X / 2,
             y: oy + gy * GRID_SPACING_Y + GRID_SPACING_Y / 2,
         };
     }
-
     for (const edge of graph.edges) {
         const fromNode = graph.nodeMap.get(edge.fromVnum);
         const toNode = graph.nodeMap.get(edge.toVnum);
@@ -245,10 +251,25 @@ function renderFloor(canvas, floor) {
         if (fromNode.floor !== floor || toNode.floor !== floor) continue;
         drawArrow(ctx, toPixel(fromNode.gridX, fromNode.gridY), toPixel(toNode.gridX, toNode.gridY), edge);
     }
-
     for (const [, node] of graph.nodeMap) {
         if (node.floor !== floor) continue;
         drawRoomNode(ctx, node, toPixel(node.gridX, node.gridY));
+    }
+    for (const [, node] of graph.nodeMap) {
+        if (node.floor !== floor) continue;
+        const pos = toPixel(node.gridX, node.gridY);
+        const hasUp = node.room.doors[DIR_U] && node.room.doors[DIR_U].VNumTo !== -1;
+        const hasDown = node.room.doors[DIR_D] && node.room.doors[DIR_D].VNumTo !== -1;
+        if (hasUp || hasDown) {
+            const parts = [];
+            if (hasUp) parts.push('\u2B06 F' + (floor + 1));
+            if (hasDown) parts.push('\u2B07 F' + (floor - 1));
+            ctx.font = '9px sans-serif';
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(parts.join('  '), pos.x, pos.y + NODE_H / 2 + 12);
+        }
     }
 }
 
@@ -256,7 +277,6 @@ function drawArrow(ctx, from, to, edge) {
     let sx, sy, ex, ey;
     const dx = to.x - from.x;
     const dy = to.y - from.y;
-
     if (Math.abs(dx) >= Math.abs(dy)) {
         sx = from.x + Math.sign(dx) * (NODE_W / 2 + 4);
         sy = from.y;
@@ -268,22 +288,36 @@ function drawArrow(ctx, from, to, edge) {
         ex = to.x;
         ey = to.y - Math.sign(dy) * (NODE_H / 2 + 4);
     }
-
     const adx = ex - sx, ady = ey - sy;
     const alen = Math.sqrt(adx * adx + ady * ady);
     if (alen < 2) return;
-
     const aux = adx / alen, auy = ady / alen;
     const color = edge.bidirectional ? ARROW_COLORS.bidirectional : ARROW_COLORS.unidirectional;
+    const headLen = 10, headW = 5;
+
+    // Shorten line so it ends at arrowhead base, not tip
+    let lineEx = ex, lineEy = ey;
+    let lineSx = sx, lineSy = sy;
+    if (!edge.bidirectional) {
+        // Unidirectional: shorten end only
+        lineEx = ex - aux * headLen;
+        lineEy = ey - auy * headLen;
+    } else {
+        // Bidirectional: shorten both ends
+        lineEx = ex - aux * headLen;
+        lineEy = ey - auy * headLen;
+        lineSx = sx + aux * headLen;
+        lineSy = sy + auy * headLen;
+    }
 
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(sx, sy);
-    ctx.lineTo(ex, ey);
+    ctx.moveTo(lineSx, lineSy);
+    ctx.lineTo(lineEx, lineEy);
     ctx.stroke();
 
-    const headLen = 10, headW = 5;
+    // Arrowhead at end
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.moveTo(ex, ey);
@@ -292,6 +326,7 @@ function drawArrow(ctx, from, to, edge) {
     ctx.closePath();
     ctx.fill();
 
+    // Arrowhead at start for bidirectional
     if (edge.bidirectional) {
         ctx.beginPath();
         ctx.moveTo(sx, sy);
@@ -306,7 +341,9 @@ function drawArrow(ctx, from, to, edge) {
     ctx.fillStyle = '#888';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(dirSimpleName[edge.dir] || '', midX - auy * 10, midY + aux * 10);
+    // Use larger offset for vertical arrows to avoid overlap with the line
+    const labelDist = (Math.abs(auy) > 0.5) ? 14 : 10;
+    ctx.fillText(dirSimpleName[edge.dir] || '', midX - auy * labelDist, midY + aux * labelDist);
 }
 
 function drawRoomNode(ctx, node, pos) {
@@ -315,37 +352,41 @@ function drawRoomNode(ctx, node, pos) {
     const room = node.room;
     const sector = room.sectorType || 0;
 
-    ctx.fillStyle = SECTOR_FILL[sector] || '#f5f5f5';
-    ctx.strokeStyle = SECTOR_BORDER[sector] || '#999';
+    if (node.external) {
+        ctx.fillStyle = '#fff3e0';
+        ctx.strokeStyle = '#e65100';
+        ctx.setLineDash([4, 3]);
+    } else {
+        ctx.fillStyle = SECTOR_FILL[sector] || '#f5f5f5';
+        ctx.strokeStyle = SECTOR_BORDER[sector] || '#999';
+        ctx.setLineDash([]);
+    }
     ctx.lineWidth = 2;
     roundRect(ctx, x, y, NODE_W, NODE_H, 8);
     ctx.fill();
     ctx.stroke();
-
+    ctx.setLineDash([]);
     ctx.font = 'bold 12px monospace';
     ctx.fillStyle = '#333';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillText('#' + room.VNum, x + 8, y + 6);
-
     ctx.font = '13px sans-serif';
     ctx.fillStyle = '#222';
     const maxW = NODE_W - 40;
     let name = room.name || '';
     if (ctx.measureText(name).width > maxW) {
-        while (name.length > 0 && ctx.measureText(name + '\u2026').width > maxW) name = name.slice(0, -1);
-        name += '\u2026';
+        while (name.length > 0 && ctx.measureText(name + '…').width > maxW) name = name.slice(0, -1);
+        name += '…';
     }
     ctx.fillText(name, x + 8, y + 22);
-
     let iconX = x + NODE_W - 8;
     ctx.font = '12px sans-serif';
     ctx.textAlign = 'right';
     const hasUp = room.doors[DIR_U] && room.doors[DIR_U].VNumTo !== -1;
     const hasDown = room.doors[DIR_D] && room.doors[DIR_D].VNumTo !== -1;
-    if (hasDown) { ctx.fillStyle = '#9c27b0'; ctx.fillText('\u2B07', iconX, y + 6); iconX -= 16; }
-    if (hasUp) { ctx.fillStyle = '#2196f3'; ctx.fillText('\u2B06', iconX, y + 6); }
-
+    if (hasDown) { ctx.fillStyle = '#9c27b0'; ctx.fillText('⬇', iconX, y + 6); iconX -= 16; }
+    if (hasUp) { ctx.fillStyle = '#2196f3'; ctx.fillText('⬆', iconX, y + 6); }
     const sect = (sectTypeName[sector] || {}).name || '';
     ctx.font = '10px sans-serif';
     ctx.fillStyle = '#888';
@@ -371,33 +412,26 @@ function roundRect(ctx, x, y, w, h, r) {
 export function initMap() {
     const container = document.getElementById('map-canvas-container');
     if (!container) return;
-
-    // Pinch-to-zoom (macOS trackpad / touch devices)
     container.addEventListener('wheel', (e) => {
         if (!isMapOpen() || !e.ctrlKey) return;
         e.preventDefault();
+        const rect = container.getBoundingClientRect();
+        const cursorX = e.clientX - rect.left + container.scrollLeft;
+        const cursorY = e.clientY - rect.top + container.scrollTop;
+        const oldZoom = zoomLevel;
         const delta = -e.deltaY * 0.01;
         zoomLevel = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoomLevel + delta));
-        applyZoom();
+        applyZoom(cursorX, cursorY, oldZoom);
     }, { passive: false });
 }
 
 export function openMap(area) {
     if (!area || !area.rooms || area.rooms.length === 0) return;
-
     const panel = document.getElementById('map-panel');
     if (!panel) return;
-
-    console.log('[Map] Opening map with', area.rooms.length, 'rooms');
     graph = buildGraph(area.rooms);
-    console.log('[Map] Graph built:', graph.nodeMap.size, 'nodes,', graph.edges.length, 'edges');
     layoutGrid(graph);
-
-    // Log node positions
-    for (const [vnum, node] of graph.nodeMap) {
-        console.log('[Map] Node', vnum, 'floor:', node.floor, 'grid:', node.gridX, node.gridY);
-    }
-
+    globalBounds = computeGlobalBounds();
     minFloor = Infinity;
     maxFloor = -Infinity;
     for (const [, node] of graph.nodeMap) {
@@ -405,14 +439,10 @@ export function openMap(area) {
         if (node.floor > maxFloor) maxFloor = node.floor;
     }
     if (minFloor === Infinity) { minFloor = 0; maxFloor = 0; }
-
-    console.log('[Map] Floor range:', minFloor, 'to', maxFloor);
     currentFloor = 0;
-
     document.getElementById('map-area-name').textContent = area.general ? area.general.areaName || '' : '';
     updateFloorUI();
     updateStats();
-
     panel.classList.remove('hidden');
     zoomLevel = 1.0;
     renderCurrentFloor();
@@ -424,6 +454,7 @@ export function closeMap() {
     const panel = document.getElementById('map-panel');
     if (panel) panel.classList.add('hidden');
     graph = null;
+    globalBounds = null;
 }
 
 export function isMapOpen() {
@@ -472,9 +503,18 @@ export function mapFloorDown() {
     }
 }
 
-function applyZoom() {
+function applyZoom(cursorX, cursorY, oldZoom) {
     const canvas = document.getElementById('map-canvas');
-    if (!canvas) return;
+    const container = document.getElementById('map-canvas-container');
+    if (!canvas || !container) return;
+
+    // If cursor position provided, adjust scroll to keep that point stable
+    if (cursorX !== undefined && cursorY !== undefined && oldZoom !== undefined && oldZoom > 0) {
+        const scale = zoomLevel / oldZoom;
+        container.scrollLeft = cursorX * scale - (cursorX - container.scrollLeft);
+        container.scrollTop = cursorY * scale - (cursorY - container.scrollTop);
+    }
+
     canvas.style.transform = 'scale(' + zoomLevel + ')';
     canvas.style.transformOrigin = 'top left';
     const label = document.getElementById('map-zoom-label');
@@ -501,4 +541,6 @@ export function zoomFit() {
     const ph = parseFloat(canvas.style.height) || canvas.height;
     zoomLevel = Math.min(cw / pw, ch / ph, 1.0);
     applyZoom();
+    container.scrollLeft = 0;
+    container.scrollTop = 0;
 }
