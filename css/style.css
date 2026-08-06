@@ -1833,10 +1833,29 @@ input[type="number"] {
     line-height: 1;
 }
 
+#map-toggle-group,
+.map-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--pico-muted-color);
+    white-space: nowrap;
+    margin: 0;
+    cursor: pointer;
+}
+
+.map-toggle input[type="checkbox"] {
+    margin: 0;
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
 #map-canvas-container {
     flex: 1;
     overflow: auto;
     position: relative;
+    background: #fbfbfc;
 }
 
 #map-canvas {
@@ -1856,6 +1875,39 @@ input[type="number"] {
 
 .legend-item {
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.legend-item i {
+    display: inline-block;
+    width: 18px;
+    height: 0;
+    border-top-width: 2px;
+    border-top-style: solid;
+}
+
+.legend-item i.lg-bi     { border-top-color: #4a8f4e; }
+.legend-item i.lg-one    { border-top-color: #e08a20; }
+.legend-item i.lg-far    { border-top-color: #8e8e93; border-top-style: dashed; }
+.legend-item i.lg-portal { border-top-color: #7a5cc4; border-top-style: dotted; }
+.legend-item i.lg-ext    { border-top-color: #c2571a; border-top-style: dotted; }
+
+#map-hint {
+    margin-left: auto;
+    font-family: var(--pico-font-family-monospace, monospace);
+    font-size: 0.72rem;
+    color: var(--pico-color, #333);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 45%;
+}
+
+#map-legend {
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 /* ========================================

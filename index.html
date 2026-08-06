@@ -110,6 +110,9 @@
                     <button id="map-zoom-in" class="outline secondary small">+</button>
                     <button id="map-zoom-fit" class="outline secondary small">Fit</button>
                     <span class="map-separator">|</span>
+                    <label class="map-toggle"><input type="checkbox" id="map-ghosts" checked> Ghost floors</label>
+                    <label class="map-toggle"><input type="checkbox" id="map-long-links"> Long links</label>
+                    <span class="map-separator">|</span>
                     <button id="map-save-png" class="outline secondary small">💾 PNG</button>
                 </div>
                 <div id="map-stats">
@@ -122,10 +125,15 @@
                 <canvas id="map-canvas"></canvas>
             </div>
             <div id="map-legend">
-                <span class="legend-item">↔ Bidirectional exit</span>
-                <span class="legend-item">→ Unidirectional exit</span>
-                <span class="legend-item">⬆ Up exit (to higher floor)</span>
-                <span class="legend-item">⬇ Down exit (to lower floor)</span>
+                <span class="legend-item"><i class="lg-bi"></i> Bidirectional</span>
+                <span class="legend-item"><i class="lg-one"></i> One-way</span>
+                <span class="legend-item"><i class="lg-far"></i> Non-Euclidean link</span>
+                <span class="legend-item"><i class="lg-portal"></i> Portal stub → other district/floor</span>
+                <span class="legend-item"><i class="lg-ext"></i> Exit leaving the area</span>
+                <span class="legend-item">▲n / ▼n Stairs to floor n</span>
+                <span class="legend-item">Dashed frame = district</span>
+                <span class="legend-item">Click a room to edit it</span>
+                <span id="map-hint"></span>
             </div>
         </div>
 
