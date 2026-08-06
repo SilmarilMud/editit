@@ -1,9 +1,10 @@
 /* room-form.js - Room editor form for EditIt */
 
 import {
-    roomFlagsName, sectTypeName, lockTypeName, doorResetName,
+    roomFlagsName, sectTypeName, exitFlagsName, doorResetName,
     dirSimpleName, dirName, createDoor,
-    createLoadedObject, createLoadedMob
+    createLoadedObject, createLoadedMob,
+    EX_ISDOOR, EX_WINDOW
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
 import { escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
@@ -140,20 +141,15 @@ function renderExits(container, room, onChange, readonly) {
                         <label>Description</label>
                         <textarea name="exit_descr_${i}" rows="2" ${readonly ? 'disabled' : ''}>${escapeHtml(door.descr)}</textarea>
                     </div>
-                    <div class="form-row">
-                        <div class="form-section">
-                            <label>Lock Type</label>
-                            <select name="exit_locktype_${i}" ${readonly ? 'disabled' : ''}>
-                                ${lockTypeName.map(l => `<option value="${l.number}" ${door.lockType===l.number?'selected':''}>${l.name}</option>`).join('')}
-                                ${!lockTypeName.some(l => l.number === door.lockType) ? `<option value="${door.lockType}" selected>Custom (${door.lockType})</option>` : ''}
-                            </select>
-                        </div>
-                        <div class="form-section">
-                            <label>Reset State</label>
-                            <select name="exit_resettype_${i}" ${readonly ? 'disabled' : ''}>
-                                ${doorResetName.map(d => `<option value="${d.number}" ${door.resetType===d.number?'selected':''}>${d.name}</option>`).join('')}
-                            </select>
-                        </div>
+                    <div class="form-section">
+                        <label>Exit Flags</label>
+                        <div class="exit-flags" id="exit-flags-${i}"></div>
+                    </div>
+                    <div class="form-section">
+                        <label>Reset State</label>
+                        <select name="exit_resettype_${i}" id="exit-resettype-${i}" ${readonly ? 'disabled' : ''}>
+                            ${doorResetName.map(d => `<option value="${d.number}" ${door.resetType===d.number?'selected':''}>${d.name}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="form-section">
                         <label>
@@ -166,6 +162,28 @@ function renderExits(container, room, onChange, readonly) {
     });
     html += '</div>';
     el.innerHTML = html;
+    
+    // Render exit flags checkboxes for each door
+    directions.forEach((dir, i) => {
+        const door = room.doors[i];
+        const flagsEl = el.querySelector(`#exit-flags-${i}`);
+        if (flagsEl) {
+            const flagsData = exitFlagsName.map(f => ({ value: f.value, label: f.label }));
+            flagsEl.appendChild(createFlagGroup(`exit_flags_${i}`, flagsData, door.exitFlags, v => {
+                door.exitFlags = v;
+                // Update status
+                const status = el.querySelector(`.exit-header[data-index="${i}"] .exit-status`);
+                if (status) {
+                    status.textContent = door.VNumTo !== -1 ? `→ #${door.VNumTo}` : 'No exit';
+                }
+                updateExitFlagsState(flagsEl, v);
+                if (onChange) onChange(room);
+            }, { columns: 3, disabled: readonly }).container);
+            
+            // Apply initial state
+            updateExitFlagsState(flagsEl, door.exitFlags);
+        }
+    });
     
     // Toggle exit details
     el.querySelectorAll('.exit-header').forEach(header => {
@@ -201,7 +219,6 @@ function renderExits(container, room, onChange, readonly) {
                 else if (field === 'keyvnum') door.keyVNum = parseInt(e.target.value, 10) || -1;
                 else if (field === 'keywords') door.keywords = e.target.value;
                 else if (field === 'descr') door.descr = e.target.value;
-                else if (field === 'locktype') door.lockType = parseInt(e.target.value, 10) || 0;
                 else if (field === 'resettype') door.resetType = parseInt(e.target.value, 10) || -1;
                 else if (field === 'reverse') door.reverse = e.target.checked;
                 
@@ -270,6 +287,44 @@ function renderExtras(container, room, onChange, readonly) {
             renderList();
             if (onChange) onChange(room);
         });
+    }
+}
+
+/**
+ * Update exit flags checkbox states based on door/window logic:
+ * - No flags: only EX_ISDOOR and EX_WINDOW enabled
+ * - EX_ISDOOR checked: EX_WINDOW disabled, others enabled
+ * - EX_WINDOW checked: all others disabled
+ * Also enables/disables Reset State select based on EX_ISDOOR
+ */
+function updateExitFlagsState(container, exitFlags) {
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const isDoor = (exitFlags & EX_ISDOOR) !== 0;
+    const isWindow = (exitFlags & EX_WINDOW) !== 0;
+    
+    checkboxes.forEach(cb => {
+        const flagValue = parseInt(cb.value, 10);
+        
+        if (isWindow) {
+            // EX_WINDOW checked: all others disabled
+            cb.disabled = flagValue !== EX_WINDOW;
+        } else if (isDoor) {
+            // EX_ISDOOR checked: EX_WINDOW disabled, others enabled
+            cb.disabled = flagValue === EX_WINDOW;
+        } else {
+            // No flags checked: only EX_ISDOOR and EX_WINDOW enabled
+            cb.disabled = flagValue !== EX_ISDOOR && flagValue !== EX_WINDOW;
+        }
+    });
+    
+    // Enable/disable Reset State select based on EX_ISDOOR
+    const match = container.id.match(/exit-flags-(\d+)/);
+    if (match) {
+        const idx = match[1];
+        const resetSelect = container.closest('.exit-details')?.querySelector(`#exit-resettype-${idx}`);
+        if (resetSelect) {
+            resetSelect.disabled = !isDoor;
+        }
     }
 }
 

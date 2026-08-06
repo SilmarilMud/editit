@@ -315,19 +315,6 @@ export const AREA_DELAYED_RESET = 4096;
 export const AFLAG_DONT_SET = AREA_BATTLEGROUND | AREA_DELAYED_RESET | AREA_ROTHOLHA_FIELD;
 
 // ============================================================================
-// LOCK_* - Door lock types
-// ============================================================================
-
-export const LOCK_NONE = 0;
-export const LOCK_YPICK_YBASH_YPASS = 1;
-export const LOCK_NPICK_YBASH_YPASS = 2;
-export const LOCK_YPICK_NBASH_YPASS = 3;
-export const LOCK_NPICK_NBASH_YPASS = 4;
-export const LOCK_YPICK_YBASH_NPASS = 5;
-export const LOCK_NPICK_YBASH_NPASS = 6;
-export const LOCK_YPICK_NBASH_NPASS = 7;
-export const LOCK_NPICK_NBASH_NPASS = 8;
-
 // ============================================================================
 // DOOR_* - Door reset states
 // ============================================================================
@@ -358,9 +345,9 @@ export const EX_HEAVY = 1024;
 export const EX_COMPLEX = 2048;
 
 export const EFLAG_DONT_SET = EX_CLOSED | EX_LOCKED | EX_BASHED;
-export const EFLAG_FOR_DOOR = EX_CLOSED | EX_LOCKED | EX_BASHED |
+export const EFLAG_FOR_DOOR = EX_ISDOOR | EX_CLOSED | EX_LOCKED | EX_BASHED |
     EX_BASHPROOF | EX_PICKPROOF | EX_PASSPROOF |
-    EX_HIDDEN | EX_NOUN_MALE | EX_HEAVY | EX_COMPLEX;
+    EX_HIDDEN | EX_NOUN_MALE | EX_WINDOW | EX_HEAVY | EX_COMPLEX;
 
 // ============================================================================
 // WEAR_* - Wear locations
@@ -1040,17 +1027,7 @@ export const sectTypeName = [
     { number: SECT_ROAD,        name: "Strada" },
 ];
 
-export const lockTypeName = [
-    { number: LOCK_NONE,              name: "Non e' una porta" },
-    { number: LOCK_YPICK_YBASH_YPASS, name: "Porta normale" },
-    { number: LOCK_NPICK_YBASH_YPASS, name: "Porta non Forzabile" },
-    { number: LOCK_YPICK_NBASH_YPASS, name: "Porta non Sfondabile" },
-    { number: LOCK_NPICK_NBASH_YPASS, name: "Porta non Forz e Sfon" },
-    { number: LOCK_YPICK_YBASH_NPASS, name: "Porta non Passabile" },
-    { number: LOCK_NPICK_YBASH_NPASS, name: "Porta non Forz e Pasa" },
-    { number: LOCK_YPICK_NBASH_NPASS, name: "Porta non Sfon e Pass" },
-    { number: LOCK_NPICK_NBASH_NPASS, name: "Porta non Forz, Sfon e Pass" },
-];
+
 
 export const doorResetName = [
     { number: DOOR_NOT_RESET,        name: "Non resettata" },
@@ -1061,18 +1038,18 @@ export const doorResetName = [
 ];
 
 export const exitFlagsName = [
-    "E' una porta",                 // 1
-    "Chiusa",                       // 2
-    "Bloccata",                     // 4
-    "Sfondata",                     // 8
-    "Non sfondabile",               // 16
-    "Non forzabile",                // 32
-    "Non attraversabile",           // 64
-    "Nascosta",                     // 128
-    "Nome maschile",                // 256
-    "Finestra",                     // 512
-    "Resistente",                   // 1024
-    "Serr. Complessa",              // 2048
+    { value: EX_ISDOOR,     label: "E' una porta" },
+    { value: EX_CLOSED,     label: "Chiusa" },
+    { value: EX_LOCKED,     label: "Bloccata" },
+    { value: EX_BASHED,     label: "Sfondata" },
+    { value: EX_BASHPROOF,  label: "Non sfondabile" },
+    { value: EX_PICKPROOF,  label: "Non forzabile" },
+    { value: EX_PASSPROOF,  label: "Non attraversabile" },
+    { value: EX_HIDDEN,     label: "Nascosta" },
+    { value: EX_NOUN_MALE,  label: "Nome maschile" },
+    { value: EX_WINDOW,     label: "E' una finestra" },
+    { value: EX_HEAVY,      label: "Resistente" },
+    { value: EX_COMPLEX,    label: "Serr. Complessa" },
 ];
 
 export const wearName = [
@@ -1466,7 +1443,7 @@ export function createDoor() {
         VNumTo: -1,
         keywords: "",
         descr: "",
-        lockType: LOCK_NONE,
+        exitFlags: 0,
         keyVNum: -1,
         resetType: DOOR_NOT_RESET,
         reverse: false,

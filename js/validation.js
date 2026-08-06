@@ -2,8 +2,8 @@
 
 import {
     MAX_VNUM, MAXLEVEL, ITEM_MASK, ITEM_WEAR_MASK, ROOM_MASK,
-    SECT_ROAD, EX_ISDOOR, EX_CLOSED, EX_LOCKED, EX_BASHED, EX_BASHPROOF, EX_PICKPROOF, EX_PASSPROOF,
-    LOCK_NONE, LOCK_NPICK_NBASH_NPASS,
+    SECT_ROAD, EX_ISDOOR, EX_WINDOW, EFLAG_FOR_DOOR,
+
     DOOR_NOT_RESET, DOOR_CLOSED_LOCKED,
     ITEM_CONTAINER, ITEM_LIGHT,
     SEX_NEUTRAL, SEX_FEMALE, WEAR_NONE,
@@ -11,7 +11,7 @@ import {
     itemTypeName, itemWeaponName, itemContainerFlagsName,
     itemLiquidName, itemPoisonName, itemFurnitureFlagsName,
     itemTrapType, itemTrapDamage,
-    sectTypeName, lockTypeName, doorResetName, wearName, itemValues,
+    sectTypeName, doorResetName, wearName, itemValues,
     VALUE_IS_SPELL, VALUE_IS_WEAPON, VALUE_IS_CONTAINER_FLAGS,
     VALUE_IS_LIQUID, VALUE_IS_POISON, VALUE_IS_FURNITURE_FLAGS,
     VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE,
@@ -407,10 +407,29 @@ function checkRooms(rooms) {
         for (let dir = 0; dir <= 5; dir++) {
             const door = room.doors[dir];
 
-            // Lock type validation
-            if (door.lockType < 0) {
-                issues.push(issue('W-INVALID-LOCK', 'room', room.VNum, `doors[${dir}].lockType`, {
-                    message: `Direction ${dirStr(dir)}: Lock type ${door.lockType} is negative`
+            // Exit flags validation
+            if (door.exitFlags < 0) {
+                issues.push(issue('W-INVALID-LOCK', 'room', room.VNum, `doors[${dir}].exitFlags`, {
+                    message: `Direction ${dirStr(dir)}: Exit flags ${door.exitFlags} is negative`
+                }));
+            }
+            // Validate exit flags against allowed mask
+            const invalidBits = door.exitFlags & ~EFLAG_FOR_DOOR;
+            if (invalidBits) {
+                issues.push(issue('W-INVALID-LOCK', 'room', room.VNum, `doors[${dir}].exitFlags`, {
+                    message: `Direction ${dirStr(dir)}: Exit flags contains unknown bits: ${invalidBits}`
+                }));
+            }
+            // EX_WINDOW can't be set with other flags
+            if ((door.exitFlags & EX_WINDOW) && (door.exitFlags & ~EX_WINDOW)) {
+                issues.push(issue('W-INVALID-LOCK', 'room', room.VNum, `doors[${dir}].exitFlags`, {
+                    message: `Direction ${dirStr(dir)}: Window flag can't be combined with other flags`
+                }));
+            }
+            // If EX_ISDOOR is not set, no other door flags should be set
+            if (!(door.exitFlags & EX_ISDOOR) && (door.exitFlags & ~EX_ISDOOR & ~EX_WINDOW)) {
+                issues.push(issue('W-INVALID-LOCK', 'room', room.VNum, `doors[${dir}].exitFlags`, {
+                    message: `Direction ${dirStr(dir)}: Other flags set without door flag`
                 }));
             }
 
@@ -421,8 +440,8 @@ function checkRooms(rooms) {
                 }));
             }
 
-            // Door with lockType but no keywords (only for actual doors, not regular exits)
-            if (door.VNumTo >= 0 && door.lockType !== LOCK_NONE && (!door.keywords || door.keywords === '')) {
+            // Door with exitFlags but no keywords (only for actual doors, not regular exits)
+            if (door.VNumTo >= 0 && door.exitFlags !== 0 && (!door.keywords || door.keywords === '')) {
                 issues.push(issue('W-DOOR-DESC', 'room', room.VNum, `doors[${dir}].keywords`, {
                     message: `Direction ${dirStr(dir)}: Door has no keywords defined`
                 }));

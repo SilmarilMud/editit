@@ -7,11 +7,11 @@ import {
     createLoadedMob, createMobObject,
     AREA_NEWFORMAT, AREA_NEWRESET, ACT_MASK, AFF_MOB_MASK, AFF_OBJ_MASK,
     ITEM_MASK, ITEM_WEAR_MASK, ROOM_MASK, LOOKUPNOTFOUND, WEAR_NONE,
-    DOOR_NOT_RESET, LOCK_NONE, EX_ISDOOR, EX_PICKPROOF, EX_BASHPROOF, EX_PASSPROOF,
+    DOOR_NOT_RESET, EX_ISDOOR, EX_PICKPROOF, EX_BASHPROOF, EX_PASSPROOF,
     MAX_VNUM, MAX_DIR, SHOPMAXTRADE,
     sexName, guildName, races, itemTypeName, itemWeaponName, itemContainerFlagsName,
     itemLiquidName, itemPoisonName, itemFurnitureFlagsName, itemTrapType,
-    itemTrapDamage, applyName, spells, mobSpecFuncs, objSpecFuncs, sectTypeName, lockTypeName,
+    itemTrapDamage, applyName, spells, mobSpecFuncs, objSpecFuncs, sectTypeName,
     wearName, doorResetName, itemValues,
     VALUE_IS_UNUSED, VALUE_IS_LIGHT, VALUE_IS_SPELL, VALUE_IS_NUMBER_FROM_0,
     VALUE_IS_WEAPON, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_VNUM, VALUE_IS_LIQUID,
@@ -525,22 +525,22 @@ class Parser {
                     if (general.areaFlags & AREA_NEWFORMAT) {
                         const peek = this.readLetter();
                         if (peek === 'B') {
-                            room.doors[door].lockType = this.readNumber();
+                            room.doors[door].exitFlags = this.readNumber();
                         } else {
                             this.pos--;
-                            room.doors[door].lockType = this.readNumber();
+                            room.doors[door].exitFlags = this.readNumber();
                         }
                     } else {
                         const peek = this.readLetter();
                         if (peek === 'B') {
-                            room.doors[door].lockType = this.readNumber();
+                            room.doors[door].exitFlags = this.readNumber();
                         } else {
                             this.pos--;
                             const lt = this.readNumber();
                             if (lt < 0) {
-                                room.doors[door].lockType = LOCK_NONE;
+                                room.doors[door].exitFlags = 0;
                             } else {
-                                room.doors[door].lockType = lt;
+                                room.doors[door].exitFlags = lt;
                                 const lockMap = {
                                     1: EX_ISDOOR, 2: EX_ISDOOR | EX_PICKPROOF,
                                     3: EX_ISDOOR | EX_BASHPROOF,
@@ -550,7 +550,7 @@ class Parser {
                                     7: EX_ISDOOR | EX_BASHPROOF | EX_PASSPROOF,
                                     8: EX_ISDOOR | EX_PICKPROOF | EX_BASHPROOF | EX_PASSPROOF,
                                 };
-                                if (lockMap[lt] !== undefined) room.doors[door].lockType = lockMap[lt];
+                                if (lockMap[lt] !== undefined) room.doors[door].exitFlags = lockMap[lt];
                             }
                         }
                     }

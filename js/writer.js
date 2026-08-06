@@ -245,7 +245,7 @@ class Writer {
                     out += 'D ' + j + '\n';
                     out += room.doors[j].descr + '~\n';
                     out += room.doors[j].keywords + '~\n';
-                    out += 'B' + room.doors[j].lockType + ' '
+                    out += 'B' + room.doors[j].exitFlags + ' '
                          + room.doors[j].keyVNum + ' '
                          + room.doors[j].VNumTo + '\n';
                 }

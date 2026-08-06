@@ -19,6 +19,14 @@
 .extra-keywords::placeholder,
 .extra-descr::placeholder {
     font-family: monospace;
+    color: #8a8a8a;
+}
+
+.form-section input[type="text"]:focus::placeholder,
+.form-section textarea:focus::placeholder,
+.extra-keywords:focus::placeholder,
+.extra-descr:focus::placeholder {
+    color: transparent;
 }
 
 /* ========================================
@@ -952,16 +960,12 @@ input[type="number"] {
 }
 
 .exits-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-@media (max-width: 768px) {
-    .exits-container {
-        grid-template-columns: 1fr;
-    }
-}
+
 
 .exit-panel {
     border: 1px solid var(--pico-muted-border-color);
@@ -1008,6 +1012,10 @@ input[type="number"] {
 
 .exit-details.expanded {
     display: block;
+}
+
+.exit-flags {
+    margin-top: 0.25rem;
 }
 
 .contents-list {
