@@ -45,6 +45,7 @@ let maxFloor = 0;
 let graph = null;
 let globalBounds = null;
 let zoomLevel = 1.0;
+let currentAreaName = '';
 const ZOOM_MIN = 0.1;
 const ZOOM_MAX = 3.0;
 const ZOOM_STEP = 0.15;
@@ -440,7 +441,8 @@ export function openMap(area) {
     }
     if (minFloor === Infinity) { minFloor = 0; maxFloor = 0; }
     currentFloor = 0;
-    document.getElementById('map-area-name').textContent = area.general ? area.general.areaName || '' : '';
+    currentAreaName = area.general ? (area.general.areaName || 'area') : 'area';
+    document.getElementById('map-area-name').textContent = currentAreaName;
     updateFloorUI();
     updateStats();
     panel.classList.remove('hidden');
@@ -543,4 +545,98 @@ export function zoomFit() {
     applyZoom();
     container.scrollLeft = 0;
     container.scrollTop = 0;
+}
+
+export function exportAllFloorsPNG() {
+    if (!graph || !globalBounds) return;
+    
+    const { minX, minY, maxX, maxY } = globalBounds;
+    const cols = maxX - minX + 1;
+    const rows = maxY - minY + 1;
+    const logicalW = cols * GRID_SPACING_X + PADDING * 2;
+    const logicalH = rows * GRID_SPACING_Y + PADDING * 2;
+    
+    // Sanitize area name for filename
+    const safeName = currentAreaName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_|_$/g, '') || 'area';
+    
+    // Export each floor
+    for (let floor = minFloor; floor <= maxFloor; floor++) {
+        // Create off-screen canvas at 100% scale (no DPR scaling)
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = logicalW;
+        offCanvas.height = logicalH;
+        const ctx = offCanvas.getContext('2d');
+        
+        // Render floor at 100% scale
+        renderFloorOffscreen(ctx, floor, logicalW, logicalH, minX, minY);
+        
+        // Build filename: name_f0.png, name_f-1.png, etc.
+        const floorStr = floor >= 0 ? `f${floor}` : `f${floor}`;
+        const filename = `${safeName}_${floorStr}.png`;
+        
+        // Download
+        offCanvas.toBlob((blob) => {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }, 'image/png');
+    }
+}
+
+function renderFloorOffscreen(ctx, floor, width, height, minX, minY) {
+    // Fill background
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(0, 0, width, height);
+    
+    if (!graph) return;
+    
+    const ox = PADDING - minX * GRID_SPACING_X;
+    const oy = PADDING - minY * GRID_SPACING_Y;
+    
+    function toPixel(gx, gy) {
+        return {
+            x: ox + gx * GRID_SPACING_X + GRID_SPACING_X / 2,
+            y: oy + gy * GRID_SPACING_Y + GRID_SPACING_Y / 2,
+        };
+    }
+    
+    // Draw edges
+    for (const edge of graph.edges) {
+        const fromNode = graph.nodeMap.get(edge.fromVnum);
+        const toNode = graph.nodeMap.get(edge.toVnum);
+        if (!fromNode || !toNode) continue;
+        if (fromNode.floor !== floor || toNode.floor !== floor) continue;
+        drawArrow(ctx, toPixel(fromNode.gridX, fromNode.gridY), toPixel(toNode.gridX, toNode.gridY), edge);
+    }
+    
+    // Draw room nodes
+    for (const [, node] of graph.nodeMap) {
+        if (node.floor !== floor) continue;
+        drawRoomNode(ctx, node, toPixel(node.gridX, node.gridY));
+    }
+    
+    // Draw up/down labels
+    for (const [, node] of graph.nodeMap) {
+        if (node.floor !== floor) continue;
+        const pos = toPixel(node.gridX, node.gridY);
+        const hasUp = node.room.doors[DIR_U] && node.room.doors[DIR_U].VNumTo !== -1;
+        const hasDown = node.room.doors[DIR_D] && node.room.doors[DIR_D].VNumTo !== -1;
+        if (hasUp || hasDown) {
+            const parts = [];
+            if (hasUp) parts.push('\u2B06 F' + (floor + 1));
+            if (hasDown) parts.push('\u2B07 F' + (floor - 1));
+            ctx.font = '9px sans-serif';
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(parts.join('  '), pos.x, pos.y + NODE_H / 2 + 12);
+        }
+    }
 }

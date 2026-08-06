@@ -70,7 +70,7 @@ import {
 } from './validation.js';
 import { undoManager, ActionType, describeAction } from './undo.js';
 import { searchArea, getContextSnippet, highlightMatch, ENTITY_TYPE_ICONS, ENTITY_TYPE_NAMES } from './search.js';
-import { initMap, openMap, closeMap, isMapOpen, mapFloorUp, mapFloorDown, zoomIn, zoomOut, zoomFit } from './map.js';
+import { initMap, openMap, closeMap, isMapOpen, mapFloorUp, mapFloorDown, zoomIn, zoomOut, zoomFit, exportAllFloorsPNG } from './map.js';
 
 // Entity type icons
 const TYPE_ICONS = {
@@ -2203,6 +2203,7 @@ async function init() {
     document.getElementById('map-zoom-in')?.addEventListener('click', zoomIn);
     document.getElementById('map-zoom-out')?.addEventListener('click', zoomOut);
     document.getElementById('map-zoom-fit')?.addEventListener('click', zoomFit);
+    document.getElementById('map-save-png')?.addEventListener('click', exportAllFloorsPNG);
     
     // Setup tree toolbar buttons
     document.getElementById('btn-expand-all')?.addEventListener('click', expandAll);
