@@ -1,83 +1,87 @@
-#AREA { 1 50} Arsil Eldamar~
-
-#HELPS
-
-0 test test2 test3~
-This is a test to verify if handling help entries works correctly.~
-
-0 $~
+#NEWAREA
+Name	Eldamar~
+Author	Arsil~
+Range	1 50
+Flags	1|8
+Music	~
+Recall	0
+Reset	~
+Plane	Materiale~
+End
 
 #MOBILES
 
-#27100
-mablung~
-Mablung~
-Mablung vigila sull'ingresso del tempio.
+#10800
+nuin~
+Nuin~
+Nuin, la Guardia della Torre, sta vigilando.
 ~
-Un elfo molto alto e robusto, i suoi occhi scintillano come stelle.
-Viene chiamato Mano Pesante per via della sua enorme forza, ma, a meno
-che tu non abbia cattive intenzioni, non hai nulla da temere da lui.
+La Guardia della Torre: un elfo particolarmente alto e robusto, i cui occhi
+scintillano come stelle. I ricci capelli castani gli ricadono liberamente
+sulle spalle. Ha una enorme forza, ma, a meno che tu non abbia cattive
+intenzioni, non hai nulla da temere da lui.
 ~
-2|64 8|32|128|8192 1000 S
+2|16384 8|32|128|8192 1000 S
 50 0 0 0d0+0 0d0+0
-1500 0
+15000 0
 0 Elf~ 1
 
-#27101
+#10801
 alakwen~
 Alakwen~
 Alakwen la curatrice e' qui.
 ~
 Questa fanciulla senza eta' possiede un fascino particolare. Il suo dolce
 sorriso e' una cura sufficiente per ogni male, ma all'occorrenza usa i suoi
-poteri per aiutare i giovani feriti, ammalati o stanchi.
+poteri per aiutare i giovani feriti, ammalati o stanchi. I suoi occhi sono
+verdi, i suoi capelli biondo platino.
 ~
-2|64 8|32|128|8192 1000 S
-45 0 0 0d0+0 0d0+0
-1500 0
+2 8|32|128|8192 1000 S
+50 0 0 0d0+0 0d0+0
+1000 0
 0 Elf~ 2
 
-#27102
-guardiano~
-un guardiano~
-Un guardiano sorveglia l'ingresso della citta'.
+#10802
+Elmir~
+Elmir~
+Elmir, Custode dei Cancelli, sorveglia l'ingresso della citta'.
 ~
 Il bellissimo e robusto guardiano ti guarda e dice: "In questo luogo non
-ti accadra' nulla di male, a meno che non sia tu stesso a portarlo teco".
+ti accadra' nulla di male, a meno che non sia tu stesso a portarlo...".
 ~
-2|64 128|8192 1000 S
-30 0 0 0d0+0 0d0+0
-100 0
+2|16384 8|32|128|8192|65536 1000 S
+40 0 0 0d0+0 0d0+0
+5000 0
 0 Elf~ 1
 
-#27103
+#10803
 fornaio~
 un fornaio~
 Un fornaio sta preparando il pane.
 ~
 Ha lunghi capelli bruni raccolti in una grossa coda di cavallo.
-Presta attenzione al pane sul forno ma e' subito al tuo servizio
-appena ne hai bisogno.
+Presta attenzione al pane sul forno ma e' subito al tuo servizio appena ne
+hai bisogno.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
-25000 0
+15000 0
 0 Elf~ 1
 
-#27104
+#10804
 negoziante~
 un negoziante~
 Un negoziante ti mostra i suoi articoli.
 ~
-Un elfo con i capelli neri corti e occhi chiari.
+Un elfo con capelli neri corti e occhi chiari.
 Ti mostra affabilmente gli articoli in vendita.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
-25000 0
+0 0
 0 Elf~ 1
 
-#27105
+#10805
 alchimista~
 un'alchimista~
 Un'alchimista sta preparando una pozione.
@@ -86,49 +90,49 @@ Questa fanciulla elfica ha l'aspetto e l'allegria di una bambina.
 Quando non prepara pozioni o pergamene scambia volentieri due
 chiacchiere con i clienti.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
-25000 0
+0 0
 0 Elf~ 2
 
-#27106
-fabbro~
-un fabbro~
-Un fabbro ti mostra la merce in vendita.
+#10806
+armaiolo~
+un armaiolo~
+Un armaiolo ti mostra la merce in vendita.
 ~
 Un elfo alto e slanciato con occhi penetranti. Affila con cura maniacale
 le lame delle sue armi, prive di difetti, oppure le lucida come specchi.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
-25000 0
+0 0
 0 Elf~ 1
 
-#27107
+#10807
 fabbro~
 un fabbro~
 Un fabbro ti mostra la merce in vendita.
 ~
 Non altissimo, ma straordinariamente robusto e muscoloso.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
-25000 0
-0 Elf~ 1
+0 0
+0 Halfelf~ 1
 
-#27108
+#10808
 negoziante~
 un negoziante~
 Un negoziante ti mostra la merce in vendita.
 ~
 Un elfo con lunghi capelli biondi e molte treccine.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
-25000 0
+0 0
 0 Elf~ 1
 
-#27109
+#10809
 sarta~
 una sarta~
 Una sarta sta cucendo una veste.
@@ -137,93 +141,573 @@ Ha lunghi capelli biondi, lisci e sciolti, occhi verdi molto accesi,
 un viso delicato e la pelle chiarissima. E' intenta a ricamare
 qualcosa ma non ti nega un sorriso colmo di gioia e amore.
 ~
-2|64 0 1000 S
+2 0 1000 S
 50 0 0 0d0+0 0d0+0
+0 0
+0 Elf~ 2
+
+#10810
+Ermon~
+Ermon~
+Ermon, Custode dei Cancelli, sorveglia l'ingresso della citta'.
+~
+Il bellissimo e robusto guardiano ti guarda e dice: "In questo luogo non
+ti accadra' nulla di male, a meno che non sia tu stesso a portarlo...".
+~
+2|16384 8|32|128|8192 1000 S
+42 0 0 0d0+0 0d0+0
+5000 0
+0 Elf~ 1
+
+#10811
+bimbo~
+un bimbo elfo~
+Un bimbo elfo e' qui che gioca allegramente.
+~
+Un grazioso bambino che passa il suo tempo giocando, cantando e danzando.
+~
+64|128 0 1000 S
+7 0 0 0d0+0 0d0+0
+0 0
+0 Elf~ 1
+
+#10812
+Gwen arciera~
+Gwen~
+Gwen l'Arciera passeggia tra i boschi.
+~
+Una leggiadra fanciulla elfica con i capelli argentati, di media lunghezza,
+raccolti in numerose treccine. Sta valutando se darti il benvenuto oppure
+infilzarti con una freccia.
+~
+64 8|32|128|8192|32768|65536 1000 S
+30 0 0 0d0+0 0d0+0
+2000 0
+0 Elf~ 2
+
+#10813
+servitore~
+un servitore~
+Un servitore di palazzo si muove tranquillo.
+~
+Vedi un giovane elfo dai capelli biondissimi. Indossa un semplice vestito
+bianco e giallo, tipico dei servitori dei regnanti. La sua camminata
+tranquilla
+e sicura sono le prove della sua dedizione ed esperienza.
+~
+4|64 0 1000 S
+25 0 0 0d0+0 0d0+0
+30 0
+0 Elf~ 1
+
+#10814
+giovane servitore~
+un giovane servitore~
+Un giovane servitore cammina immerso nei suoi pensieri.
+~
+Quello che hai davanti e' un giovane servitore dei regnanti. Indossa la
+classica tunica bianca e gialla dei domestici. Ha l'aria piuttosto assente,
+probabilmente stara' cercando di ricordarsi tutto cio' che deve fare...
+~
+4|64|128 0 1000 S
+15 0 0 0d0+0 0d0+0
+15 0
+0 Halfelf~ 1
+
+#10815
+cameriera~
+una cameriera~
+Una giovane e graziosa cameriera cammina impettita.
+~
+Vedi una giovane elfa davvero molto carina, vestita dell'abito bianco e
+giallo dei servitori dei regnanti. Questa domestica deve essere l'addetta
+alla camera da letto della torre. Cammina infatti molto impettita,
+sentendosi importante per il compito che svolge.
+~
+64|128 0 1000 S
+25 0 0 0d0+0 0d0+0
+80 0
+0 Elf~ 2
+
+#10816
+cittadino elfo~
+un cittadino elfo~
+Un cittadino elfo sta camminando tranquillamente.
+~
+Hai davanti un normalissimo elfo. La sua aria e' tranquilla e pacifica e,
+camminando per questi luoghi, e' sicuro di non correre alcun pericolo. Non
+appena ti vede, ti saluta con un leggero inchino, prima di continuare per
+la sua strada...
+~
+64|8192 0 1000 S
+20 0 0 0d0+0 0d0+0
+200 0
+0 Elf~ 1
+
+#10817
+cittadina elfa~
+una cittadina elfa~
+Un cittadina elfa cammina sicura per la strada.
+~
+Una bellissima elfa ti si para davanti. Ti saluta con un piccolo sorriso,
+mentre si tocca i bellissimi capelli color dell'oro. Nella sua figura vedi
+tutte le caratteristiche della stirpe degli Eldar: un fisico snello, capelli
+lucenti e occhi chiarissimi. Eppure sembra che un lieve velo di malinconia
+ne oscuri il volto.
+~
+64|8192 0 1000 S
+20 0 0 0d0+0 0d0+0
+200 0
+0 Elf~ 2
+
+#10818
+bibliotecario~
+un bibliotecario~
+Il bibliotecario di Eldamar e' qui a controllare la biblioteca.
+~
+Vedi un alto elfo dai lunghi capelli scuri. Sembra immerso nei suoi
+pensieri, ma i suoi occhi espressivi sono in continuo movimento,
+controllando ogni angolo della stanza. Il suo compito e' quello di
+custodire la biblioteca e tutto il sapere in essa contenuto.
+Deve essere sicuramente una persona molto saggia e i suoi occhi 
+devono aver visto moltissime ere.
+~
+2|8|8192 4|8|32|128 1000 S
+50 0 0 0d0+0 0d0+0
+5000 0
+0 Elf~ 1
+
+#10819
+garzone~
+un garzone~
+Un garzone del negoziante e' qui, affaccendato.
+~
+Un giovane elfo si trova qui a compiere i lavori piu' umili per conto del
+suo bottegaio.
+~
+64|128|8192 0 1000 S
+15 0 0 0d0+0 0d0+0
+5 0
+0 Elf~ 1
+
+#10820
+apprendista~
+un apprendista~
+Un apprendista negoziante e' qui ad imparare il mestiere.
+~
+Vedi un giovane apprendista dai corti capelli scuri. Ti guarda placidamente,
+per poi rivolgere lo sguardo verso il negoziante, pronto a carpirne tutti i
+consigli.
+~
+2|128|8192 0 1000 S
+20 0 0 0d0+0 0d0+0
+20 0
+0 Halfelf~ 1
+
+#10821
+sentinella elfo~
+un elfo sentinella~
+Un elfo sentinella e' seduta qui appoggiata al suo arco.
+~
+Vedi un elfo dai capelli biondissimi chiuso nel suo mantello e appoggiato a
+un lungo arco di tasso. Tutti i suoi sensi sono tesi al massimo, pronti a
+sentire la presenza di qualsiasi nemico prima che possa fare del male.
+~
+2 4|32|512|65536 1000 S
+35 0 0 0d0+0 0d0+0
+50 0
+0 Elf~ 1
+
+#10822
+sentinella~
+una sentinella dei boschi~
+Una sentinella dei boschi e' qui seduta in silenzio.
+~
+Stai guardando una sentinella dei boschi, chiusa nel suo mantello grigio. Le
+uniche cose che vedi sono gli occhi verdissimi e i lunghi capelli
+scuri. E' attentissimo ad ogni rumore, pronto a colpire ogni eventuale
+nemico.
+~
+2 4|8|512|65536 1000 S
+38 0 0 0d0+0 0d0+0
+50 0
+0 Elf~ 1
+
+#10823
+sentinella~
+una sentinella dei boschi~
+Un'elfa sentinella e' qui, pronta a difendere il suo bosco.
+~
+Chiusa nel suo mantello grigio questa elfa sentinella e' completamente
+nascosta.
+I suoi corti capelli biondi si intravedono appena e i chiari occhi azzurri
+sono quasi costantemente chiusi. Sembra pronta a colpirti in qualsiasi
+momento.
+~
+2 8|32|512|65536 1000 S
+35 0 0 0d0+0 0d0+0
+100 0
+0 Elf~ 2
+
+#10824
+farfalla~
+una farfalla variopinta~
+Una farfalla svolazza tranquillamente nel cielo.
+~
+Una piccola farfalla di mille colori vola tranquilla di fiore in fiore.
+~
+64|128 524288 0 S
+1 0 0 0d0+0 0d0+0
+0 0
+0 Insect~ 0
+
+#10825
+scoiattolo~
+uno scoiattolo~
+Uno scoiattolo ti scruta da un albero.
+~
+Uno scoiattolo marroncino con una grande coda pelosa. Ti scruta incuriosito,
+ma a debita distanza nascosto su di un albero.
+~
+64|128 0 0 S
+2 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 0
+
+#10826
+tasso~
+un tasso~
+Un grosso tasso passeggia in cerca di cibo.
+~
+Un grosso tasso cammina placidamente, annusando l'aria e il terreno in cerca
+di cibo.
+~
+64|128 0 0 S
+3 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 0
+
+#10827
+volpe~
+una volpe~
+Una volpe cammina furtiva fra gli alberi.
+~
+Una volpe ti osserva dubbiosa, agitando lentamente la folta coda rossiccia.
+~
+64|128 0 0 S
+4 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 0
+
+#10828
+oste cantore elfo~
+l'oste cantore~
+Un elfo dai lunghi capelli bianchi e' seduto dietro il bancone.
+~
+Un alto elfo dai lunghissimi capelli bianchi che gli arrivano fin quasi le
+ginocchia. Il suo sguardo e' diretto verso di te, aspettando 
+un'ordinazione. Gli occhi sono molto chiari, del colore del ghiaccio, e il
+suo sguardo e' molto profondo, tipico di una persona che ha visto moltissime
+cose. E' vestito di bianco, cosa che mette ancora piu' in risalto i capelli
+e gli occhi.
+~
+2|8 0 1000 S
+40 0 0 0d0+0 0d0+0
+1200 0
+0 Elf~ 1
+
+#10829
+reggente eldamar elfo~
+il reggente di Eldamar~
+Un elfo adulto dall'aria molto importante ti guarda severamente.
+~
+Ti trovi davanti ad un vigoroso elfo dai lunghi capelli corvini. I suoi
+occhi verdi, che balzano subito allo sguardo in contrasto con la
+capigliatura, ti scrutano dall'alto al basso, senza alcuno stupore. Indossa
+una luminosa veste bianca e azzurra e la sua testa e' ornata con
+una corona di foglie.
+~
+2|8|8192 8|128 1000 S
+45 0 0 0d0+0 0d0+0
+20000 0
+0 Elf~ 1
+
+#10830
+sovrana eldamar~
+la sovrana di Eldamar~
+La sovrana di Eldamar e' qui, chiusa nei suoi pensieri.
+~
+Ti trovi al cospetto della Sovrana di Eldamar.
+Tutta la citta' e' sotto il suo diretto comando e quello dei suoi
+collaboratori, tra i quali il piu' stretto e' il reggente. Lunghi capelli
+color dell'oro e due splendidi occhi azzurri rendono la sua figura quasi
+irreale. L'aura di rispetto che l'avvolge e' rafforzata anche dal candido
+vestito e dalla splendida corona di foglie d'argento.
+~
+2|8|8192 8|128 1000 S
+50 0 0 0d0+0 0d0+0
+50000 0
+0 Elf~ 2
+
+#10831
+consigliere rosso nobile~
+un consigliere in rosso~
+Un nobile elfico in abito rosso cammina placidamente.
+~
+Un elfo dal portamento nobile, vestito con uno splendido abito rosso. E' uno
+dei consiglieri di Eldamar, che aiutano la sovrana ed il reggente nelle
+decisioni pie' importanti che riguardano la citta' e tutto il popolo degli
+elfi. Ognuno dei quattro consiglieri e' contraddistinto da un colore, che
+ne indica la provenienza. Questo e' il consigliere della citta'.
+~
+8|64|8192 0 1000 S
+40 0 0 0d0+0 0d0+0
+25000 0
+0 Elf~ 1
+
+#10832
+consigliere verde nobile~
+un consigliere in verde~
+Un nobile elfo vestito di verde cammina solitario.
+~
+Un elfo dal portamento nobile, vestito con uno splendido abito color
+smeraldo.
+E' uno dei consiglieri di Eldamar, che aiutano la sovrana e il reggente
+nelle decisioni piu' importanti che riguardano la citta' e tutto il popolo
+degli elfi. Ognuno dei quattro consiglieri e' contraddistinto da un colore,
+che ne indica la provenienza. Questo e' il consigliere proveniente dalla 
+foresta.
+~
+8|64|8192 0 1000 S
+40 0 0 0d0+0 0d0+0
+25000 0
+0 Elf~ 1
+
+#10833
+consigliere azzurro nobile~
+un consigliere in azzurro~
+Una nobile elfa in abito celeste e' qui immersa nei suoi pensieri.
+~
+Un'elfa dal portamento nobile, vestita con uno splendido abito celeste. E'
+uno dei consiglieri di Eldamar, che aiutano la sovrana e il reggente nelle
+decisioni piu' importanti che riguardano la citta' e tutto il popolo degli
+elfi. Ognuno dei quattro consiglieri e' contraddistinto da un colore, che
+ne indica la provenienza. Questa e' il consigliere giunto dal porto.
+~
+8|64|8192 0 1000 S
+40 0 0 0d0+0 0d0+0
 25000 0
 0 Elf~ 2
+
+#10834
+consigliere giallo nobile~
+un consigliere in giallo~
+Un nobile elfo in abito giallo sta camminando tranquillamente.
+~
+Un elfo dal portamento nobile, vestito con uno splendido abito dorato. E'
+uno dei consiglieri di Eldamar, che aiutano la sovrana e il reggente nelle
+decisioni piu' importanti che riguardano la citta' e tutto il popolo degli
+elfi. Ognuno dei quattro consiglieri e' contraddistinto da un colore, che
+ne indica la provenienza. Questo consigliere rappresenta tutti gli elfi
+residenti fuori da Eldamar.
+~
+8|64|8192 0 1000 S
+40 0 0 0d0+0 0d0+0
+25000 0
+0 Elf~ 1
+
+#10835
+lepre bianca~
+una lepre bianca~
+Una lepre dal manto bianco ti passa davanti.
+~
+Una semplice lepre che corre fra gli alberi. 
+~
+64|128 0 0 S
+6 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 0
+
+#10836
+falastur~
+Falastur~
+Falastur, Sire delle Spiagge, controlla che tutto proceda bene.
+~
+Un Elfo Grigio, esperto nella lavorazione del legno e nella fabbricazione di
+navi e frangiflutti. Dirige i lavori nei cantieri, ove con l'aiuto dei suoi
+artigiani, ma sarebbe meglio dire artisti, costruisce e ripara
+imbarcazioni, ed e' responsabile del reperimento del legname e del
+rimpiazzamento degli
+alberi abbattuti, operazione delicata per il rischio di disboscamento. 
+E' anche un esperto capitano, capace come pochi altri di governare le navi
+nelle acque tumultuose, ma piu' che praticare preferisce insegnare i suoi
+segreti. Ed e' sempre lui a vendere o noleggiare le barche, essendo la
+massima autorita' del porto.
+~
+2 8|128|8192 1000 S
+50 0 0 0d0+0 0d0+0
+15000 0
+0 Elf~ 1
+
+#10837
+stalliere~
+uno stalliere~
+Un elfo stalliere vestito di cuoio e' qui.
+~
+Un elfo particolarmente empatico nei confronti degli animali:
+cura amorevolmente gli animali della stalla, cercando di venderli
+soltanto a persone che li meritano e che sapranno trattarli a dovere.
+~
+2|8 0 1000 S
+50 0 0 0d0+0 0d0+0
+15000 0
+0 Elf~ 1
+
+#10838
+pony cavallino~
+un pony~
+Un cavallino obbediente e disciplinato scuote la criniera.
+~
+Un robusto pony pronto a sobbarcarsi il fardello del suo padrone.
+~
+2|4 0 0 S
+10 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 1
+
+#10839
+cane~
+un cane da caccia~
+Un cane da caccia con un collare d'argento scodinzola contento.
+~
+Un cane dal pelo lucido e curato. 
+La sua muscolatura appare guizzante e i suoi occhi vigili seguono anche il
+piu' piccolo movimento.
+~
+2|4 0 0 S
+20 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 1
+
+#10840
+cavallo meara~
+un cavallo elfico~
+Un imponente cavallo elfico dal manto grigio agita la coda.
+~
+Uno splendido esemplare di meara, la razza di cavalli elfici contro
+la quale nessun altro destriero puo' competere quanto a velocita',
+forza, resistenza e affiatamento col suo cavaliere.
+~
+2|4 0 0 S
+30 0 0 0d0+0 0d0+0
+0 0
+0 Animal~ 1
+
+#10841
+guardia~
+una guardia elfica~
+Una guardia sull'attenti scruta la zona.
+~
+I lunghi capelli dell'elfo spuntano da sotto un elmo dalla forma allungata.
+E' fermo sull'attenti, tanto da sembrare una statua, ma difficilmente puo'
+sfuggire il movimento continuo degli occhi attraverso la fessura dell'elmo.
+~
+1|2 0 1000 S
+18 0 0 0d0+0 0d0+0
+50 0
+0 Elf~ 1
 
 #0
 
 #OBJECTS
 
-#27100
+#10800
 albero~
-un albero di cristallo~
-In mezzo alle statue vedi un albero di cristallo.~
+un albero argenteo~
+In mezzo alle piazza vedi un profumato albero argenteo.~
 ~
-15 0 0
-500~ 0~ 0~ 0~
-5 0 0
+12 1|64|65536 0
+0~ 0~ 0~ 0~
+1000 0 0
+E
+albero argento~
+Uno stupendo albero luminoso dai cui polloni provengono luce ed una
+fragranza inebriante.
+~
 
-#27101
+#10801
 fontana~
 una fontana d'argento~
 Da una fontana d'argento sgorga un'acqua limpidissima.~
 ~
 25 0 0
 0~ 0~ 0~ 0~
-5 0 0
+1000 0 0
 E
 fontana~
-Una splendida fontana a base circolare.
+L'acqua purissima zampilla alta al centro della fontana e ricade nella vasca
+circolare. I riflessi dell'argento creano giochi di luce stupefacenti, mentre 
+lo scroscio cristallino si diffonde nell'aria fresca.
 ~
 
-#27102
+#10802
 spada elfica~
 una lunga spada elfica~
 Una lunga spada e' qui per terra.~
 ~
 5 64|1024 1|8192
 0~ 0~ 0~ 3~
-30 0 0
+5 15000 0
 E
 spada elfica lama~
-E' un arma di pregievole fattura: l'elsa e' finemente decorata
-e la lama ricoperta di rune magiche.
+E' un'arma di pregevole fattura: l'elsa e' finemente decorata e la lama
+ricoperta di rune magiche.
 ~
 A
-19 3
+19 1
 
-#27103
+#10803
 pugnale elfico~
 un lungo pugnale elfico~
 Un lungo pugnale e' qui per terra.~
 ~
 5 64|1024 1|8192
 0~ 0~ 0~ 11~
-10 0 0
+3 8000 0
 E
 pugnale elfico lama~
-E' un pugnale di pregievole fattura e la lama e' ricoperta di rune magiche.
+E' un pugnale di pregevole fattura e la lama e' ricoperta di rune magiche.
 ~
 A
-19 3
+19 1
+A
+18 1
 
-#27104
+#10804
 bastone elfico~
 un lungo bastone elfico~
 Un lungo bastone e' qui per terra.~
 ~
-5 16|1024 1|8192
+5 64|1024 1|8192
 0~ 0~ 0~ 7~
-20 0 0
+8 6000 0
 E
 bastone elfico~
 E' un lungo bastone di legno ricavato da un albero millenario.
-Gli elfi lo hanno lavorato rendendolo ancora piu' robusto
-e le rune incise alle estremita' lo rendono magico.
+Gli elfi lo hanno lavorato rendendolo ancora piu' robusto e le
+rune incise alle estremita' lo rendono magico.
 ~
 A
-19 3
+19 2
 
-#27105
+#10805
 scudo elfico~
 un grande scudo elfico~
 Un grande scudo e' qui per terra.~
 ~
 9 64|1024 1|512
-0~ 0~ 0~ 0~
-20 0 0
+8~ 0~ 0~ 0~
+40 10000 0
 E
 scudo elfico~
 Un grande scudo a forma di V.
@@ -231,82 +715,84 @@ Un grande scudo a forma di V.
 A
 13 10
 
-#27106
+#10806
 elmo elfico~
 un elmo elfico~
 Un elmo e' qui per terra.~
 ~
 9 64|1024 1|16
 0~ 0~ 0~ 0~
-5 0 0
+5 5000 0
 E
 elmo elfico~
-Uno splendido elmo elfico integrale che lascia scoperti solo il viso.
+Uno splendido elmo elfico integrale che lascia scoperto solo il viso.
 ~
 
-#27107
+#10807
 cotta elfica~
 una cotta di maglia elfica~
 Una cotta di maglia e' qui per terra.~
 ~
 9 64|1024 1|8
-0~ 0~ 0~ 0~
-15 0 0
+10~ 0~ 0~ 0~
+15 10000 0
 E
 cotta elfica~
 Molti anelli ne formano la fitta trama, e' leggera e pieghevole
 come lino, fredda come ghiaccio e dura piu' dell'acciaio.
 ~
 
-#27108
+#10808
 maniche elfiche~
 un paio di maniche elfiche~
 Un paio di maniche sono qui per terra.~
 ~
 9 64|1024 1|256
-0~ 0~ 0~ 0~
-5 0 0
+4~ 0~ 0~ 0~
+5 6000 0
 E
 maniche elfiche~
 Molti anelli ne formano la fitta trama, sono pieghevoli come lino,
 fredde come ghiaccio e piu' dure dell'acciaio.
 ~
 
-#27109
+#10809
 schinieri elfici~
 un paio di schinieri elfici~
 Un paio di schinieri sono qui per terra.~
 ~
 9 64|1024 1|32
-0~ 0~ 0~ 0~
-5 0 0
+4~ 0~ 0~ 0~
+5 6000 0
 E
 schinieri elfici~
 Molti anelli ne formano la fitta trama, sono pieghevoli come lino,
 freddi come ghiaccio e piu' duri dell'acciaio.
 ~
 
-#27110
-mantello grigio~
-un mantello grigio~
-Un mantello grigio e' qui per terra.~
+#10810
+mantello grigio elfico~
+un mantello elfico grigio~
+Un mantello elfico grigio e' qui per terra.~
 ~
-9 0 1|1024
-0~ 0~ 0~ 0~
-2 0 0
+9 64|1024 1|1024
+4~ 0~ 0~ 0~
+5 6000 0
 E
-mantello grigio~
+mantello grigio elfico~
 Un mantello di fattura elfica.
 ~
+A
+27 5
 
-#27111
+#10811
 stivali elfici~
 un paio di stivali elfici~
 Vedi un paio di stivali neri per terra.~
 ~
 9 64 1|64
 0~ 0~ 0~ 0~
-5 0 0
+4 4000 0
 E
 stivali elfici~
 Un paio di stivali neri di fattura elfica, permettono di ritardare
@@ -315,14 +801,14 @@ l'arrivo della stanchezza nei lunghi viaggi.
 A
 14 50
 
-#27112
+#10812
 corno elfico~
 un corno da guerra elfico~
 Un corno e' qui per terra.~
-~
-9 64|256|1024|65536 1|16384
+Uno squillo chiaro e limpido risuona nell'aria.~
+21 64|256|1024|65536 1|16384
 0~ 0~ 0~ 0~
-1 0 0
+2 1000 0
 E
 corno elfico~
 Un corno usato per suonare l'allarme oppure in battaglia prima di
@@ -332,40 +818,40 @@ e speranza agli alleati, timore e sgomento ai nemici.
 A
 4 1
 
-#27113
+#10813
 abito azzurro~
 un abito azzurro~
 Un abito azzurro e' qui per terra.~
 ~
-9 0 1|1024
+9 0 1|8
 0~ 0~ 0~ 0~
-1 0 0
+2 250 0
 E
 abito azzurro~
 Un abito azzurro, leggero e soffice.
 ~
 
-#27114
+#10814
 vestito verde~
 un vestito verde~
 Un vestito verde e' qui per terra.~
 ~
-9 0 1|1024
+9 0 1|8
 0~ 0~ 0~ 0~
-1 0 0
+2 250 0
 E
 vestito verde~
 Un vestito verde, caldo e morbido.
 ~
 
-#27115
+#10815
 guanti elfici~
 un paio di guanti elfici~
 Un paio di guanti sono qui per terra.~
 ~
 9 64|1024 1|128
 0~ 0~ 0~ 0~
-1 0 0
+1 1000 0
 E
 guanti elfici~
 Questi guanti magici sono usati dagli artigiani aumentare la loro perizia
@@ -374,14 +860,14 @@ e la loro precisione, e dai guerrieri per aumentare la loro agilita'.
 A
 2 1
 
-#27116
+#10816
 libro storia~
 un libro di storia~
-Un libro di storia e' disposto sullo scaffale.~
+Un libro di storia e' per terra a prendere polvere.~
 ~
-12 0 0
+33 0 1|16384
 0~ 0~ 0~ 0~
-5 0 0
+5 500 0
 E
 libro storia~
 La storia di Eldamar:
@@ -391,143 +877,143 @@ La storia di Eldamar:
 
  La citta' stessa e' chiamata Eldamar, ma anche Citta' delle tre Vie,
  Citta' delle cinque stelle e con molti altri nomi; e' sita su un basso
- colle nel mezzo della foresta verde, e da essa viene protetta e celata.
+ colle nel mezzo della Foresta Verde, e da essa viene protetta e celata.
 
  E' il regno della bellezza, della saggezza e della sapienza, un regno
  pacifico, ma vi dimora un popolo forte e vigoroso.
 ~
 
-#27117
+#10817
 mappa eldamar~
 una mappa di Eldamar~
-Una mappa arrotolata e' disposta sullo scaffale.~
+Una mappa arrotolata e' stata lasciata qui.~
 ~
-12 0 0
+32 0 1|16384
 0~ 0~ 0~ 0~
-5 0 0
+2 0 0
 E
 mappa~
-MAPPA DI ELDAMAR                 LEGENDA
+MAPPA DI ELDAMAR                        LEGENDA
  N
 O+E       /\ /\ /\ /\ /\ /\            /\  Montagne Azzurre (Ered Luin)
- S             M     | ffff             M  Torre dei Cieli (Mindon Menel)
-               T     | ffff             T  Tempio
-             #####   | ffff             #  Citta'
-             #####   | ffff             |  Fiume Musicale (Linsir)
-             #####   | ffff             P  Porto
-                    | ffff              f  Grande Foresta Verde
+ S             M     |                  M  Torre dei Cieli (Minas Menel)
+           f   @   f | ffff             @  Piazza
+           f ##### f | ffff             #  Citta'
+           f ##### f | ffff             |  Fiume Musicale (Linsir)
+           f ##### f | ffff             P  Porto
+           ffffffff | ffff              f  Grande Foresta Verde
          P ffffffff|ffff                B  Bosco d'Oro
               B  !                      !  Schiuma Argentea (Celebros)
 
-N.B. I nomi tra parentesi sono in linguaggio elfico (Sindarin).
+N.B. I nomi tra parentesi sono in linguaggio elfico.
 ~
 
-#27118
+#10818
 pane elfico~
 del pane elfico~
 Vedi del pane elfico.~
 ~
 19 0 1
 15~ 0~ 0~ 0~
-1 25 0
+1 50 0
 
-#27119
+#10819
 lembas galletta~
 una galletta elfica~
-Vedi una galletta.~
+Una galletta e' stata lasciata qui ad ammuffire.~
 ~
-19 64 1
+19 0 1
 50~ 0~ 0~ 0~
-5 500 0
+1 500 0
 E
 lembas galletta~
 Un dolce estremamente sottile, di farina infornata, bruno all'esterno e di un
 bianco cremoso all'interno. E' molto croccante. Chiamato lembas dagli elfi.
 ~
 
-#27120
+#10820
 torcia~
 una torcia~
 Una torcia e' stata lasciata qui.~
 ~
 1 0 1
-0~ 0~ 200~ 0~
-2 0 0
+0~ 0~ 140~ 0~
+3 50 0
 E
 torcia~
-Una semplice torcia, dura molto a lungo.
+Una torcia che dura molto a lungo.
 ~
 
-#27121
+#10821
 candela~
 una candela~
-Una candela e' qui.~
+Una candela consumata e' qui per terra.~
 ~
 1 0 1
-0~ 0~ 50~ 0~
-2 0 0
+0~ 0~ 30~ 0~
+1 5 0
 
-#27122
-borraccia~
-una borraccia~
-Una borraccia e' stata lasciata qui.~
+#10822
+otre recipiente~
+un otre~
+Un recipiente di pelle conciata e cucita.~
 ~
 17 0 1
-20~ 20~ 0~ 0~
-5 25 0
+40~ 40~ 0~ 0~
+5 35 0
+
+#10823
+bottiglia dorwinion~
+una bottiglia di vino del Dorwinion~
+Una bottiglia di vino del Dorwinion.~
+~
+17 0 1
+15~ 15~ 2~ 0~
+3 300 0
 E
-borraccia~
-Una borraccia di pelle.
+bottiglia dorwinion~
+Una bottiglia del pregiato vino rosso ricavato dalle vigne del Dorwinion.
 ~
 
-#27123
-bottiglia vino~
-una bottiglia di vino~
-Una bottiglia di vino e' stata lasciata qui.~
-~
-17 0 1
-9~ 9~ 2~ 0~
-3 150 0
-
-#27124
+#10824
 idromele coppa~
 una coppa di idromele~
 Una coppa di idromele e' stata lasciata qui.~
 ~
 17 0 1
-2~ 2~ 16~ 0~
-1 50 0
+4~ 4~ 16~ 0~
+1 0 0
 E
 coppa idromele~
 Vedi una coppa d'oro finemente decorata.
 ~
 
-#27125
+#10825
 cintura rossa~
 una cintura rossa~
 Una cintura rossa e' stata lasciata qui.~
 ~
 9 0 1|2048
 0~ 0~ 0~ 0~
-1 1000 0
+1 150 0
 
-#27126
+#10826
 cintura grigia~
 una cintura grigia~
 Una cintura grigia e' stata lasciata qui.~
 ~
 9 0 1|2048
 0~ 0~ 0~ 0~
-1 1000 0
+1 150 0
 
-#27127
+#10827
 libro leggenda leggende~
 un libro di leggende~
-Un libro di leggende e' sullo scaffale.~
+Un libro di leggende e' a terra a prendere polvere.~
 ~
-12 0 0
+33 0 1|16384
 0~ 0~ 0~ 0~
-5 0 0
+5 500 0
 E
 libro leggenda leggende~
 Linsir
@@ -538,11 +1024,11 @@ Linsir
 Celebros
  Dopo essere precipitate da questa cascata, le fredde acque del fiume
  si riscaldano e cambiano tonalita' di colore. Pare che immergendo i
- piedi in prossimita' della schiuma il cuore si allegerisca ed i
+ piedi in prossimita' della schiuma il cuore si alleggerisca ed i
  pensieri si addolciscano.
 
 Bosco D'oro
- Alcuni ritengono che gli alberi dorati siano un dono di Yavanna,
+ Alcuni ritengono che gli alberi dorati siano un dono della Dea della Natura,
  altri che siano spuntati nel punto in cui ebbe sepoltura un paladino
  dai capelli gialli. Si dice che nel suo suolo, fiori sboccino ove
  fanciulle di grande grazia e bellezza posano i loro piedi.
@@ -551,199 +1037,721 @@ Le cinque stelle
  Per quanto riguarda le stelle incise su alcune delle mattonelle
  in pietra levigata che formano la pavimentazione delle strade
  della citta', nessuno ne ha ancora scoperto il significato...
+
+Amon Ereb
+ Pare che la Collina Solitaria sia stata, in tempi antichi, teatro di una
+ grande battaglia, e per questo ai nostri giorni e' ritenuta un luogo sacro.
 ~
 
-#27128
+#10828
 faretra~
 una faretra~
 Una faretra e' stata lasciata qui.~
 ~
 16 0 1|65536
-100~ 0~ 0~ 0~
-5 1000 0
+50~ 0~ 0~ 0~
+10 1000 0
 E
 faretra~
 Una capiente faretra di cuoio rinforzato.
 ~
 
-#27129
+#10829
 arco elfico~
 un arco elfico~
 Vedi un lungo arco.~
 ~
-5 64|1024 1|8192
-0~ 0~ 0~ 6~
-4 1000 0
+5 64|1024|131072 1|8192
+3~ 0~ 0~ 6~
+7 5000 0
 E
 arco elfico~
-Un lungo arco ricavato da legno di tasso; la corda e' fatta
-da capelli elfici intrecciati.
+Un lungo arco ricavato da legno di tasso; la corda e' fatta da capelli
+elfici intrecciati.
 ~
 A
 18 3
 
-#27130
+#10830
 razione cibo~
 una razione di cibo~
 Vedi una razione di cibo.~
 ~
 19 0 1
-20~ 0~ 0~ 0~
-2 15 0
+10~ 0~ 0~ 0~
+2 50 0
 
-#27131
+#10831
 scrigno~
 uno scrigno~
 Ai piedi del letto vedi uno scrigno.~
 ~
 15 0 0
-100~ 5~ 0~ 0~
+50~ 5~ 0~ 0~
 5 0 0
 
-#27132
-pero~
+#10832
+albero pero~
 un pero~
 Vedi un albero da frutta.~
 ~
 15 0 0
 0~ 0~ 0~ 0~
-5 0 0
+50 0 0
 E
 albero~
-Ha corteccia scura a lenticelle, legno duro, pregiato,
-foglie picciolate, ovali, acuminate, fiori bianchi o rosa.
+Ha corteccia scura a lenticelle, legno duro, pregiato, foglie picciolate,
+ovali, acuminate, fiori bianchi o rosa.
 ~
 
-#27133
+#10833
 pera~
 una pera~
 Vedi una pera.~
 ~
 19 0 1
 4~ 0~ 0~ 0~
-1 5 0
+1 1 0
 
-#27134
-melo~
+#10834
+albero melo~
 un melo~
 Vedi un albero da frutta.~
 ~
 15 0 0
 0~ 0~ 0~ 0~
-5 5 0
+50 0 0
 E
 albero~
-Ha tronco corto, diritto, con corteccia bruno-cinerea,
-foglie ovali dentate, fiori bianchi o rosei.
+Ha tronco corto, diritto, con corteccia bruno-cinerea, foglie ovali dentate,
+fiori bianchi o rosei.
 ~
 
-#27135
+#10835
 mela~
 una mela~
 Vedi una mela.~
 ~
 19 0 1
 4~ 0~ 0~ 0~
-1 5 0
+1 1 0
+
+#10836
+abito bianco giallo~
+un abito bianco e giallo~
+Un abito bianco e giallo, tipico dei servitori, e' a terra.~
+~
+9 0 1|8
+0~ 0~ 0~ 0~
+2 300 0
+E
+abito giallo bianco~
+Una abito giallo e bianco, uguale a quelli indossati solitamente dai servitori
+dei reggenti di Eldamar.
+~
+
+#10837
+bastone bibliotecario~
+il bastone del bibliotecario~
+Il pesante bastone del bibliotecario e' qui per terra.~
+~
+4 1|64|1024 1|16384
+25~ 5~ 5~ cone of silence~
+12 50000 0
+E
+bastone bibliotecario~
+Il pesante bastone del bibliotecario di Eldamar. Impugnandolo acquisisci il
+potere di portare il silenzio nelle stanze.
+~
+
+#10838
+foglietto~
+il foglietto dell'apprendista~
+Per terra vedi un piccolo foglietto con delle scritte.~
+~
+13 0 1
+0~ 0~ 0~ 0~
+1 0 0
+E
+foglietto apprendista~
+E' un foglietto scritto dall'apprendista negoziante!
+C'e' una sola frase:
+"Ricorda... Il cliente ha sempre ragione!"
+~
+
+#10839
+pozione lucente~
+una pozione lucente~
+Una pozione brilla a terra.~
+~
+10 1024 1|16384
+5~ detect invis~ detect evil~ ~
+1 1000 0
+E
+pozione lucente~
+Una piccola pozione brilla intensamente.
+~
+
+#10840
+piccola fiala~
+una piccola fiala~
+Una piccola fiala luminescente si trova qui.~
+~
+10 0 1|16384
+12~ cure blindness~ cure light~ ~
+1 500 0
+E
+fiala piccola~
+Una piccola fiala opaca.
+~
+
+#10841
+pergamena rimuovi maledizioni~
+una pergamena di rimuovi maledizioni~
+Una pergamena coperta di rune e' stata lasciata qui.~
+~
+2 0 1|16384
+15~ remove curse~ ~ ~
+2 2500 0
+E
+pergamena rimuovi maledizioni~
+Una pergamena fitta di rune magiche.
+~
+
+#10842
+medaglione elfico~
+un medaglione elfico~
+Un piccolo medaglione elfico e' qui.~
+~
+9 1|64 1|4
+2~ 0~ 0~ 0~
+2 2500 0
+E
+medaglione elfico~
+Un piccolo medaglione elfico con incisi simboli incomprensibili.
+~
+A
+13 5
+
+#10843
+astuccio portaoggetti~
+un astuccio portaoggetti~
+Un piccolo astuccio porta oggetti e' qui a terra.~
+~
+15 0 1
+50~ 5~ 0~ 0~
+2 250 0
+E
+astuccio portaoggetti~
+Un piccolo astuccio portaoggetti da appendere al fianco.
+~
+
+#10844
+libreria~
+una lunga libreria~
+Una lunga libreria occupa tutta una parete della stanza.~
+~
+15 0 0
+100~ 0~ 0~ 0~
+300 0 0
+E
+libreria~
+Una lunga libreria che occupa gran parte della parete.
+~
+
+#10845
+tavolo marmo~
+un tavolo di marmo~
+Un gigantesco tavolo di marmo per le offerte.~
+~
+15 0 0
+1500~ 0~ 0~ 0~
+0 0 0
+E
+tavolo marmo~
+Un ampissimo tavolo di marmo su cui ogni elfo puo' mettere un oggetto che
+potrebbe tornare utile alla comunita'.
+~
+
+#10846
+spadone guardiano~
+lo spadone del Guardiano della Torre~
+Vedi una lunghissima lama elfica per terra.~
+~
+5 1|64|1024|2048|65536 1|8192
+0~ 0~ 0~ 3~
+50 15000 0
+A
+18 5
+A
+19 5
+
+#10847
+spada guardiano~
+la spada del Guardiano del Cancello~
+Vedi una splendida lama elfica di ottima fattura.~
+~
+5 1|64|1024|2048 1|8192
+0~ 0~ 0~ 3~
+6 5000 0
+A
+18 4
+
+#10848
+boccale idromele~
+un boccale di idromele~
+Per terra c'e' un fine boccale di legno.~
+~
+17 0 1
+4~ 4~ 16~ 0~
+1 25 0
+
+#10849
+boccale vino~
+un boccale di vino~
+Un piccolo boccale di fine legno e' stato abbandonato qui.~
+~
+17 0 1
+4~ 4~ 2~ 0~
+1 15 0
+
+#10850
+boccale latte~
+un boccale di latte~
+Un semplice boccale di legno e' qui per terra.~
+~
+17 0 1
+5~ 5~ 10~ 0~
+1 10 0
+
+#10851
+boccale birra~
+un boccale di birra~
+Un ampio boccale di legno e' stato lasciato qui.~
+~
+17 0 1
+6~ 6~ 1~ 0~
+1 20 0
+
+#10852
+tunica bianca~
+una lunga tunica bianca~
+Una splendida e lussuosa tunica bianca e' stata lasciata qui.~
+~
+9 1|64|1024|2048 1|8
+0~ 0~ 0~ 0~
+2 10000 0
+E
+tunica bianca~
+Una lunga tunica bianca fatta di seta finissima e ricamata con fili d'oro e di
+argento.
+~
+
+#10853
+corona foglie~
+una semplice corona di foglie~
+Delle foglie legate con un piccolo filo argenteo sono qui per terra.~
+~
+8 1|64|256|1024|2048 1|16
+50000~ 0~ 0~ 0~
+2 0 0
+E
+corona foglie~
+Una semplice corona di foglie intrecciate lungo uno splendido filo d'argento.
+~
+
+#10854
+corona foglie argentee~
+una stupenda corona di foglie argentee~
+Un mucchietto di magiche foglie argentee e' stato lasciato qui.~
+~
+8 1|64|256|1024|2048 1|16
+150000~ 0~ 0~ 0~
+2 0 0
+E
+corona foglie argentee~
+Una stupenda corona, formata da un filo dorato su cui sono attaccate delle foglie
+d'argento, probabilmente provenienti dall'albero che si erge nel cortile della
+Torre. La corona e' circondata da un misterioso alone lucente.
+~
+
+#10855
+arco lungo elfico bianco~
+un arco elfico bianco~
+Vedi un lungo arco di legno chiaro.~
+~
+5 1|64|1024|2048|131072 1|8192
+4~ 0~ 0~ 6~
+10 100000 0
+E
+arco lungo elfico argenteo~
+Un lungo arco da caccia di legno bianco, di sicura fattura elfica . La corda e'
+un intreccio di finissimi capelli elfici.
+~
+A
+18 3
+A
+19 3
+
+#10856
+fiore lissuin~
+un fiore di lissuin~
+Un piccolo fiore celeste spunta tra l'erba~
+~
+13 0 1|16
+0~ 0~ 0~ 0~
+1 0 0
+E
+fiore lissuin~
+Un fiore celeste la cui fragranza porta sollievo al cuore.
+~
+
+#10857
+canoa imbarcazione~
+una canoa elfica~
+Una piccola imbarcazione giace qui capovolta.~
+~
+22 0 1
+0~ 0~ 0~ 0~
+50 5000 0
+E
+canoa~
+Un'agile e leggera imbarcazione a remi che puo' ospitare due persone.
+~
+
+#10858
+barca imbarcazione~
+una barca-cigno~
+Una candida imbarcazione con le sembianze di un cigno e' qui.~
+~
+22 0 1
+0~ 0~ 0~ 0~
+100 25000 0
+E
+barca~
+Una barca bianca scolpita a forma di cigno, con un collo arcuato, un candido
+petto e ampie ali che increspano l'acqua durante la navigazione. Puo' ospitare
+fino a otto passeggeri, che possono sedere comodamente sui sedili al centro
+della barca, e necessita di due marinai per essere governata tramite pagaie
+nere, manovrate da apposite postazioni vicino alle ali.
+~
+
+#10859
+nave imbarcazione~
+una nave-cigno~
+Una grande imbarcazione grigia con le sembianze di un cigno e' qui.~
+~
+22 0 1
+0~ 0~ 0~ 0~
+300 50000 0
+E
+nave~
+Una nave di legno grigio chiaro, bassa e lunga, con un albero centrale in
+cui c'e' una singola vela, quadrata e di colore bianco. E' una ruota a
+caviglie a fungere da timone e quindi a governare il dritto di poppa per
+dare direzionalita' al veliero. La prua si innalza verso l'alto ed ha la
+foggia di una testa di cigno, con occhi e becco d'oro, e delle ali di cigno
+sono scolpite dietro i banchi delle otto file di remi. Richiede un capitano,
+dei marinai e numerosi rematori per essere governata.
+~
+
+#10860
+fiore elanor~
+un fiore di elanor~
+Un piccolo fiore dorato spunta tra l'erba.~
+~
+13 0 1|16
+0~ 0~ 0~ 0~
+1 0 0
+E
+fiore elanor~
+Un piccolo fiore dorato, a forma di stella, simile alla primula.
+~
+
+#10861
+fiore niphredil~
+un fiore di niphredil~
+Un pallido fiore spunta tra l'erba.~
+~
+13 0 1|16
+0~ 0~ 0~ 0~
+1 0 0
+E
+fiore niphredil~
+Un pallido, delicato fiore bianco simile al bucaneve.
+~
+
+#10862
+cespuglio~
+un cespuglio~
+Un cespuglio di Athelas.~
+~
+15 16777216 0
+50~ 0~ 0~ 0~
+0 0 0
+E
+cespuglio~
+Un cespuglio di una pianta medicinale.
+~
+
+#10863
+foglia athelas~
+una foglia di athelas~
+Una lunga foglia giace a terra.~
+~
+26 0 1
+10~ cure light~ ~ ~
+2 1000 0
+E
+foglia athelas~
+Una lunga foglia che esala una fragranza dolce e penetrante.
+~
+
+#10864
+freccia~
+una freccia elfica~
+Una freccia dal fine piumaggio e' appoggiata per terra.~
+~
+27 262144 1|16384
+6~ 0~ 0~ 0~
+1 150 0
+
+#10865
+libro cultura~
+un libro di cultura~
+Un libro e' appoggiato per terra.~
+~
+33 0 1|16384
+0~ 0~ 0~ 0~
+5 500 0
+E
+libro cultura~
+ASPETTO
+Gli elfi sono molto alti e snelli. Non sono mai grassi o magri, e hanno una
+corporatura proporzionata. Hanno la pelle chiara. I capelli generalmente 
+sono bruni (o addirittura neri) e biondi, piu' raramente argentati, castani 
+e perfino rossicci. Le orecchie sono leggermente appuntite, a forma di foglia.
+Gli occhi possono essere scuri o grigi, piu' raramente blu o verdi (di solito 
+associati ai capelli biondi).
+
+INDUMENTI
+Maschili: tuniche, mantelli, calzoni, vesti, casacche, camice e cotte.
+Femminili: gonne, camicette, tuniche, vesti e corpetti.
+
+ATTEGGIAMENTO
+Quando sono felici sorridono e ridono spesso; quando sono tristi, possono
+essere depressi e sconvolti, ma di solito appaiono semplicemente turbati.
+Anche se arrabbiati tendono ad essere pazienti, preferiscono lasciar
+perdere anziche' litigare. Possono usare parole dure o contrite e la loro 
+postura diventa rigida, ma raramente alzano la voce o si abbassano ad 
+imprecare, almeno non in situazioni banali.
+
+Anche se hanno una brutta giornata ritrovano presto il loro buon umore. Vedono
+gli aspetti belli piu' che i brutti: sono molto ottimisti.
+
+SESSUALITA'
+Non vivono la sessualita' come gli umani. Sono riservati, raffinati,
+gentili, romantici, non sono ne' maliziosi ne' trasgressivi. In pubblico
+possono baciarsi (castamente) o camminare mano nella mano, ma andare
+oltre non fa parte della loro cultura/societa'. Non si vestono mai in 
+modo volgare o provocante (ne' le elfe hanno curve abbondanti).
+In amore sono molto passionali, ma all'unico scopo di procreare.
+Il matrimonio dura tutta la vita e, poiche' sono immortali, questo
+significa molto molto tempo. Non divorziano, se un elfo precedentemente
+sposato rimane solo significa che sua moglie o suo marito non c'e' piu'.
+Lo stesso vale per il fidanzamento. Quindi non si sposano ne' si 
+fidanzano alla leggera, ma ci pensano bene prima di farlo.
+Gli elfi hanno pochi figli, uno solo di solito (perche' la gravidanza
+porta via molte energie alle elfe).
+
+NOMI
+Il nome dovrebbe avere un suono vagamente elfico.
+
+
+ALTRE CARATTERISTICHE
+Gli elfi hanno una grande capacita' di riprendersi da ferite e infezioni,
+quindi cicatrici e bruciature sono inappropriate. Si ammalano raramente
+e solo in circostanze straordinarie.
+Hanno una vista acuta e penetrante, in generale i loro sensi sono piu'
+sviluppati rispetto agli umani. Si muovono con grazia ed eleganza,
+quasi senza produrre rumore. Hanno voci chiare e melodiose e sono
+le creature piu' versate per la musica, la poesia e l'arte in generale.
+
+ABITAZIONI
+Gli elfi dimorano nei boschi (in semplici capanne o case sugli alberi),
+in caverne oppure, se trovano un luogo sicuro e riparato, in citta'
+costruite sopra alture o sulle rive di mari o laghi.
+~
+
+#10866
+fiaschetta miruvor~
+una fiaschetta di miruvor~
+Una fiaschetta di cuoio col tappo d'argento e' sul pavimento.~
+~
+17 0 1
+20~ 20~ 16~ 0~
+4 700 0
+E
+fiaschetta miruvor ~
+Una fiaschetta di cuoio contenente il cordiale di Eldamar: un caldo
+e fragrante liquore composto da acqua e miele fermentati. Ha il potere
+di donare vigore, allontanare la sonnolenza e ridestare la speranza.
+~
+
+#10867
+sgabello~
+un fine sgabello di legno~
+Un fine sgabello di legno e' qui.~
+~
+12 0 1
+12~ 1~ 5~ 0~
+15 1 0
+E
+sgabello~
+Uno sgabello di legno chiaro, intarsiato con motivi semplici e dalla
+forma sottile e slanciata.
+~
+
+#10868
+tavolo~
+un tavolo ovale~
+Vedi un tavolo ovale circondato da sgabelli.~
+~
+12 0 0
+12~ 3~ 60~ 0~
+50 1 0
+E
+tavolo~
+Un lungo tavolo ovale di legno. La superficie e le gambe sono lavorati
+in modo da dargli un aspetto sinuoso, ma allo stesso tempo semplice e
+fine.
+~
+
+#10869
+picca~
+una picca elfica~
+Una picca elegante e resistente e' appoggiata per terra.~
+~
+5 64 1|8192
+0~ 0~ 0~ 2~
+20 5000 0
+A
+13 5
+A
+18 1
+A
+19 1
+E
+picca elfica~
+L'acciaio e' ottimo, con fini incisioni sulla lama. L'asta resistente rende 
+l'arma piu' leggera di una normale picca, ma comunque ben bilanciata.
+~
 
 #0
 
 #ROOMS
 
-#27100
+#10800
 Balcone~
-Osservi il panorama dal balcone dell'alta torre: a sud vedi il sacro
-tempio, le pallide luci della citta' e le sue candide mura; oltre ancora
-la foresta e il bosco d'oro; ad est si estende la grande foresta verde,
-attraversata dal fiume che percorre tutta la regione dalle sue sorgenti,
-nelle montagne a nord-est, e infine sfocia nel grande mare dell'ovest.
+Osservi il panorama dal balcone dell'alta torre: in basso vedi il cortile
+della torre, le pallide luci della citta' e le sue candide mura; oltre
+ancora la foresta e il bosco d'oro; ad est si estende la grande Foresta
+Verde, attraversata dal fiume che percorre tutta la regione dalle sue
+sorgenti, nelle montagne a nord-est, e infine sfocia nel grande mare
+dell'ovest.
 ~
-0 8192 0
+0 0 1
 D 0
 Vedi una camera da letto.~
-~
-0 0 27101
+finestra~
+B1 -1 10801
 S
 
-#27101
+#10801
 Stanza da letto~
 Ti trovi nella stanza da letto regale. Dietro ampi tendaggi
-semitrasparenti
-vi e' un sontuoso letto a baldacchino, in legno finemente decorato, con
-coperte e lenzuola di seta. La stanza e' illuminata da lampade d'argento
-e agli angoli sono poste anfore colme di fiori ed erbe che emanano una
-dolce e fresca fragranza dall'effetto rilassante.
+semitrasparenti vi e' un sontuoso letto a baldacchino, in legno finemente
+decorato, con coperte e lenzuola di seta. La stanza e' illuminata da
+lampade d'argento e agli angoli sono poste anfore colme di fiori ed erbe
+che emanano una dolce e fresca fragranza dall'effetto rilassante.
 ~
-0 8|8192 0
+0 8 0
 D 2
 Vedi una grande porta-finestra.~
-~
-0 0 27100
+finestra~
+B1 0 10800
 D 5
 Una scala conduce al piano inferiore.~
-~
-0 0 27102
+porta~
+B1 -1 10802
 S
 
-#27102
+#10802
 Sala da pranzo~
 Questo e' il luogo ove si tengono i pasti dei reali ed i banchetti da essi
 organizzati. Vi e' un largo tavolo rotondo in legno bianco circondato da
 sedie in legno nero. Il bordo della tovaglia e' ricamato con motivi
-stellari fatti con fili d'argento, e' apparecchiata e imbandita in modo
+stellari fatti con fili d'argento, ed e' apparecchiata e imbandita in modo
 opulento.
 ~
-0 8|8192 0
+0 8 0
 D 4
 Una scala conduce al piano superiore.~
-~
-0 0 27101
+porta~
+B1 -1 10801
 D 5
 Una scala conduce al piano inferiore.~
 ~
-0 0 27103
+B0 -1 10803
 S
 
-#27103
+#10803
 Sala riunioni~
-Questa ampia stanza di forma rettangolare funge da ingresso alla torre.
-L'alta volta sormonta le pareti affrescate con immagini di foreste, cosi'
-vivide da sembrare reali. Un lungo tappeto rosso attraversa il centro
-della sala unendo l'ingresso ad una piattaforma rialzata sulla parete
-opposta, su cui si trovano due troni di semplice fattura. Ai loro piedi,
-in semicerchio, sono disposte diverse sedie.
-Una scala si apre in una parete e conduce verso l'alto.
+Un'ampia stanza di forma rettangolare con l'alta volta che sormonta le
+pareti affrescate con immagini di foreste, cosi' vivide da sembrare reali.
+Un lungo tappeto rosso attraversa il centro della sala unendo l'ingresso ad
+una piattaforma rialzata sulla parete opposta, su cui si trovano due troni
+di semplice fattura. Ai loro piedi, in semicerchio, sono disposte diverse
+sedie. Una scala si apre in una parete e conduce verso l'alto.
 ~
-0 8|8192 0
+0 8 0
 D 2
-Vedi la porta di ingresso alla torre.~
-porta~
-0 0 27104
+Vedi l'ingresso alla torre.~
+~
+B0 -1 10806
 D 4
 Una scala conduce al piano superiore.~
 ~
-0 0 27102
+B0 -1 10802
 S
 
-#27104
+#10804
 Cortile~
-Sei di fronte all'ingresso di Mindon Menel, la Torre dei Cieli, dimora
+Sei di fronte all'ingresso di Minas Menel, la Torre dei Cieli, dimora
 dei reali e sede del consiglio del regno di Eldamar. Alle sue spalle
 vi sono le mura di cinta settentrionali della citta': formano un ampio
-semicerchio che circonda la zona del tempio separandolo dai pendii
+semicerchio che circonda torre e piazza separandole dai pendii
 boscosi ai piedi di una grande catena montuosa, le Montagne Azzurre.
 ~
-0 8192 1
+0 0 1
 D 0
-Vedi la porta di ingresso alla torre.~
-porta~
-0 0 27103
-D 2
-Vedi l'ingresso settentrionale del tempio.~
+Sotto un grande arco, vedi il portone che da' accesso alla torre.~
+portone~
+B257 -1 10806
+D 1
 ~
-0 0 27106
+~
+B0 -1 10807
+D 2
+Vedi la piazza della citta'.~
+~
+B0 -1 10808
+D 3
+~
+~
+B0 -1 10805
 E
-torre mindon~
+torre minas menel~
 E' una costruzione imponente a base circolare. Piu' bianca che neve,
 piu' robusta che acciaio, brilla orgogliosa e solenne alla luce del
 sole o delle stelle. Piante rampicanti sembrano legarla saldamente
@@ -751,312 +1759,276 @@ al suolo per impedirle di raggiungere il cielo.
 ~
 S
 
-#27105
-Casa di guarigione~
-Sei nella casa di guarigione, una sezione del tempio dedicata al ristoro e
-soprattutto alla cura dei feriti. Vi sono molti comodi letti per riposare
-e una curatrice che si prende cura dei giovani elfi che vengono a cercare
-aiuto.
+#10805
+Casa della Curatrice~
+Sei nella casa della curatrice, un ampio locale pulito ed ordinato
+dedicato al ristoro e soprattutto alla cura dei feriti. Vi sono molti
+comodi letti per riposare e una curatrice che si prende cura dei giovani
+elfi che vengono a cercare aiuto.
 ~
-0 8|1024|8192 0
+0 8|1024 0
 D 1
 ~
 ~
-0 0 27106
+B0 -1 10804
 S
 
-#27106
-Ingresso al tempio~
-Sei all'interno del tempio, luogo sacro ove la pace e la felicita' sono
-maggiori che in tutto il resto del regno. Rimani stupefatto dalla maestosa
+#10806
+Ingresso della Torre~
+Sei all'interno della torre, ove la pace e la felicita' sono maggiori che
+in tutto il resto della regione. Rimani stupefatto dalla maestosa
 architettura elfica, dalle possenti ma eleganti mura, dalle lampade
 d'argento, dalle rune che decorano e proteggono magicamente queste aule.
 Le pareti sono coperte da drappi tessuti ove sono raffigurati molti
 avvenimenti del passato, nonche' ombre di cose a venire.
 ~
-0 4|8|1024|8192 0
+0 4|8 0
 D 0
-Vedi il cortile ai piedi della torre.~
+Vedi un'ampia stanza rettangolare.~
 ~
-0 0 27104
-D 1
-~
-~
-0 0 27107
+B0 -1 10803
 D 2
-Vedi la piazza della citta'.~
-~
-0 0 27108
-D 3
-~
-~
-0 0 27105
+Vedi il portone di ingresso alla torre.~
+portone~
+B257 -1 10804
 S
 
-#27107
+#10807
 Altare~
-Al centro di questa sezione del tempio, ai lati di un altare bianco, si
-ergono due grandi statue di magnifica fattura: un uomo che regge uno
-scettro, ed una donna dalla bellezza celestiale. Poco oltre, addossato
-alla parete di fondo del tempio, c'e' un ampissimo tavolo di marmo,
-ricoperto di oggetti di ogni genere che gli elfi depositano per aiutare i
-membri della loro comunita'.
+Ai lati di un altare bianco si ergono due grandi statue di magnifica fattura:
+un uomo che regge uno scettro, ed una donna dalla bellezza celestiale. Poco
+oltre, addossato alla parete di fondo del tempio, c'e' un ampissimo tavolo di
+marmo, ricoperto di oggetti di ogni genere che gli elfi depositano per aiutare
+i membri della loro comunita'.
 ~
-0 8|1024|8192 0
+0 8|1024|262144 0
 D 3
 ~
 ~
-0 0 27106
-E
-manwe uomo statua~
-Ai piedi della statua c'e' una placca d'oro:
-
- Manwe Sulimo, il Signore del Vento. Azzurro e' il suo abito, e azzurro il
- fuoco dei suoi occhi, e il suo scettro e' di zaffiro. Il suo diletto sono
- i venti e le nuvole. Tutti gli uccelli egli ama, ed essi vanno e vengono 
-al suo comando.
-~
-E
-varda donna statua~
-Ai piedi della statua c'e' una placca d'oro:
-
- Varda, Artefice delle Stelle. Il fascino della sua bellezza e'  
-insostenibile. Nella luce sono la sua potenza e la sua gioia. E' chiamata 
-anche Elbereth.
-~
+B0 -1 10804
 S
 
-#27108
+#10808
 Piazza~
-Sei in un'ampia piazza circolare delimitata dai portici del tempio; le
-colonne sono scolpite a guisa di faggi. E' un luogo di ritrovo assai
-trafficato, in cui gli elfi si incontrano per parlare e cantare. A nord
-puoi vedere l'ingresso al tempio, mentre una scalea in marmo bianco scende
-verso un incrocio cittadino.
+Sei in un'ampia piazza semicircolare delimitata dai portici del muro di
+cinta settentrionale: le colonne sono scolpite a guisa di faggi e il
+pavimento e' formato da grandi lastre quadrate di pietra bianca. E' un
+luogo di ritrovo assai trafficato, in cui gli elfi si incontrano per
+parlare e cantare. A nord puoi vedere il cortile della torre, mentre una
+scalea in marmo bianco scende verso un incrocio cittadino. Un profumo
+unico e travolgente aleggia nell'aria, e sembra piu' forte verso nord.
 ~
-0 8192 1
+0 0 1
 D 0
-Vedi l'ingresso meridionale del tempio.~
+Vedi il cortile della torre.~
 ~
-0 0 27106
+B0 -1 10804
 D 5
 La liscia scalea scende in direzione della citta'.~
 ~
-0 0 27112
+B0 -1 10812
 S
 
-#27109
+#10809
 Angolo nord-ovest~
-Sei sulla Via Occidentale della citta', vicino ad un lungo porticato;
-le maestose colonne hanno le fattezze di querce giganti e reggono il
-soffitto del tempio. Nella parete nord e' stato dipinto uno splendido
-affresco, mentre sulla strada e' incisa una stella.
+La Via Occidentale curva ad angolo. Le maestose colonne di un lungo
+porticato sul lato nord hanno le fattezze di querce giganti e separano la
+zona residenziale della citta' da quella settentrionale in cui si trovano
+la torre e la piazza di Eldamar. Da ovest, ove la collina si fonde con la
+rigogliosa foresta che la circonda, giungono i canti degli uccelli ed il
+fresco profumo del sottobosco, lievemente attutiti dalle candide mura di
+cinta. Sulla strada e' incisa una stella.
 ~
-0 8192 1
+0 0 1
 D 1
 ~
 ~
-0 0 27110
+B0 -1 10810
 D 2
 ~
 ~
-0 0 27116
+B0 -1 10816
 E
 stella~
-Al centro della stella c'e' il numero 3.
-~
-E
-affresco~
-Rappresenta uno degli Aratar: Ulmo, il Signore delle Acque. Egli vive solo,
-non dimora in alcun luogo muovendosi a piacimento nelle acque profonde.
-Il Re del Mare suona con i suoi grandi corni ricavati da candide conchiglie
-e parla con la voce dell'acqua; il cuore di coloro che lo odono viene
-pervaso dal desiderio del mare che mai piu' li abbandona.
+Pietre azzurrine sulla strada formano una stella, nel cui centro si legge il numero 3.
 ~
 S
 
-#27110
+#10810
 Via Occidentale~
-Sei sulla Via Occidentale della citta'. A nord vedi le colonne del tempio
-e sulla parete un grande affresco, rappresenta un superbo cavaliere.
+Cammini lungo la Via Occidentale della citta', fiancheggiata da ampi 
+portici a nord. Le colonne hanno forma di querce giganti e, se non fossero
+di marmo bianchissimo, le scambieresti certamente per alberi veri. Odi il
+suono di una fontana nelle vicinanze, mentre nell'aria aleggia il profumo
+dei fiori misto ad un altro che non riesci bene a comprendere. Ciottoli
+bianchi lastricano anche la strada, che continua verso est e verso ovest.
 ~
-0 8192 1
+0 0 1
 D 1
 ~
 ~
-0 0 27111
+B0 -1 10811
 D 3
 ~
 ~
-0 0 27109
-E
-affresco~
-E' Orome, il Grande Cavaliere, in sella al suo candido cavallo. Egli e' un
-cacciatore di mostri e bestie feroci, si diletta di cavalli e cani ed ama
-tutti gli alberi, ragion per cui e' detto Aldaron, Signore di Foreste.
-Nahar e' il nome del suo destriero e Valaroma quello del suo grande corno.
-~
+B0 -1 10809
 S
 
-#27111
+#10811
 Via Occidentale~
-Sei sulla Via Occidentale della citta', vicino ai portici del tempio.
-Nella parete nord vedi l'affresco di una donna coronata dal sole.
+Cammini lungo la Via Occidentale della citta', fiancheggiata da ampi
+portici a nord. Le colonne hanno forma di querce giganti e, se non fossero
+di marmo bianchissimo, le scambieresti certamente per alberi veri.
+Ciottoli bianchi lastricano anche la strada. Dalle finestre dell'edificio
+a sud senti provenire il dolce profumo del pane elfico e ti accorgi di
+passare accanto al panificio. Il dolce suono della fontana di Eldamar e'
+qui molto distinto. La strada continua verso est e verso ovest.
 ~
-0 8192 1
+0 0 1
 D 1
 ~
 ~
-0 0 27112
+B0 -1 10812
 D 3
 ~
 ~
-0 0 27110
-E
-affresco~
-Vedi l'immagine di Yavanna, la Dispensatrice di Frutti, in forma di donna:
-e' alta e vestita di verde. Essa ama tutte le cose che crescono e hanno
-radici. Kementari, Regina della Terra, cosi' e' soprannominata.
-~
+B0 -1 10810
 S
 
-#27112
+#10812
 Incrocio~
-Qui le Tre Vie si riuniscono. A ovest e a est vedi i porticati meridionali
-del tempio; a nord una scalea in marmo bianco passa attraverso le colonne
-salendo verso la piazza della citta', dove scherza una lucente fontana.
+Ti trovi all'incrocio dove le Tre Vie si riuniscono.
+A ovest e ad est vedi i porticati meridionali della torre della citta';
+a nord una grande scalinata in marmo bianco passa attraverso le candide
+colonne salendo verso la piazza, da dove proviene il suono di una fontana.
+La fragranza dell'aroma del pane proveniente dal vicino panificio, mista ad
+un altro profumo piacevole e penetrante, riempie l'aria.
 ~
-0 8192 1
+0 0 1
 D 1
 ~
 ~
-0 0 27113
+B0 -1 10813
 D 2
 ~
 ~
-0 0 27119
+B0 -1 10819
 D 3
 ~
 ~
-0 0 27111
+B0 -1 10811
 D 4
 La liscia scalea porta alla zona elevata della citta', nell'ampia
-zona a forma di semicerchio in cui si trovano il tempio e la torre.~
+zona a forma di semicerchio in cui si trova la torre.~
 ~
-0 0 27108
+B0 -1 10808
 S
 
-#27113
+#10813
 Via Orientale~
-Sei sulla Via Orientale della citta', presso i portici del tempio.
-Nelle mura a nord vedi un affresco che attira la tua attenzione.
+Cammini lungo la Via Orientale della citta', fiancheggiata da ampi portici
+a nord. Le colonne hanno la forma di querce giganti e, se non fossero di
+marmo bianchissimo, le scambieresti certamente per alberi veri. Ciottoli
+bianchi lastricano la strada. Il rumore di una fontana risuona nelle
+vicinanze, ed un profumo sconosciuto ed inebriante ti attrae verso nord. La
+strada continua verso est e verso ovest.
 ~
-0 8192 1
+0 0 1
 D 1
 ~
 ~
-0 0 27114
+B0 -1 10814
 D 3
 ~
 ~
-0 0 27112
-E
-affresco~
-E' una delle Potenze: Aule l'Artefice, il cui dominio di esercita
-su tutte le sostanze di cui e' fatta la terra ed e' colui che ne
-ha plasmato la forma. Egli e' fabbro e maestro di tutti i mestieri.
-Trae diletto da lavori d'abilita', sia minuti che maestosi.
-~
+B0 -1 10812
 S
 
-#27114
+#10814
 Via Orientale~
-Sei sulla Via Orientale della citta', vicino ai portici del tempio.
-Vedi l'affresco di una nera figura nella parete a nord.
+Cammini lungo la Via Orientale della citta', fiancheggiata da ampi portici a
+nord. Le colonne hanno la forma di querce giganti e, se non fossero di
+marmo bianchissimo, le scambieresti certamente per alberi veri. Ciottoli
+bianchi lastricano la strada. Odi il suono di una fontana nelle vicinanze,
+mentre nell'aria aleggia il profumo dei fiori misto ad un altro che non
+riesci bene a distinguere. La strada continua verso est e verso ovest.
 ~
-0 512|1024|2048|4096|8192 1
+0 0 1
 D 1
 ~
 ~
-0 0 27115
+B0 -1 10815
 D 3
 ~
 ~
-0 0 27113
-E
-affresco~
-Namo, il custode delle Case dei Morti. Chiamato anche Mandos dal nome delle sue
-aule in cui vengono convocati gli spiriti del massacro.
-Egli nulla dimentica e conosce molte delle cose che saranno.
-~
+B0 -1 10813
 S
 
-#27115
+#10815
 Angolo nord-est~
-Sei sulla Via Orientale della citta'. A nord vedi i portici del tempio:
-le sue mura meridionali sono decorate con affreschi che rappresentano
-le spoglie dei Valar, coloro che gli uomini chiamerebbero divinita'.
-In questo affresco e' raffigurata una donna in lacrime.
+La Via Orientale curva ad angolo. Le maestose colonne di un lungo porticato
+sul lato nord hanno le fattezze di querce giganti e separano la zona
+residenziale della citta' da quella settentrionale in cui si trovano la
+torre e la piazza di Eldamar. Alle narici ti giunge, intenso e fresco, il
+profumo della foresta che abbraccia la collina ad est, oltre le candide
+mura di cinta.
 ~
-0 8192 1
+0 0 1
 D 2
 ~
 ~
-0 0 27122
+B0 -1 10822
 D 3
 ~
 ~
-0 0 27114
-E
-affresco~
-Rappresenta Nienna. Le e' noto il dolore e si lamenta d'ogni ferita
-sofferta a causa della malvagita'. Coloro che odono il suo canto
-apprendono la pieta' e a perseverare nella speranza, poiche' essa
-arreca forza di spirito e trasforma il dolore in saggezza.
-~
+B0 -1 10814
 S
 
-#27116
+#10816
 Via Occidentale~
-Sei sulla Via Occidentale della citta'. A ovest, nelle candide mura di
-cinta, vedi il testo di un antico canto elfico. Ad est c'e' la biblioteca.
+Cammini lungo la Via Occidentale della citta'. Ciottoli bianchi lastricano
+la strada, la quale proseguendo verso sud e verso nord giunge a una
+svolta davanti a quelli che ti sembrano grandi tronchi di alberi bianchi.
+Ad ovest, inciso sulle candide mura di cinta, noti il testo di un antico
+canto elfico. Ad est c'e' l'entrata per la biblioteca.
 ~
-0 8192 1
+0 0 1
 D 0
 ~
 ~
-0 0 27109
+B0 -1 10809
 D 1
 ~
 ~
-0 0 27117
+B0 -1 10817
 D 2
 ~
 ~
-0 0 27123
+B0 -1 10823
 E
 testo canto~
-Oh Elbereth Accenditrice di Stelle,
 Ricordiamo ancora noi che viviamo
 In queste terre tra alberi lontani
 Il chiarore di stelle sui mari occidentali.
 ~
 S
 
-#27117
+#10817
 Biblioteca~
-Sei nella biblioteca, dove viene custodito il prezioso e antico sapere
-del regno. Qui troverai diversi volumi che potrai consultare liberamente.
-E' una stanza semplice, con dei tavolini, delle sedie e uno scaffale.
-Vedi una pergamena incorniciata e appesa ad una parete, sembra una poesia.
+Metti piede nella Biblioteca del Regno, dove viene custodito il prezioso e
+antico sapere degli Elfi. E' una stanza semplice con dei tavoli e molte
+sedie al centro. Contro tutte le pareti si estendono librerie ricolme di
+volumi. Qui potrai consultare liberamente ogni libro che vorrai, senza
+pero' appropriartene. Vedi una pergamena incorniciata su un leggio, sembra
+una poesia.
 ~
-0 8|8192|16384 0
+0 8|16384 0
 D 3
 ~
 ~
-0 0 27116
+B0 -1 10816
 E
-pergamena poesia~
+pergamena poesia leggio~
 Fatti coraggio, amico mio,
 Anche se sembra che tu sia solo
 Un milione di luci sopra di te
@@ -1064,92 +2036,111 @@ Sorridono verso la tua casa.
 ~
 S
 
-#27118
+#10818
 Panificio~
-Sei nel panificio, dove viene preparato il buonissimo pane elfico,
-puoi sentirne il profumo che permea la calda aria del negozio.
-Il forno e' in continua attivita' cosi' i prodotti sono sempre freschi.
+Sei nel panificio della citta', dove viene preparato il buonissimo pane
+elfico. Il suo profumo permea la calda aria del negozio, riempiendoti le
+narici ed il cuore. Guardandoti vedi ceste piene di ogni tipo di pane,
+tutto rigorosamente di fattura Elfica. Il bancone e' leggermente
+infarinato, pur mantenendo un aspetto pulito.
+Il forno e' in continua attivita', affinche' i prodotti siano sempre
+freschi.
 ~
-0 8|8192 0
+0 8 0
 D 1
 ~
 ~
-0 0 27119
+B0 -1 10819
 S
 
-#27119
+#10819
 Via Centrale~
-Sei sulla Via Centrale della citta', dove si trovano i negozi.
-Ad ovest vedi il panificio e a est il negozio delle armi.
-~
-0 8192 1
-D 0
-~
-~
-0 0 27112
-D 1
-~
-~
-0 0 27120
-D 2
-~
-~
-0 0 27126
-D 3
-~
-~
-0 0 27118
-S
-
-#27120
-Negozio delle Armi~
-Hai di fronte un vero e proprio arsenale: spade, pugnali e bastoni
-di fattura elfica. Si dice che le armi degli elfi siano magiche e
-che non possono essere adoperate da chi ha un animo malvagio.
-~
-0 8|8192 0
-D 3
-~
-~
-0 0 27119
-S
-
-#27121
-Sartoria~
-In questo luogo le abili mani delle elfe confezionano abiti e accessori di
-bellezza stupefacente. Cucito e Ricamo sono arti antichissime in cui le elfe
-eccellono. All'angolo della stanza vedi un filatoio e un telaio a mano,
-alle pareti sono esposti vestiti dai colori vivaci, ispirati alla natura.
-~
-0 8|8192 0
-D 1
-~
-~
-0 0 27122
-S
-
-#27122
-Via Orientale~
-Sei sulla Via Orientale della citta'. Ad est vedi le bianche mura
-di cinta, vi e' inciso il testo di un antico canto elfico.
-Sul pavimento e' stata incisa una stella. Ad ovest vedi la sartoria.
+Cammini lungo la Via Centrale della citta'. Tutta la strada lastricata di
+ciottoli bianchi e' circondata da splendidi porticati candidi, decorati con
+colonne che sembrano querce. Sotto di questi si trovano, per tutta la loro
+lunghezza, i negozi di Eldamar. 
+Un profumo delizioso ti attrae a ovest, dove vedi l'entrata al panificio.
+Ad est si trova invece il negozio delle armi. A nord, alla fine della via,
+vedi una grande scalinata che porta verso una piazza ove scherza una
+fontana. Ancora oltre vedi ergersi l'alta torre di Eldamar.
 ~
 0 0 1
 D 0
 ~
 ~
-0 0 27115
+B0 -1 10812
+D 1
+~
+~
+B0 -1 10820
 D 2
 ~
 ~
-0 0 27129
+B0 -1 10826
 D 3
 ~
 ~
-0 0 27121
+B0 -1 10818
+S
+
+#10820
+Negozio delle Armi~
+Sei nel Negozio di Armi della citta'. Ti guardi intorno alla ricerca di
+qualcosa di utile e ti rendi conto che hai di fronte un vero e proprio
+arsenale: spade lunghe, pugnali affilati e robusti bastoni tutti
+della migliore fattura elfica. Si dice che le armi degli elfi siano
+magiche e che non possano essere adoperate da chiunque abbia un animo
+malvagio.
+~
+0 8 0
+D 3
+~
+~
+B0 -1 10819
+S
+
+#10821
+Sartoria~
+Sei nella piccola sartoria di Eldamar. In questo luogo le abili mani
+delle elfe confezionano abiti e accessori di bellezza stupefacente. Cucito
+e Ricamo sono arti antichissime in cui le elfe eccellono da sempre.
+All'angolo della stanza vedi un filatoio e un telaio a mano. Lungo tutte
+le pareti sono esposti vestiti dai colori vivaci tipicamente elfici,
+ispirati alla natura e a tutto cio' che ne concerne.
+~
+0 8 0
+D 1
+~
+~
+B0 -1 10822
+S
+
+#10822
+Via Orientale~
+Cammini lungo la Via Orientale della citta'. Ciottoli bianchi lastricano
+la strada che continua verso nord, dove vedi quelli che ti sembrano tronchi
+di grandi alberi bianchi, e verso sud lungo le mura che, in questo punto,
+portano inciso il testo di un antico canto elfico. Da ovest giunge invece
+un sommesso canto di elfe, la' dove si trova l'ingresso della sartoria. 
+Sul pavimento e' stata incisa una stella.
+~
+0 0 1
+D 0
+~
+~
+B0 -1 10815
+D 2
+~
+~
+B0 -1 10829
+D 3
+~
+~
+B0 -1 10821
 E
 stella~
-Al centro della stella c'e' il numero 4.
+Pietre azzurrine sulla strada formano una stella, nel cui centro si legge
+il numero 4.
 ~
 E
 testo canto~
@@ -1160,131 +2151,151 @@ E le scarpe grigio argento.
 ~
 S
 
-#27123
+#10823
 Via Occidentale~
-Sei sulla Via Occidentale della citta'. La strada costeggia il muro di
-cinta, sul quale vi e' il testo di un antico canto elfico.
-Ad est vedi una casa. Sul pavimento e' stata incisa una stella.
+Cammini lungo la Via Occidentale della citta'. Ciottoli bianchi lastricano
+la strada che continua verso nord e verso sud. L'aria pervasa dal canto
+degli uccelli e' impregnata di un lieve profumo di cui non riesci a
+stabilire la provenienza. Sulle candide mura di cinta vedi il testo di
+un antico canto elfico. Sul pavimento e' stata incisa una stella.
 ~
-0 8192 1
+0 0 1
 D 0
 ~
 ~
-0 0 27116
+B0 -1 10816
 D 1
 ~
 porta~
-33 0 27124
+B1 -1 10824
 D 2
 ~
 ~
-0 0 27130
+B0 -1 10830
 E
 stella~
-Al centro della stella c'e' il numero 2.
+Pietre azzurrine sulla strada formano una stella, nel cui centro si legge
+il numero 2.
 ~
 E
 testo canto~
-Oh Elbereth Accenditrice di Stelle,
-Che dal cielo guardi lontano,
-Io ti invoco ora dall'ombra della morte,
-Guarda verso di me Semprebianco.
+Oh Stelle che dal cielo guardate lontano,
+Io vi invoco ora dall'ombra della morte,
+Volgetevi a me, illuminate il mio cammino.
 ~
 S
 
-#27124
+#10824
 Una casa~
-Sei all'interno di una casa elfica. E' semplice ma c'e' tutto il
-necessario: un camino, un letto, un tavolo e delle sedie intorno. La porta
-e' a ovest.
+Giungi all'interno di una tipica casa elfica di Eldamar. 
+Non e' molto grande, eppure c'e' tutto il necessario e l'aspetto e' molto
+confortevole. Un camino con davanti un tavolo e delle sedie si trovano
+verso la parete nord; all'altro capo della stanza c'e' un letto. L'uscita
+e' ad ovest.
 ~
-0 8|8192 0
+0 8 0
 D 3
 ~
 porta~
-33 0 27123
+B1 -1 10823
 S
 
-#27125
+#10825
 Negozio~
-Sei in un piccolo negozio in cui puoi acquistare diversi articoli,
-alcuni effettivamente utili per l'avventuriero, altri piu' frivoli.
+Entri in un piccolo negozio del tutto anonimo. Ti guadi intorno e vedi
+moltissimi articoli di svariati generi. Non sai bene da dove cominciare, ma
+sei certo che puoi trovare alcuni oggetti effettivamente utili per gli
+avventurieri, in mezzo ad altri piu' frivoli.
 ~
-0 8|8192 0
+0 8 0
 D 1
 ~
 ~
-0 0 27126
+B0 -1 10826
 S
 
-#27126
+#10826
 Via Centrale~
-Sei esattamente al centro della citta', sulla Via Centrale.
-Ad est vedi un negozio di armature e ad ovest un'altro negozio.
+Sei esattamente al centro della citta', sulla Via Centrale. Tutta la
+strada lastricata di ciottoli bianchi e' circondata da splendidi porticati
+candidi decorati con colonne che sembrano querce. Sotto di questi si
+trovano, per tutta la loro lunghezza, i negozi di Eldamar. Ad est, da cui
+provengono dei colpi di martello che urtano il ferro, vedi una porta oltre
+la quale splendono chiaramente svariate armature. Ad ovest c'e' un altro
+negozio di cui non riesci a distinguere le merci. In fondo alla via a nord
+vedi aprirsi la grande piazza e dietro di essa l'altissima torre bianca
+della citta'. Poco distanti a sud vedi i grandi cancelli.
 ~
-0 8192 1
+0 0 1
 D 0
 ~
 ~
-0 0 27119
+B0 -1 10819
 D 1
 ~
 ~
-0 0 27127
+B0 -1 10827
 D 2
 ~
 ~
-0 0 27133
+B0 -1 10833
 D 3
 ~
 ~
-0 0 27125
+B0 -1 10825
 S
 
-#27127
+#10827
 Negozio delle Armature~
-Sei di fronte al banco del negozio, la fucina si trova nei sotterranei
-e ogni tanto senti l'eco delle martellate. Qui potrai trovare le famose
-armature elfiche. Sono tutte di pregevole fattura e solo quelle dei nani
-possono rivaleggiare con esse.
+Sei nel negozio delle armature. Tutt'intorno a te vedi svariate armature
+elfiche di ottima fattura e molto ben lucidate, seconde solo a quelle dei
+nani. Dietro al bancone si apre una porta con delle scale che portano
+probabilmente alla fucina, a giudicare dall'eco delle martellate che ti
+colpisce le orecchie.
 ~
-0 8|8192 0
+0 8 0
 D 3
 ~
 ~
-0 0 27126
+B0 -1 10826
 S
 
-#27128
+#10828
 Una casa~
-Sei all'interno di una casa elfica. E' semplice ma c'e' tutto il necessario:
-un camino, un letto, un tavolo e delle sedie intorno. La porta e' a est.
+Giungi all'interno di una tipica casa elfica di Eldamar. 
+Non e' molto grande, eppure c'e' tutto il necessario e l'aspetto e' molto
+confortevole. Un camino con davanti un tavolo e delle sedie si trovano
+verso la parete nord; all'altro capo della stanza c'e' un letto. L'uscita
+e' ad est.
 ~
-0 8|8192 0
+0 8 0
 D 1
 ~
 porta~
-33 0 27129
+B1 -1 10829
 S
 
-#27129
+#10829
 Via Orientale~
-Sei sulla Via Orientale della citta'. Sul muro di cinta vedi il testo
-di un antico canto elfico. A ovest vedi una casa.
+Cammini lungo la Via Occidentale della citta'. Ciottoli bianchi lastricano
+la strada che continua verso nord e verso sud. Nell'aria, impregnata del
+profumo della foresta che circonda la collina, si sente un canto sommesso.
+In questa sezione delle candide mura di cinta e' inciso il testo di un
+antico canto elfico.
 ~
-0 8192 1
+0 0 1
 D 0
 ~
 ~
-0 0 27122
+B0 -1 10822
 D 2
 ~
 ~
-0 0 27136
+B0 -1 10836
 D 3
 ~
 porta~
-33 0 27128
+B1 -1 10828
 E
 testo canto~
 Una stella sulla tua fronte,
@@ -1294,127 +2305,129 @@ A Eldamar nei giorni belli.
 ~
 S
 
-#27130
+#10830
 Via Occidentale~
-Sei sulla via Occidentale della citta'. Sul muro di cinta vedi il testo di
-un antico canto elfico. A est c'e' una casa.
-~
-0 8192 1
-D 0
-~
-~
-0 0 27123
-D 1
-~
-porta~
-33 0 27131
-D 2
-~
-~
-0 0 27137
-E
-testo canto~
-Ah! Come oro cadono le foglie al vento,
-lunghi anni innumerevoli come le ali degli alberi!
-I lunghi anni sono passati come rapidi sorsi del dolce idromele
-in alti saloni oltre l'Occidente, sotto le azzurre volte di Varda,
-ove le stelle tremolano alla voce del suo canto, voce sacra di regina.
-~
-S
-
-#27131
-Una casa~
-Sei all'interno di una casa elfica. E' semplice ma c'e' tutto il
-necessario: un camino, un letto, un tavolo e delle sedie intorno. La porta
-e' a ovest.
-~
-0 8|8192 0
-D 3
-~
-porta~
-33 0 27130
-S
-
-#27132
-Alchimista~
-Sei nel laboratorio di un alchimista, qui potrai trovare pozioni e infusi
-di vario genere e natura, oltre ad altri oggetti magici e misteriosi.
-~
-0 8|8192 0
-D 1
-~
-~
-0 0 27133
-S
-
-#27133
-Via Centrale~
-Sei sulla Via Centrale della citta', dove si trovano i negozi.
-Ad ovest vedi un laboratorio e ad est un negozio di accessori.
-~
-0 8192 1
-D 0
-~
-~
-0 0 27126
-D 1
-~
-~
-0 0 27134
-D 2
-~
-~
-0 0 27140
-D 3
-~
-~
-0 0 27132
-S
-
-#27134
-Negozio di Accessori~
-Qui potrai trovare diversi articoli utili, si tratta di accessori che
-completano l'equipaggiamento, sia esso da viaggio o da battaglia.
-~
-0 8|8192 0
-D 3
-~
-~
-0 0 27133
-S
-
-#27135
-Una casa~
-Sei all'interno di una casa elfica. E' semplice ma c'e' tutto il
-necessario: un camino, un letto, un tavolo e delle sedie intorno. La porta
-e' a est.
-~
-0 8|8192 0
-D 1
-~
-~
-0 0 27136
-S
-
-#27136
-Via Orientale~
-Sei sulla Via Orientale della citta'. La strada costeggia le candide mura
-di cinta, ove vedi il testo di un antico canto elfico. A ovest c'e' una
-casa.
+Cammini lungo la Via Occidentale della citta'. Ciottoli bianchi lastricano
+la strada che continua verso nord e verso sud, da dove senti provenire un
+dolce canto di uccelli e il dolce profumo di alberi da frutta. In questa
+sezione delle candide mura di cinta e' inciso il testo di un antico canto
+elfico.
 ~
 0 0 1
 D 0
 ~
 ~
-0 0 27129
+B0 -1 10823
+D 1
+~
+porta~
+B1 -1 10890
 D 2
 ~
 ~
-0 0 27143
+B0 -1 10837
+E
+testo canto~
+Oh Stelle, bianche faville scintillanti come gioielli,
+che dal firmamento digradano la gloria della volta stellata.
+~
+S
+
+#10832
+Laboratorio~
+Sei nel laboratorio di un alchimista, a giudicare dalla gran quantita' di
+ampolle e vasi disposti sugli scaffali dietro il bancone. L'aria qui dentro
+e' piuttosto fresca, e carica di odori esotici e frizzanti.
+~
+0 8 0
+D 1
+~
+~
+B0 -1 10833
+S
+
+#10833
+Via Centrale~
+Cammini lungo la Via Centrale della citta'. Tutta la strada lastricata di
+ciottoli bianchi e' circondata da splendidi porticati candidi decorati con
+colonne che sembrano querce. Sotto di questi si trovano, per tutta la loro
+lunghezza, i negozi di Eldamar. Ad ovest vedi una specie di laboratorio,
+mentre dalla parte opposta noti l'insegna di un negozio di accessori.
+Alla fine della via a nord c'e' una piazza rialzata e la grande torre che
+le fa da sfondo. A sud si innalzano imponenti i cancelli della citta'.
+~
+0 0 1
+D 0
+~
+~
+B0 -1 10826
+D 1
+~
+~
+B0 -1 10834
+D 2
+~
+~
+B0 -1 10840
 D 3
 ~
 ~
-0 0 27135
+B0 -1 10832
+S
+
+#10834
+Negozio di Accessori~
+Sei nel Negozio degli Accessori. Moltissimi oggetti sono disposti sui
+numerosi scaffali, pronti ad essere venduti. Noti diversi articoli utili,
+per lo piu' accessori che completano l'equipaggiamento, sia esso da viaggio
+o da battaglia, ognuno dei quali ha un cartellino sul quale e' segnato il
+prezzo.
+~
+0 8 0
+D 3
+~
+~
+B0 -1 10833
+S
+
+#10835
+Casa dei Canti~
+Giungi all'interno di un ampio locale scarsamente illuminato.
+Al centro della stanza, circondato da un basso muretto di pietre grigie,
+scoppietta allegramente un piccolo fuoco, unica fonte di luce in tutta la
+stanza. Diversi cuscini, piccoli sgabelli e un paio di semplici scranni
+sono sparsi per la stanza. Lungo il lato settentrionale vi e' un lungo
+bancone di legno lucido. In questo luogo gli elfi si ritrovano per bere
+qualcosa ascoltando storie.
+~
+0 8 0
+D 1
+~
+~
+B0 -1 10836
+S
+
+#10836
+Via Orientale~
+Cammini lungo la Via Occidentale della citta'. Ciottoli bianchi lastricano
+la strada che continua verso nord e verso sud, da dove giunge un leggero
+profumo di prato in fiore. In questa sezione delle candide mura di cinta
+e' inciso il testo di un antico canto elfico. Ad ovest si ode un vociare
+dolce e sommesso.
+~
+0 0 1
+D 0
+~
+~
+B0 -1 10829
+D 2
+~
+~
+B0 -1 10843
+D 3
+~
+~
+B0 -1 10835
 E
 testo canto~
 Lunghi i capelli, bianca la pelle, chiara la voce
@@ -1424,210 +2437,234 @@ Come sul tiglio foglia vibrante.
 ~
 S
 
-#27137
+#10837
 Angolo sud-ovest~
-Nell'angolo formato dalle mura di cinta meridionali e occidentali della
-citta' vedi un piccolo giardino composto da alberi che non muoiono, i cui
-rami ospitano variopinti uccelli canori. Sulla strada e' stata incisa una
-stella.
+La Via Occidentale curva ad angolo seguendo le mura, formando lo spazio
+per un piccolo giardino composto da alberi da frutta rigogliosi, sui cui
+rami sono ospitati molti uccelli canori variopinti. L'odore intenso e
+fragrante della natura si spande dalle piante per tutte le vie.
+Sulla strada e' stata incisa una stella.
 ~
-0 8192 1
+0 0 1
 D 0
 ~
 ~
-0 0 27130
+B0 -1 10830
 D 1
 ~
 ~
-0 0 27138
+B0 -1 10838
 E
 stella~
-Al centro della stella c'e' il numero 1.
+Pietre azzurrine sulla strada formano una stella, nel cui centro si legge
+il numero 1.
 ~
 S
 
-#27138
+#10838
 Via Occidentale~
-Sei sulla Via Occidentale della citta'. A ovest c'e' un giardino.
-A sud vedi il robusto muro di cinta, costruito sulla cima del colle
-le cui pendici sono ricoperte dagli alberi della grande foresta verde.
-~
-0 8192 1
-D 1
-~
-~
-0 0 27139
-D 3
-~
-~
-0 0 27137
-S
-
-#27139
-Via Occidentale~
-Sei sulla Via Occidentale della citta'. Fasci di erbe appesi al muro di
-cinta meridionale profumano gradevolmente l'aria; altre erbe, sparse sul
-pavimento lastricato in pietra, emettono un piacevole aroma quando vengono
-calpestate.
-~
-0 8192 1
-D 1
-~
-~
-0 0 27140
-D 3
-~
-~
-0 0 27138
-S
-
-#27140
-Incrocio~
-Sei ad un incrocio dal quale si dipartono le famose tre vie della citta'.
-Qui a sud vedi i cancelli, mentre a nord, alla fine della strada, scorgi
-il tempio, dietro al quale svetta la torre, e sullo sfondo le montagne.
-~
-0 8192 1
-D 0
-~
-~
-0 0 27133
-D 1
-~
-~
-0 0 27141
-D 2
-~
-~
-0 0 27144
-D 3
-~
-~
-0 0 27139
-S
-
-#27141
-Via Orientale~
-Sei sulla Via Orientale; in questo tratto costeggia le mura di cinta
-meridionali della citta'. Le bianche e robuste pareti sono decorate
-con bassorilievi raffiguranti figure di pennuti e di animali terrestri.
-~
-0 8192 1
-D 1
-~
-~
-0 0 27142
-D 3
-~
-~
-0 0 27140
-S
-
-#27142
-Via Orientale~
-Sei sulla Via Orientale della citta'. La parete sud e' tempestata di
-fulgide pietre preziose dai mille colori, estratte dai monti o dalle
-spiagge.
-~
-0 8192 1
-D 1
-~
-~
-0 0 27143
-D 3
-~
-~
-0 0 27141
-S
-
-#27143
-Angolo sud-est~
-Sei sulla Via Orientale, tra i candidi contrafforti delle mura della
-citta'.
-Nell'angolo vedi un piccolo giardino, ove tenera erba e delicati fiori
-formano un prato umido di rugiada. Sulla strada e' stata incisa una
-stella.
-~
-0 8192 1
-D 0
-~
-~
-0 0 27136
-D 3
-~
-~
-0 0 27142
-E
-stella~
-Al centro della stella c'e' il numero 5.
-~
-S
-
-#27144
-Cancelli~
-Sei di fronte ai cancelli, tra le bianche mura che circondano la Bianca
-Citta' sul colle. La cosa che colpisce maggiormente e' proprio il candore,
-la sensazione di purezza trasmessa dalla prima all'ultima pietra con cui
-e' stata amorevolmente costruita la citta', protetta e celata allo sguardo
-dagli alberi impenetrabili che ricoprono le pendici del colle su cui
-sorge.
-~
-0 8192 1
-D 0
-~
-~
-0 0 27140
-D 2
-~
-~
-0 0 27151
-S
-
-#27145
-Porto~
-Senti il vento sulla faccia e odi il dolce fragore delle onde che si
-frangono sulla riva, bagnando la lunga e stretta spiaggia che separa la
-foresta dal mare. Questo porto e' molto antico e ricco di storia. Dai
-lunghi pontili e' possibile attraccare o salpare verso nuove terre o solo
-navigare per il semplice gusto di farlo. Vicino ad un pontile noti un
-cartello.
+Cammini lungo la Via Occidentale della citta'. Da un giardino poco lontano
+ad ovest, addossato alle mura, proviene un profumo dolce ed intenso che ben
+si miscela con gli odori della foresta che circonda la citta'. Le candide
+mura di cinta a sud non nascondono le chiome degli alberi piu' alti. La via
+prosegue verso est ed ovest.
 ~
 0 0 1
 D 1
-Vedi i margini della foresta.~
 ~
-0 0 27146
-E
-cartello~
-"Il mare puo' essere amato, ma deve comunque essere temuto".
 ~
+B0 -1 10839
+D 3
+~
+~
+B0 -1 10837
+S
+
+#10839
+Via Occidentale~
+Cammini lungo la Via Occidentale della citta'. Rampicanti di vario genere,
+dai fiori grandi e colorati, crescono sulle mura di cinta spandendo
+nell'aria un profumo delizioso, che insieme ai canti di una moltitudine di
+uccelli contribuiscono a creare un'atmosfera serena e vivace. A sud, oltre
+le mura, vedi le chiome degli alberi piu' alti della foresta che circonda
+la citta'.
+~
+0 0 1
+D 1
+~
+~
+B0 -1 10840
+D 3
+~
+~
+B0 -1 10838
+S
+
+#10840
+Incrocio~
+Ti trovi all'interno della citta' elfica di Eldamar, precisamente
+all'incrocio dal quale si dipartono le famose Tre Vie che la attraversano.
+A sud si stagliano i cancelli, mentre lontano a nord scorgi la piazza
+monumentale e, alle sue spalle, un'altissima torre con le montagne come
+sfondo suggestivo. Noti che le mura di cinta, bianche come il resto della
+citta', sono in piu' punti coperte da erbe e fiori colorati che
+arricchiscono l'aria con i loro profumi inebrianti.
+~
+0 0 1
+D 0
+~
+~
+B0 -1 10833
+D 1
+~
+~
+B0 -1 10841
+D 2
+~
+cancello~
+B257 -1 10844
+D 3
+~
+~
+B0 -1 10839
+S
+
+#10841
+Via Orientale~
+Cammini lungo la Via Orientale della citta'. Le bianche e robuste mura di
+cinta sono decorate con altorilievi che raffigurano pennuti e animali
+terrestri, arricchiti con fulgide pietre preziose provenienti dalle
+Montagne Azzurre o dalle ricchezze marine su cui si affaccia il porto
+elfico. I fragranti profumi nell'aria ed il canto degli uccelli fanno da
+contorno alla pace del luogo.
+~
+0 0 1
+D 1
+~
+~
+B0 -1 10842
+D 3
+~
+~
+B0 -1 10840
+S
+
+#10842
+Via Orientale~
+Cammini lungo la Via Orientale della citta'. L'aria e' impregnata dell'odore
+della foresta che circonda la collina e di quello piu' delicato dell'erba,
+che reputi provenire da un prato poco piu' ad est di qui. Verso ovest
+invece la strada si congiunge a quella principale, nei pressi dei cancelli.
+~
+0 0 1
+D 1
+~
+~
+B0 -1 10843
+D 3
+~
+~
+B0 -1 10841
+S
+
+#10843
+Angolo sud-est~
+La Via Orientale curva ad angolo seguendo le mura. Tra i candidi
+contrafforti noti un piccolo giardino, ove tenera erba verde e delicati
+fiori formano uno splendido prato colorato e umido di rugiada. Il profumo
+che ne proviene non e' molto intenso, ma sicuramente delizioso. Sulla
+strada e' stata incisa una stella.
+~
+0 0 1
+D 0
+~
+~
+B0 -1 10836
+D 3
+~
+~
+B0 -1 10842
 E
-spiaggia~
-La spiaggia e' ricca di conchiglie e pietre colorate.
+stella~
+Pietre azzurrine sulla strada formano una stella, nel cui centro si legge
+il numero 5.
 ~
 S
 
-#27146
+#10844
+Cancelli~
+Sei sulla cima di una bassa collina, di fronte ai cancelli delle bianche
+mura che circondano una Bianca Citta'. La cosa che colpisce maggiormente e'
+proprio il candore, la sensazione di purezza trasmessa dalla prima
+all'ultima pietra con cui e' stata amorevolmente costruita, protetta e
+celata allo sguardo dagli alberi impenetrabili che ricoprono le pendici del
+colle su cui sorge.
+~
+0 4 1
+D 0
+~
+cancello~
+B257 -1 10840
+D 2
+~
+~
+B0 -1 10851
+S
+
+#10845
+Area Portuale~
+Un basso muricciolo di pietre accatastate cinge la zona portuale. Intorno
+alla piazza circolare, in cui si erge il grande faro, sorgono costruzioni,
+edifici ed installazioni, tutti rigorosamente di grigia pietra, destinati
+a vari scopi: magazzini, cantieri per la costruzione e la riparazione delle
+imbarcazioni, ed infine gli alloggi che ospitano marinai e navigatori.	
+~
+0 4 1
+D 1
+Vedi i margini della foresta.~
+~
+B0 -1 10846
+D 3
+~
+~
+B0 -1 10873
+E
+faro calmindon~
+Calmindon, la Torre di Luce, il grande faro la cui argentea luce, visibile
+da lungi tra le brume del mare, indica la posizione dell'elfico porto.
+~
+S
+
+#10846
 Sentiero~
-Il sentiero si snoda all'interno della foresta verde, attraversando i
-punti in cui e' meno fitta riuscendo cosi' a non intaccare la sua bellezza
-primeva. Un fresco vento proviene da ovest, accompagnando quelle che
-sembrano le grida dei gabbiani.
+Un sentiero serpeggiante passa attraverso gli alberi della Foresta Verde.
+In questo punto la vegetazione e' poco fitta, costituita in prevalenza da
+alberi di oiolaire e fiori di lissuin. Una fresca brezza spira da
+occidente, portando con se' grida di gabbiani e altri uccelli marini.
 ~
 0 0 3
 D 0
 ~
 ~
-0 0 27147
+B0 -1 10847
 D 3
-Tra gli alberi intravedi una spiaggia e delle costruzioni.~
+Un basso muricciolo di pietra cinge il porto. Nel mezzo c'e' un ampio varco.~
 ~
-0 0 27145
+B0 -1 10845
+E
+oiolaire~
+Un alberto sempreverde, con foglie lucenti e fragranti, che prospera nelle
+vicinanze del mare.
+~
+E
+fiori lissuin~
+Fiori cerulei la cui fragranza porta sollievo al cuore.
+~
 S
 
-#27147
+#10847
 Sentiero~
-Il sentiero si snoda all'interno della foresta verde, attraversando i
+Il sentiero si snoda all'interno della Foresta Verde, attraversando i
 punti in cui e' meno fitta riuscendo cosi' a non intaccare la sua bellezza
 primeva. Gli alberi, superbi nella loro maestosita', si ergono come
 testimoni della pace del luogo. Verso sud-ovest, nella stessa direzione in
@@ -1637,11 +2674,11 @@ cui prosegue in sentiero, la vegetazione diventa via via meno fitta.
 D 1
 ~
 ~
-0 0 27148
+B0 -1 10848
 D 2
 ~
 ~
-0 0 27146
+B0 -1 10846
 E
 albero alberi~
 Appoggiando una mano alla corteccia ti puoi rendere conto, forse per la
@@ -1649,9 +2686,9 @@ prima volta, che e' una creatura vivente.
 ~
 S
 
-#27148
+#10848
 Sentiero~
-Il sentiero si snoda all'interno della foresta verde, attraversando i
+Il sentiero si snoda all'interno della Foresta Verde, attraversando i
 punti in cui e' meno fitta riuscendo cosi' a non intaccare la sua bellezza
 primeva. L'allegro cinguettare degli uccelli ti accompagna lungo il tuo
 cammino. In questo luogo la gioia del mattino, prima che s'asciughi la
@@ -1661,40 +2698,44 @@ rugiada allorche' ciascuna foglia e' verde, non ha mai fine.
 D 0
 ~
 ~
-0 0 27149
+B0 -1 10849
 D 3
 ~
 ~
-0 0 27147
+B0 -1 10847
 D 4
 Verso la cima, il fusto dell'albero si divide in una corona di diramazioni
 sulle quali e' stata costruita una piattaforma.~
 ~
-0 0 27166
+B0 -1 10866
 S
 
-#27149
+#10849
 Sentiero~
-Il sentiero si snoda all'interno della foresta verde, attraversando i
+Il sentiero si snoda all'interno della Foresta Verde, attraversando i
 punti in cui e' meno fitta riuscendo cosi' a non intaccare la sua bellezza
 primeva. Hai l'impressione che in questi luoghi la primavera sia perenne.
 Poco lontano dal sentiero un cervo annusa l'aria pregna dell'odore del
 muschio, e poi sparisce tra gli alberi con eleganti balzi.
 ~
 0 0 3
+D 0
+~
+~
+B0 -1 10884
 D 1
 ~
 ~
-0 0 27150
+B0 -1 10850
 D 2
 ~
 ~
-0 0 27148
+B0 -1 10848
 S
 
-#27150
+#10850
 Sentiero~
-Il sentiero si snoda all'interno della foresta verde, attraversando i
+Il sentiero si snoda all'interno della Foresta Verde, attraversando i
 punti in cui e' meno fitta riuscendo cosi' a non intaccare la sua bellezza
 primeva. Alcune leggende raccontano che anche gli alberi hanno un anima.
 Questi faggi sembrano possederla decisamente: se sei gentile potrebbero
@@ -1705,36 +2746,41 @@ paiono rendere l'aria satura di collera.
 D 1
 ~
 ~
-0 0 27151
+B0 -1 10851
+D 2
+~
+~
+B0 -1 10879
 D 3
 ~
 ~
-0 0 27149
+B0 -1 10849
 S
 
-#27151
+#10851
 Sentiero~
-Il sentiero si snoda all'interno della foresta verde, attraversando i
+Il sentiero si snoda all'interno della Foresta Verde, attraversando i
 punti in cui e' meno fitta riuscendo cosi' a non intaccare la sua bellezza
 primeva. Tutto intorno la vegetazione e' densa e gli alberi alti, non
-riesci a vedere altro all'infuori della pista che segui.
+riesci a vedere altro all'infuori della pista che segui. A nord vedi che
+gli alberi si diradano ulteriormente, salendo verso una collina.
 ~
 0 0 3
 D 0
 ~
 ~
-33 0 27144
+B0 -1 10844
 D 1
 ~
 ~
-0 0 27152
+B0 -1 10852
 D 3
 ~
 ~
-0 0 27150
+B0 -1 10850
 S
 
-#27152
+#10852
 Sentiero~
 Gli alberi, i fiori e le erbe che crescono in questo luogo sono comuni e
 diffusi, eppure qui sembrano piu' belli, ancora piu' profumati e freschi
@@ -1746,34 +2792,38 @@ gli alberi a sud.
 D 1
 ~
 ~
-0 0 27153
+B0 -1 10853
 D 2
 ~
 ~
-0 0 27169
+B0 -1 10869
 D 3
 ~
 ~
-0 0 27151
+B0 -1 10851
 S
 
-#27153
+#10853
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Ti sembra di sentire una strana musica. Proviene da est.
 ~
 0 0 3
+D 0
+~
+~
+B0 -1 10878
 D 1
 Il sentiero e' interrotto da un corso d'acqua.~
 ~
-0 0 27154
+B0 -1 10854
 D 3
 ~
 ~
-0 0 27152
+B0 -1 10852
 S
 
-#27154
+#10854
 Ponte~
 Sei su un ponte ampio e robusto che attraversa un fiume, il cui mormorio
 sembra quasi una musica: il continuo fondersi delle acque crea infinite
@@ -1784,93 +2834,95 @@ ascoltare la corrente dimenticandoti perfino di mangiare e bere.
 D 1
 ~
 ~
-0 0 27155
+B0 -1 10855
 D 3
 ~
 ~
-0 0 27153
+B0 -1 10853
 E
 ponte~
 Il ponte, interamente in legno, e' inarcato e dotato di parapetto.
 ~
 S
 
-#27155
+#10855
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Da ovest proviene una sorta di melodia, ora dolce, ora turbolenta.
 ~
 0 0 3
 D 1
 ~
 ~
-0 0 27156
+B0 -1 10856
 D 3
 Il sentiero e' interrotto da un corso d'acqua.~
 ~
-0 0 27154
+B0 -1 10854
 S
 
-#27156
+#10856
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Qui la pista si divide proseguendo verso ovest, est e sud.
 ~
 0 0 3
 D 1
 ~
 ~
-0 0 27162
+B0 -1 10862
 D 2
 ~
 ~
-0 0 27157
+B0 -1 10857
 D 3
 ~
 ~
-0 0 27155
+B0 -1 10855
 S
 
-#27157
+#10857
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
-L'aria e' purissima e respirando ti senti in pace con te stesso.
+Stai attraversando un sentiero all'interno della Foresta Verde.
+L'aria e' purissima e respirando ti senti in pace con te stesso,
+forse perche' in questa zona crescono piante dal profumo dolce e
+penetrante e che hanno inoltre importanti proprieta' medicinali.
 ~
 0 0 3
 D 0
 ~
 ~
-0 0 27156
+B0 -1 10856
 D 2
 ~
 ~
-0 0 27158
+B0 -1 10858
 S
 
-#27158
+#10858
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Questi faggi sono veramente speciali, hanno alcunche' di fatato.
 ~
 0 0 3
 D 0
 ~
 ~
-0 0 27157
+B0 -1 10857
 D 2
 ~
 ~
-0 0 27159
+B0 -1 10859
 D 4
 Verso la cima, il fusto dell'albero si divide in una corona di diramazioni
 sulle quali e' stata costruita una piattaforma.~
 ~
-0 0 27167
+B0 -1 10867
 S
 
-#27159
+#10859
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde. Hai paura
+Stai attraversando un sentiero all'interno della Foresta Verde. Hai paura
 di perderti ma allo stesso tempo sei molto attratto da questo luogo, dai
 suoi colori intensi e dai suoi profumi inebrianti.
 ~
@@ -1878,14 +2930,14 @@ suoi colori intensi e dai suoi profumi inebrianti.
 D 0
 ~
 ~
-0 0 27158
+B0 -1 10858
 D 1
 ~
 ~
-0 0 27271
+B0 -1 10860
 S
 
-#27160
+#10860
 Sentiero~
 Stai attraversando un sentiero all'interno della foresta. Il terreno ai piedi
 degli alberi e' ricoperto da un manto d'erba verde dove crescono pallidi fiori.
@@ -1894,46 +2946,52 @@ degli alberi e' ricoperto da un manto d'erba verde dove crescono pallidi fiori.
 D 1
 ~
 ~
-0 0 27161
+B0 -1 10861
 D 3
 ~
 ~
-0 0 27159
+B0 -1 10859
 S
 
-#27161
+#10861
 Sentiero~
 Sei di fronte alle propaggini orientali di una foresta che ha qualcosa
 di misterioso e antico. Gli alberi, per lo piu' faggi, sono molto alti
 e le loro foglie di un verde molto intenso. L'aria e' fresca e salubre.
 ~
 0 4 3
+D 1
+~
+~
+B0 -1 1134
 D 3
 ~
 ~
-0 0 27160
+B0 -1 10860
 S
 
-#27162
+#10862
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Senti il fruscio del vento tra le foglie, lo stesso vento che ti
-accarezza delicatamente il volto facendoti venire il buon umore.
+accarezza delicatamente il volto facendoti venire il buon umore
+perche' trasporta una fragranza dolce e penetrante proveniente
+dai cespugli ai lati del sentiero.
 ~
 0 0 3
 D 0
 ~
 ~
-0 0 27163
+B0 -1 10863
 D 3
 ~
 ~
-0 0 27156
+B0 -1 10856
 S
 
-#27163
+#10863
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Vorresti indugiare per sempre in questi luoghi incantevoli, stare
 ad ascoltare il canto degli uccelli e annusare gli odorosi fiori.
 ~
@@ -1941,36 +2999,40 @@ ad ascoltare il canto degli uccelli e annusare gli odorosi fiori.
 D 0
 ~
 ~
-0 0 27164
+B0 -1 10864
 D 2
 ~
 ~
-0 0 27162
+B0 -1 10862
 D 4
 Verso la cima, il fusto dell'albero di divide in una corona di diramazioni
 sulle quali e' stata costruita una piattaforma.~
 ~
-0 0 27168
+B0 -1 10868
 S
 
-#27164
+#10864
 Sentiero~
-Stai attraversando un sentiero all'interno della foresta verde.
+Stai attraversando un sentiero all'interno della Foresta Verde.
 Proveniente da nord-ovest, ti sembra di sentire una strana musica
 oppure lo scrosciare dell'acqua, non sapresti distinguere fra i due.
 ~
 0 0 3
+D 0
+~
+~
+B0 -1 25700
 D 1
 ~
 ~
-0 0 27165
+B0 -1 10865
 D 2
 ~
 ~
-0 0 27163
+B0 -1 10863
 S
 
-#27165
+#10865
 Sentiero~
 Sei ai margini di una immensa foresta, formata da alberi molto alti
 dalle foglie ovali di colore verde intenso. Ti senti attratto da questo
@@ -1978,13 +3040,17 @@ luogo, eppure inizialmente non puoi fare a meno di provare un certo
 timore. A ovest vedi un sentiero che si inoltra nella foresta.
 ~
 0 4 3
+D 1
+~
+~
+B0 -1 318
 D 3
 ~
 ~
-0 0 27164
+B0 -1 10864
 S
 
-#27166
+#10866
 Sul talan~
 Da questa piattaforma di legno, costruita in cima ad un albero, e'
 possibile scorgere un ampio tratto del bosco per avvistare eventualmente
@@ -1993,13 +3059,21 @@ addolcito dal canto degli uccelli e dai giochi di luce provocati dal
 debole fruscio delle foglie.
 ~
 0 0 3
+D 0
+~
+~
+B512 -1 10849
+D 3
+~
+~
+B512 -1 10847
 D 5
 ~
 ~
-0 0 27148
+B0 -1 10848
 S
 
-#27167
+#10867
 Sul talan~
 Da questa piattaforma di legno, costruita in cima ad un albero, e'
 possibile scorgere un ampio tratto del bosco per avvistare eventualmente
@@ -2008,13 +3082,21 @@ addolcito dal canto degli uccelli e dai giochi di luce provocati dal
 debole fruscio delle foglie.
 ~
 0 0 3
+D 0
+~
+~
+B512 -1 10857
+D 2
+~
+~
+B512 -1 10859
 D 5
 ~
 ~
-0 0 27158
+B0 -1 10858
 S
 
-#27168
+#10868
 Sul talan~
 Da questa piattaforma di legno, costruita in cima ad un albero, e'
 possibile scorgere un ampio tratto del bosco per avvistare eventualmente
@@ -2023,15 +3105,23 @@ addolcito dal canto degli uccelli e dai giochi di luce provocati dal
 debole fruscio delle foglie.
 ~
 0 0 3
+D 0
+~
+~
+B512 -1 10864
+D 2
+~
+~
+B512 -1 10862
 D 5
 ~
 ~
-0 0 27163
+B0 -1 10863
 S
 
-#27169
+#10869
 Sentiero~
-Un sentiero si inoltra all'interno della foresta verde, tra cespugli
+Un sentiero si inoltra all'interno della Foresta Verde, tra cespugli
 rigogliosi e fiori dalle tinte forti. Da sud-est proviene una musica,
 mentre a sud-ovest ti sembra di vedere dei riflessi dorati.
 ~
@@ -2039,16 +3129,16 @@ mentre a sud-ovest ti sembra di vedere dei riflessi dorati.
 D 0
 ~
 ~
-0 0 27152
+B0 -1 10852
 D 2
 ~
 ~
-0 0 27170
+B0 -1 10870
 S
 
-#27170
+#10870
 Sentiero~
-Un sentiero si inoltra all'interno della foresta verde, tra cespugli
+Un sentiero si inoltra all'interno della Foresta Verde, tra cespugli
 rigogliosi e fiori dalle tinte forti. Da est proviene una musica simile
 allo scroscio dell'acqua, mentre dalla direzione opposta, tra migliaia di
 luccichii, vedi un bosco formato da alberi vestiti d'oro.
@@ -2057,18 +3147,18 @@ luccichii, vedi un bosco formato da alberi vestiti d'oro.
 D 0
 ~
 ~
-0 0 27169
+B0 -1 10869
 D 1
 ~
 ~
-0 0 27171
+B0 -1 10871
 D 3
 ~
 ~
-0 0 27172
+B0 -1 10872
 S
 
-#27171
+#10871
 Cascata~
 Sei di fronte ad una piccola cascata; il suono armonioso dello scrosciare
 dell'acqua e' pari alla piu' soave musica che tu abbia mai udito. L'aria
@@ -2081,188 +3171,648 @@ acque assumono un colore argenteo.
 D 3
 ~
 ~
-0 0 27170
+B0 -1 10870
 S
 
-#27172
-Bosco d'oro~
+#10872
+Bosco d'Oro~
 Sei circondato da un bosco incantevole. La corteccia degli alberi e' color
-avorio e i rami frondosi sono ricoperti di vibranti foglie dorate. Il
-verde manto erboso e' ricoperto di fiori gialli, blu e bianchi. Tutti i
-colori sono acutissimi e hai l'impressione di percepirli per la prima
-volta e di creare per loro nomi meravigliosi.
+avorio e i rami frondosi sono ricoperti di vibranti foglie dorate. Il verde
+manto erboso e' ricoperto di fiori bianchi e gialli. Tutti i colori sono
+acutissimi e hai l'impressione di percepirli per la prima volta e di creare
+per loro nomi meravigliosi.
 ~
 0 0 3
 D 1
 ~
 ~
-0 0 27170
+B0 -1 10870
+S
+
+#10873
+Porto~
+Sul tratto di costa racchiuso dal porto si trovano banchine, moli e pontili
+di sbarco, in cui vi sono bitte per ormeggiare le imbarcazioni, e dove
+brillano lanterne rosse a supporto della luce chiara del faro. Vi sono
+inoltre numerose darsene per la rimessa delle imbarcazioni disarmate. E'
+possibile attraccare le navi di ritorno da un lungo viaggio e salpare in
+direzione di mete lontane, oppure semplicemente navigare nel vasto mare per
+pura passione.	
+~
+0 0 1
+D 1
+~
+~
+B0 -1 10845
+D 3
+~
+~
+B0 -1 10874
+S
+
+#10874
+Pontile~
+Il vento soffia sulla faccia e si ode il dolce fragore delle delicate onde
+che si frangono sulla riva, bagnando la lunga e stretta spiaggia che separa
+il bosco dal mare. All'estremita' del lungo pontile, fatto di robusto
+legno, vi e' un vecchio cartello, mezzo rovinato ma ancora chiaramente
+leggibile. Lanterne gialle illuminano l'imboccatura del frangiflutti,
+struttura muraria a forma di semicerchio che affiora dalle acque e che,
+insieme al muricciolo di pietra sulla terraferma, circonda come in un
+abbraccio tutto il porto. Meravigliose a vedersi sono la laguna e la
+scintillante spiaggia di Eldamar.
+~
+0 0 1
+D 1
+~
+~
+B0 -1 10873
+D 3
+~
+~
+B0 -1 10875
+E
+cartello~
+"Il mare puo' essere amato, ma deve comunque essere temuto".
+~
+E
+spiaggia sabbia riva costa~
+Opali, diamanti e pallidi cristalli sono stati sparsi sulle rive di Eldamar.
+~
+E
+laguna~
+Le basse acque della laguna sono ricche di perle e altre pietre colorate.
+~
+S
+
+#10875
+Mare~
+Ad est, a non molta distanza, su un muricciolo che affiora dalle acque
+brillano le luci gialle di un possente faro che indicano chiaramente
+l'imboccatura di un porto, sistemato in cima ad un'alta torre, e le
+sabbiose sponde della verde terra che lo ospita.
+~
+0 0 7
+D 1
+~
+~
+B0 -1 10874
+D 3
+~
+~
+B0 -1 10876
+S
+
+#10876
+Mare~
+Un immenso mare senza sponde si estende in tutte le direzioni, mentre a
+oriente e' possibile scorgere distintamente la luce argentea di un faro che
+mette in risalto il profilo di un lungo tratto di costa.
+~
+0 0 7
+D 1
+~
+~
+B0 -1 10875
+D 3
+~
+~
+B0 -1 10877
+S
+
+#10877
+Alto Mare~
+Il liquido abisso si estende fino alla linea dell'orizzonte in tutte le
+direzioni. In questa parte del mondo, quando il cielo e' sgombro da nubi,
+dominano due colori: l'azzurro durante il giorno e il grigio nelle notti
+stellate, e tutte le loro sfumature si rispecchiano nel profondo mare.
+Quando si alza la nebbia invece, sembra di galleggiare all'interno di una
+nuvola. Eppure, che il cielo sia coperto o meno, con la pioggia o con la
+nebbia, di giorno o di notte, a est sembra sempre brillare una luce
+lontana.
+~
+0 0 11
+D 1
+~
+~
+B0 -1 10876
+S
+
+#10878
+Radura del Banchetto Silvano~
+Uno spiazzo dove alcuni alberi sono stati abbattuti e il suolo livellato.
+Sull'erboso terreno umido di rugiada, all'ombra di pini, faggi e castagni,
+vi e' un gran cerchio di sedili ricavati da tronchi segati e ricoperti di
+muschio, al centro del quale arde un grande falo'. Centinaia di torce sono
+appese agli alberi tutto intorno e la bianca ombrella della cicuta avvolge
+come una nuvola la parte inferiore dei loro tronchi.
+~
+0 0 3
+D 2
+~
+~
+B0 -1 10853
+S
+
+#10879
+Sentiero~
+Il sentiero che attraversa la foresta si trasforma in una polverosa pista
+battuta, bordata su entrambi i lati da pietre bianche che servono a
+separare la carreggiata dai campi e i prati di una grande radura. Non vi e'
+alcuna fattoria: la terra non ha padroni e tutti possono disporre dei suoi
+frutti, rispettando i tempi di raccolta per non danneggiare il suo ciclo
+vitale.
+~
+0 0 3
+D 0
+~
+~
+B0 -1 10850
+D 2
+~
+~
+B0 -1 10880
+S
+
+#10880
+Campi di Grano~
+Su una radura assolata di questa terra protetta si coltiva il grano usato
+per la preparazione del pane elfico. Seminato in qualunque stagione, tranne
+che in inverno, esso germoglia e cresce rapidamente necessitando di poca
+luce solare per maturare, poiche' assorbe il vigore di ogni raggio che vi
+ricade. Le spighe dorate non si raccolgono con attrezzi, ma con le mani,
+una ad una, e la bianca paglia viene raccolta nella stessa maniera e viene
+intrecciata in cesti per il trasporto e la conservazione del grano.
+~
+0 0 2
+D 0
+~
+~
+B0 -1 10879
+D 2
+~
+~
+B0 -1 10883
+D 3
+~
+~
+B0 -1 10882
+S
+
+#10881
+Pascoli delle Api~
+Su innumerevoli aiuole ondeggiano grandi macchie di fiori dello stesso tipo:
+garofani selvatici, garofani purpurei e garofani bianchi. Sul bordo della
+radura, riparate dai rami spioventi degli alberi, sono disposte file e file
+di arnie con il tetto di paglia a forma di campana, in cui le api entrano
+ed escono continuamente. Si ode incessante un ronzio, un brusio, un
+fruscio.
+~
+0 0 2
+D 0
+~
+~
+B0 -1 10882
+D 1
+~
+~
+B0 -1 10883
+S
+
+#10882
+Frutteti~
+In questa fertile terra ove l'erba e' alta e fioriscono i prati, non mancano
+ricchi frutteti in cui sorgono alberi ricolmi di frutta che per bellezza e
+bonta' paiono sotto la perenne benedizione e la amorevole protezione degli
+dei.
+~
+0 0 2
+D 1
+~
+~
+B0 -1 10880
+D 2
+~
+~
+B0 -1 10881
+S
+
+#10883
+Dorwinion~
+La vite che cresce in questi grandi giardini e' molto rinomata poiche' il
+vino pregiato che se ne ricava e' di una qualita' straordinaria. Gli Elfi
+non amano certo ubriacarsi, ma dicono che il vino faccia bene e se bevuto
+prima di riposare aiuti a dormire piu' profondamente e a fare sogni lieti.
+~
+0 0 2
+D 0
+~
+~
+B0 -1 10880
+D 3
+~
+~
+B0 -1 10881
+S
+
+#10884
+Viottolo~
+Uno stretto viottolo si stacca dal sentiero principale che attraversa la
+Foresta Verde per incunearsi in una fitta zona boscosa, ove gli alberi sono
+piu' ravvicinati, la luce penetra con difficolta' e il terreno e' piu'
+aspro.
+~
+0 0 3
+D 0
+~
+~
+B0 -1 10885
+D 2
+~
+~
+B0 -1 10849
+S
+
+#10885
+Collina Solitaria~
+Un roccioso colle dalla cima piatta si erge nel bel mezzo della foresta,
+come se fosse un'isola circondata da un mare di alberi. Si dice che questa
+collina non sia altro che un enorme masso lanciato da un gigante, forse una
+metafora per indicare una frana avvenuta nelle Montagne Azzurre, la grande
+catena montuosa che, seppure remota, e' possibile scorgere a nord.
+~
+0 0 4
+D 0
+~
+~
+B0 -1 10886
+D 2
+~
+~
+B0 -1 10884
+S
+
+#10886
+Viottolo~
+Un piccolo viottolo accidentato percorre il terreno ondulato della densa
+foresta. Dirigendo lo sguardo a nord, al di sopra delle cime degli alberi,
+si vede l'inconfondibile profilo dei monti che torreggiano questa regione.
+~
+0 0 3
+D 0
+~
+~
+B0 -1 10887
+D 2
+~
+~
+B0 -1 10885
+S
+
+#10887
+Viottolo~
+Uno stretto viottolo serpeggia nella fitta boscaglia fino a giungere ai
+piedi delle alte colline che formano i pendii rocciosi delle montagne. Ci
+si trova di fronte ad un muro di roccia a strapiombo in cui, sotto un basso
+arco, si apre l'imboccatura di una grotta naturale che scende in
+profondita'.
+~
+0 0 3
+D 2
+~
+~
+B0 -1 10886
+D 5
+~
+~
+B0 -1 10888
+S
+
+#10888
+Caverne~
+Fiaccole illuminano i pavimenti sabbiosi di interminabili saloni sotto
+cupole eccheggianti dell'eterna musica dell'acqua che gocciola sugli
+stagni. Colonne bianche, zafferano e rosa sorgono dal pavimento per
+avvinghiarsi ai soffitti, la cui immagine si riflette su laghi tranquilli.
+Unico intervento artificiale e' l'illuminazione, realizzata tramite
+lanterne elfiche che pendono da catene di ferro ancorate alle mura, per il
+resto questa e' una vera e propria opera d'arte plasmata dalle lunghe dita
+dell'Artefice della Terra.
+~
+0 16 0
+D 3
+~
+~
+B0 -1 10889
+D 4
+~
+~
+B0 -1 10887
+S
+
+#10889
+Miniera~
+Inesauribili filoni di metalli e minerali preziosi scintillano sulle pareti
+lucide delle cave, e in particolare affiorano strati di ricche vene di un
+giacimento argentifero. Questo e' il luogo ideale per coloro che traggono
+diletto dalla prospezione dei monti e dall'estrazione di gemme e metalli.
+~
+0 16 5
+D 1
+~
+~
+B0 -1 10888
+S
+
+#10890
+Stalle~
+Un grande edificio di pietra curato, pulito e ben tenuto ospita le stalle
+della citta'. Gli animali sono alloggiati in comode lettiere ed hanno a
+disposizione greppie, mangiatoie e abbeveratoi in abbondanza.
+~
+0 8|4096 0
+D 3
+~
+porta~
+B1 -1 10830
+S
+
+#10891
+Magazzino~
+Questo magazzino, pulito e ben tenuto ospita vari tipi di animali.
+~
+0 4|8 0
 S
 
 #0
 
 #RESETS
 
-* Stanza Balcone (27100) generale
-* Stanza Stanza da letto (27101) generale
-* Stanza Stanza da letto (27101) oggetti
-O 0 27131 0 27101 		uno scrigno
-P 0 27124 0 27131 		una coppa di idromele
-* Stanza Sala da pranzo (27102) generale
-* Stanza Sala riunioni (27103) generale
-* Stanza Cortile (27104) generale
-* Stanza Casa di guarigione (27105) generale
-* Stanza Casa di guarigione (27105) mobs
-M 0 27101 1 27105 		Alakwen
-* Stanza Ingresso al tempio (27106) generale
-* Stanza Ingresso al tempio (27106) mobs
-M 0 27100 1 27106 		Mablung
-E 0 27102 0 16 		una lunga spada elfica
-* Stanza Altare (27107) generale
-* Stanza Altare (27107) oggetti
-O 0 27100 0 27107 		un albero di cristallo
-* Stanza Piazza (27108) generale
-* Stanza Piazza (27108) oggetti
-O 0 27101 0 27108 		una fontana d'argento
-* Stanza Angolo nord-ovest (27109) generale
-* Stanza Via Occidentale (27110) generale
-* Stanza Via Occidentale (27111) generale
-* Stanza Incrocio (27112) generale
-* Stanza Via Orientale (27113) generale
-* Stanza Via Orientale (27114) generale
-* Stanza Angolo nord-est (27115) generale
-* Stanza Via Occidentale (27116) generale
-* Stanza Biblioteca (27117) generale
-* Stanza Biblioteca (27117) oggetti
-O 0 27116 0 27117 		un libro di storia
-O 0 27117 0 27117 		una mappa di Eldamar
-O 0 27127 0 27117 		un libro di leggende
-* Stanza Panificio (27118) generale
-* Stanza Panificio (27118) mobs
-M 0 27103 1 27118 		un fornaio
-G 0 27119 0 0 		una galletta elfica
-G 0 27118 0 0 		del pane elfico
-* Stanza Via Centrale (27119) generale
-* Stanza Negozio delle Armi (27120) generale
-* Stanza Negozio delle Armi (27120) mobs
-M 0 27106 1 27120 		un fabbro
-G 0 27129 0 0 		un arco elfico
-G 0 27104 0 0 		un lungo bastone elfico
-G 0 27103 0 0 		un lungo pugnale elfico
-G 0 27102 0 0 		una lunga spada elfica
-* Stanza Sartoria (27121) generale
-* Stanza Sartoria (27121) mobs
-M 0 27109 1 27121 		una sarta
-G 0 27126 0 0 		una cintura grigia
-G 0 27125 0 0 		una cintura rossa
-G 0 27110 0 0 		un mantello grigio
-G 0 27113 0 0 		un abito azzurro
-G 0 27114 0 0 		un vestito verde
-* Stanza Via Orientale (27122) generale
-* Stanza Via Occidentale (27123) generale
-* Stanza Una casa (27124) generale
-* Stanza Negozio (27125) generale
-* Stanza Negozio (27125) mobs
-M 0 27104 1 27125 		un negoziante
-G 0 27112 0 0 		un corno da guerra elfico
-G 0 27120 0 0 		una torcia
-G 0 27121 0 0 		una candela
-G 0 27122 0 0 		una borraccia
-* Stanza Via Centrale (27126) generale
-* Stanza Negozio delle Armature (27127) generale
-* Stanza Negozio delle Armature (27127) mobs
-M 0 27107 1 27127 		un fabbro
-G 0 27109 0 0 		un paio di schinieri elfici
-G 0 27108 0 0 		un paio di maniche elfiche
-G 0 27107 0 0 		una cotta di maglia elfica
-G 0 27106 0 0 		un elmo elfico
-* Stanza Una casa (27128) generale
-* Stanza Via Orientale (27129) generale
-* Stanza Via Occidentale (27130) generale
-* Stanza Una casa (27131) generale
-* Stanza Alchimista (27132) generale
-* Stanza Alchimista (27132) mobs
-M 0 27105 1 27132 		un'alchimista
-* Stanza Via Centrale (27133) generale
-* Stanza Negozio di Accessori (27134) generale
-* Stanza Negozio di Accessori (27134) mobs
-M 0 27108 1 27134 		un negoziante
-G 0 27128 0 0 		una faretra
-G 0 27115 0 0 		un paio di guanti elfici
-G 0 27111 0 0 		un paio di stivali elfici
-G 0 27105 0 0 		un grande scudo elfico
-* Stanza Una casa (27135) generale
-* Stanza Via Orientale (27136) generale
-* Stanza Angolo sud-ovest (27137) generale
-* Stanza Angolo sud-ovest (27137) oggetti
-O 0 27132 0 27137 		un pero
-P 0 27133 0 27132 		una pera
-* Stanza Via Occidentale (27138) generale
-* Stanza Via Occidentale (27139) generale
-* Stanza Incrocio (27140) generale
-* Stanza Via Orientale (27141) generale
-* Stanza Via Orientale (27142) generale
-* Stanza Angolo sud-est (27143) generale
-* Stanza Angolo sud-est (27143) oggetti
-O 0 27134 0 27143 		un melo
-P 0 27135 0 27134 		una mela
-* Stanza Cancelli (27144) generale
-* Stanza Cancelli (27144) mobs
-M 0 27102 1 27144 		un guardiano
-E 0 27102 0 16 		una lunga spada elfica
-* Stanza Porto (27145) generale
-* Stanza Sentiero (27146) generale
-* Stanza Sentiero (27147) generale
-* Stanza Sentiero (27148) generale
-* Stanza Sentiero (27149) generale
-* Stanza Sentiero (27150) generale
-* Stanza Sentiero (27151) generale
-D 0 27151 0 1
-* Stanza Sentiero (27152) generale
-* Stanza Sentiero (27153) generale
-* Stanza Ponte (27154) generale
-* Stanza Sentiero (27155) generale
-* Stanza Sentiero (27156) generale
-* Stanza Sentiero (27157) generale
-* Stanza Sentiero (27158) generale
-* Stanza Sentiero (27159) generale
-* Stanza Sentiero (27160) generale
-* Stanza Sentiero (27161) generale
-* Stanza Sentiero (27162) generale
-* Stanza Sentiero (27163) generale
-* Stanza Sentiero (27164) generale
-* Stanza Sentiero (27165) generale
-* Stanza Sul talan (27166) generale
-* Stanza Sul talan (27166) oggetti
-O 0 27130 0 27166 		una razione di cibo
-* Stanza Sul talan (27167) generale
-* Stanza Sul talan (27167) oggetti
-O 0 27130 0 27167 		una razione di cibo
-* Stanza Sul talan (27168) generale
-* Stanza Sul talan (27168) oggetti
-O 0 27130 0 27168 		una razione di cibo
-* Stanza Sentiero (27169) generale
-* Stanza Sentiero (27170) generale
-* Stanza Cascata (27171) generale
-* Stanza Bosco d'oro (27172) generale
+* Stanza Balcone (10800) generale
+D 0 10800 0 0
+* Stanza Stanza da letto (10801) generale
+D 0 10801 2 0
+D 0 10801 5 1
+* Stanza Stanza da letto (10801) oggetti
+O 0 10831 0 10801 		uno scrigno
+P 0 10824 0 10831 		una coppa di idromele
+* Stanza Stanza da letto (10801) mobs
+M 0 10815 1 10801 		una cameriera
+E 0 10836 0 5 		un abito bianco e giallo
+* Stanza Sala da pranzo (10802) generale
+D 0 10802 4 1
+* Stanza Sala da pranzo (10802) mobs
+M 0 10813 1 10802 		un servitore
+E 0 10836 0 5 		un abito bianco e giallo
+M 0 10814 1 10802 		un giovane servitore
+E 0 10836 0 5 		un abito bianco e giallo
+* Stanza Sala riunioni (10803) mobs
+M 0 10829 1 10803 		il reggente di Eldamar
+E 0 10852 0 5 		una lunga tunica bianca
+E 0 10853 0 6 		una semplice corona di foglie
+M 0 10830 1 10803 		la sovrana di Eldamar
+E 0 10852 0 5 		una lunga tunica bianca
+E 0 10854 0 6 		una stupenda corona di foglie 
+M 0 10833 1 10803 		un consigliere in azzurro
+* Stanza Cortile (10804) generale
+D 0 10804 0 1
+* Stanza Cortile (10804) oggetti
+O 0 10800 0 10804 		un albero argenteo
+* Stanza Cortile (10804) mobs
+M 0 10800 1 10804 		Nuin
+E 0 10846 0 16 		lo spadone del Guardiano della
+M 0 10834 1 10804 		un consigliere in giallo
+* Stanza Stanza della Curatrice (10805) mobs
+M 0 10801 1 10805 		Alakwen
+M 0 10831 1 10805 		un consigliere in rosso
+* Stanza Ingresso della Torre (10806) generale
+D 0 10806 2 1
+* Stanza Altare (10807) oggetti
+O 0 10845 0 10807 		un tavolo di marmo
+* Stanza Piazza (10808) oggetti
+O 0 10801 0 10808 		una fontana d'argento
+* Stanza Piazza (10808) mobs
+M 0 10832 1 10808 		un consigliere in verde
+* Stanza Incrocio (10812) mobs
+M 0 10841 2 10812 		una guardia elfica
+E 0 10869 0 16 		una picca elfica
+* Stanza Via Orientale (10813) mobs
+M 0 10817 1 10813 		una cittadina elfa
+E 0 10814 0 5 		un vestito verde
+* Stanza Biblioteca (10817) oggetti
+O 0 10844 0 10817 		una lunga libreria
+P 0 10827 0 10844 		un libro di leggende
+P 0 10817 0 10844 		una mappa di Eldamar
+P 0 10816 0 10844 		un libro di storia
+* Stanza Biblioteca (10817) mobs
+M 0 10818 1 10817 		un bibliotecario
+E 0 10837 0 17 		il bastone del bibliotecario
+* Stanza Panificio (10818) mobs
+M 0 10803 1 10818 		un fornaio
+G 0 10819 0 1 		una galletta elfica
+G 0 10818 0 1 		del pane elfico
+* Stanza Via Centrale (10819) mobs
+M 0 10816 1 10819 		un cittadino elfo
+E 0 10813 0 5 		un abito azzurro
+* Stanza Negozio delle Armi (10820) mobs
+M 0 10806 1 10820 		un armaiolo
+G 0 10829 0 5 		un arco elfico
+G 0 10804 0 5 		un lungo bastone elfico
+G 0 10803 0 5 		un lungo pugnale elfico
+G 0 10802 0 5 		una lunga spada elfica
+G 0 10864 0 5 		una freccia elfica
+* Stanza Sartoria (10821) mobs
+M 0 10809 1 10821 		una sarta
+G 0 10825 0 5 		una cintura rossa
+G 0 10826 0 5 		una cintura grigia
+G 0 10813 0 5 		un abito azzurro
+G 0 10814 0 5 		un vestito verde
+G 0 10810 0 10 		un mantello elfico grigio
+* Stanza Via Occidentale (10823) generale
+D 0 10823 1 1
+* Stanza Una casa (10824) generale
+D 0 10824 3 1
+* Stanza Una casa (10824) mobs
+M 0 10811 1 10824 		un bimbo elfo
+* Stanza Negozio (10825) mobs
+M 0 10804 1 10825 		un negoziante
+G 0 10812 0 15 		un corno da guerra elfico
+G 0 10820 0 1 		una torcia
+G 0 10821 0 1 		una candela
+G 0 10822 0 1 		un otre
+G 0 10823 0 1 		una bottiglia di vino del Dorw
+G 0 44 0 16
+M 0 10820 1 10825 		un apprendista
+G 0 10838 0 0		il foglietto dell'apprendista
+* Stanza Via Centrale (10826) mobs
+M 0 10811 1 10826 		un bimbo elfo
+M 0 10841 1 10826 		una guardia elfica
+E 0 10869 0 16 		una picca elfica
+* Stanza Negozio delle Armature (10827) mobs
+M 0 10807 1 10827 		un fabbro
+G 0 10809 0 10 		un paio di schinieri elfici
+G 0 10808 0 10 		un paio di maniche elfiche
+G 0 10807 0 10 		una cotta di maglia elfica
+G 0 10806 0 10 		un elmo elfico
+G 0 10805 0 10 		un grande scudo elfico
+* Stanza Una casa (10828) generale
+D 0 10828 1 1
+* Stanza Via Orientale (10829) generale
+D 0 10829 3 1
+* Stanza Via Orientale (10829) mobs
+M 0 10816 1 10829 		un cittadino elfo
+E 0 10813 0 5 		un abito azzurro
+M 0 10841 1 10829 		una guardia elfica
+E 0 10869 0 16 		una picca elfica
+* Stanza Via Occidentale (10830) generale
+D 0 10830 1 0
+* Stanza Via Occidentale (10830) mobs
+M 0 10841 1 10823 		una guardia elfica
+E 0 10869 0 16 		una picca elfica
+* Stanza Laboratorio (10832) mobs
+M 0 10805 1 10832 		un'alchimista
+G 0 10839 0 10 		una pozione lucente
+G 0 10840 0 10 		una piccola fiala
+G 0 10841 0 10 		una pergamena di rimuovi maled
+G 0 41 0 1
+G 0 42 0 1
+* Stanza Negozio di Accessori (10834) mobs
+M 0 10808 1 10834 		un negoziante
+G 0 10828 0 1 		una faretra
+G 0 10815 0 5 		un paio di guanti elfici
+G 0 10811 0 5 		un paio di stivali elfici
+G 0 10843 0 5 		un astuccio portaoggetti
+G 0 10842 0 5 		un medaglione elfico
+M 0 10819 1 10834 		un garzone
+* Stanza Casa dei Canti (10835) oggetti
+O 0 10867 0 10835 		un fine sgabello di legno
+O 0 10868 0 10835 		un tavolo ovale
+* Stanza Casa dei Canti (10835) mobs
+M 0 10828 1 10835 		l'oste cantore
+G 0 10848 0 0 		un boccale di idromele
+G 0 10849 0 0		un boccale di vino
+G 0 10850 0 0		un boccale di latte
+G 0 10851 0 0		un boccale di birra
+G 0 10866 0 0		una fiaschetta di miruvor
+* Stanza Angolo sud-ovest (10837) oggetti
+O 0 10832 0 10837 		un pero
+P 0 10833 0 10832 		una pera
+P 0 10833 0 10832 		una pera
+P 0 10833 0 10832 		una pera
+* Stanza Via Occidentale (10839) mobs
+M 0 10817 1 10839 		una cittadina elfa
+E 0 10814 0 5 		un vestito verde
+* Stanza Incrocio (10840) generale
+D 0 10840 2 0
+* Stanza Via Orientale (10842) mobs
+M 0 10811 1 10842 		un bimbo elfo
+* Stanza Angolo sud-est (10843) oggetti
+O 0 10834 0 10843 		un melo
+P 0 10835 0 10834 		una mela
+P 0 10835 0 10834 		una mela
+P 0 10835 0 10834 		una mela
+* Stanza Cancelli (10844) generale
+D 0 10844 0 0
+* Stanza Cancelli (10844) mobs
+M 0 10802 1 10844 		Elmir
+E 0 10847 0 16 		la spada del Guardiano del Can
+M 0 10810 1 10844 		Ermon
+E 0 10847 0 16 		la spada del Guardiano del Can
+* Stanza Area Portuale (10845) mobs
+M 0 10836 1 10845 		Falastur
+G 0 10857 0 10 		una canoa elfica
+G 0 10858 0 25 		una barca-cigno
+G 0 10859 0 40 		una nave-cigno
+* Stanza Sentiero (10846) oggetti
+O 0 10856 0 10846 		un fiore di lissuin
+* Stanza Sentiero (10848) mobs
+M 0 10824 2 10848 		una farfalla variopinta
+* Stanza Sentiero (10850) mobs
+M 0 10825 2 10850 		uno scoiattolo
+* Stanza Sentiero (10853) mobs
+M 0 10826 2 10853 		un tasso
+* Stanza Ponte (10854) mobs
+M 0 10812 1 10854 		Gwen
+E 0 10855 0 16 		un arco elfico bianco
+E 0 10828 0 20 		una faretra
+G 0 10864 0 0		una freccia elfica
+* Stanza Sentiero (10857) oggetti
+O 0 10862 0 10857 		un cespuglio
+P 0 10863 0 10862 		una foglia di athelas
+* Stanza Sentiero (10859) mobs
+M 0 10827 2 10859 		una volpe
+* Stanza Sentiero (10863) mobs
+M 0 10835 2 10863 		una lepre bianca
+* Stanza Sul talan (10866) oggetti
+O 0 10830 0 10866 		una razione di cibo
+* Stanza Sul talan (10866) mobs
+M 0 10821 1 10866 		un elfo sentinella
+E 0 10829 0 16 		un arco elfico
+E 0 10828 0 20 		una faretra
+G 0 10864 0 0		una freccia elfica
+M 0 10823 1 10866 		una sentinella dei boschi
+E 0 10802 0 16 		una lunga spada elfica
+* Stanza Sul talan (10867) oggetti
+O 0 10830 0 10867 		una razione di cibo
+* Stanza Sul talan (10867) mobs
+M 0 10822 1 10867 		una sentinella dei boschi
+E 0 10803 0 16 		un lungo pugnale elfico
+M 0 10821 1 10867 		un elfo sentinella
+E 0 10829 0 16 		un arco elfico
+E 0 10828 0 20 		una faretra
+G 0 10864 0 0		una freccia elfica
+* Stanza Sul talan (10868) oggetti
+O 0 10830 0 10868 		una razione di cibo
+* Stanza Sul talan (10868) mobs
+M 0 10821 1 10868 		un elfo sentinella
+E 0 10828 0 20 		una faretra
+E 0 10829 0 16 		un arco elfico
+G 0 10864 0 0		una freccia elfica
+M 0 10822 1 10868 		una sentinella dei boschi
+E 0 10803 0 16 		un lungo pugnale elfico
+* Stanza Bosco d'Oro (10872) oggetti
+O 0 10860 0 10872 		un fiore di elanor
+O 0 10861 0 10872 		un fiore di niphredil
+* Stanza Frutteti (10882) oggetti
+O 0 10832 0 10882 		un pero
+P 0 10833 0 10832 		una pera
+P 0 10833 0 10832 		una pera
+P 0 10833 0 10832 		una pera
+O 0 10834 0 10882 		un melo
+P 0 10835 0 10834 		una mela
+P 0 10835 0 10834 		una mela
+P 0 10835 0 10834 		una mela
+* Stanza Stalle (10890) generale
+D 0 10890 3 0
+* Stanza Stalle (10890) mobs
+M 0 10837 1 10890 		uno stalliere
+* Stanza Magazzino (10891) mobs
+M 0 10838 1 10891 		un pony
+M 0 10839 1 10891 		un cane da caccia
+M 0 10840 1 10891 		un cavallo elfico
 S
 
 #SHOPS
 
-27103 19 0 0 0 0 100 100 3 19 		un fornaio
-27104 0 0 0 0 0 100 100 7 19 		un negoziante
-27105 3 4 10 2 0 100 100 7 19 		un'alchimista
-27106 5 0 0 0 0 100 100 7 19 		un fabbro
-27107 9 0 0 0 0 100 70 7 19 		un fabbro
-27108 9 0 0 0 0 100 70 7 19 		un negoziante
-27109 0 0 0 0 0 100 100 7 19 		una sarta
+10803 0 0 0 0 0 100 100 3 12 		un fornaio
+10804 0 0 0 0 0 100 100 7 19 		un negoziante
+10805 3 4 10 2 0 100 80 7 19 		un'alchimista
+10806 5 0 0 0 0 100 80 7 19 		un armaiolo
+10807 9 0 0 0 0 100 80 7 19 		un fabbro
+10808 0 0 0 0 0 100 100 7 19 		un negoziante
+10809 0 0 0 0 0 100 100 7 19 		una sarta
+10828 0 0 0 0 0 100 100 0 23 		l'oste cantore
+10836 0 0 0 0 0 100 100 14 23 		Falastur
+10837 0 0 0 0 0 100 100 5 18 		uno stalliere
 0
 
 #SPECIALS
 
-M 27100 spec_guard 	Mablung
-M 27101 spec_cast_adept 	Alakwen
-M 27102 spec_guard 	un guardiano
+M 10800 spec_executioner 	Nuin
+M 10801 spec_cast_adept 	Alakwen
+M 10812 spec_bowman 	Gwen
+M 10821 spec_bowman 	un elfo sentinella
+M 10841 spec_guard 	una guardia elfica
 S
 
 #$

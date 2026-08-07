@@ -4,3 +4,7 @@
 # Test files
 test-storage.js
 test-validation.js
+
+# OS / junk files
+.DS_Store
+js/map.js.orig
