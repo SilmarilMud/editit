@@ -305,6 +305,90 @@
 }
 
 /* ========================================
+   About Dialog
+   ======================================== */
+#about-dialog article {
+    max-width: 520px;
+    color: var(--pico-color);
+    background: var(--pico-card-background-color);
+}
+
+#about-dialog header {
+    color: var(--pico-color);
+}
+
+.about-content {
+    color: var(--pico-color);
+}
+
+.about-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.about-logo img {
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.about-logo h4 {
+    margin: 0;
+}
+
+.about-version {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--pico-muted-color);
+}
+
+.about-description {
+    margin: 0 0 0.5rem;
+}
+
+.about-link a {
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.about-content h5 {
+    margin: 0.5rem 0 0.25rem;
+    font-size: 0.9rem;
+    color: var(--pico-primary);
+}
+
+.about-browser-info {
+    margin: 0;
+}
+
+.about-info-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+    font-size: 0.82rem;
+    align-items: baseline;
+}
+
+.about-info-row dt {
+    flex-shrink: 0;
+    width: 110px;
+    font-weight: 600;
+    color: var(--pico-muted-color);
+}
+
+.about-info-row dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.about-credits {
+    font-size: 0.85rem;
+    margin: 0;
+    color: var(--pico-muted-color);
+}
+
+/* ========================================
    Error Dialog
    ======================================== */
 .error-dialog article {

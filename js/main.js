@@ -3,7 +3,7 @@
 const DEBUG = false;
 
 import { parseFile } from './parser.js';
-import { createArea, createHelp, createObject, createMobile, createRoom } from './constants.js';
+import { createArea, createHelp, createObject, createMobile, createRoom, APP_NAME, APP_VERSION, APP_DESCRIPTION, GITHUB_URL } from './constants.js';
 import { serializeFile } from './writer.js';
 import {
     initDB,
@@ -306,6 +306,67 @@ function toggleShortcutsDialog() {
 // Setup shortcuts dialog close button
 document.addEventListener('DOMContentLoaded', () => {
     const dialog = document.getElementById('shortcuts-dialog');
+    const closeBtn = dialog?.querySelector('.close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => dialog.close());
+    }
+});
+
+/**
+ * Toggle the About dialog
+ */
+function toggleAboutDialog() {
+    const dialog = document.getElementById('about-dialog');
+    if (!dialog) return;
+
+    if (dialog.open) {
+        dialog.close();
+    } else {
+        populateAboutDialog();
+        dialog.showModal();
+    }
+}
+
+/**
+ * Populate the About dialog with application and browser info.
+ * Static fields use constants; browser info is gathered at open time.
+ */
+function populateAboutDialog() {
+    const nameEl = document.getElementById('about-app-name');
+    const versionEl = document.getElementById('about-version');
+    const descEl = document.getElementById('about-description');
+    const githubEl = document.getElementById('about-github');
+    const browserEl = document.getElementById('about-browser-info');
+
+    if (nameEl) nameEl.textContent = APP_NAME;
+    if (versionEl) versionEl.textContent = `Version ${APP_VERSION}`;
+    if (descEl) descEl.textContent = APP_DESCRIPTION;
+    if (githubEl) {
+        githubEl.textContent = GITHUB_URL;
+        githubEl.href = GITHUB_URL;
+    }
+
+    if (browserEl) {
+        const ua = navigator.userAgent;
+        const match = ua.match(/(Firefox|Edg|Chrome|Safari|OPR)\/?\s*([\d.]+)/);
+        const browserName = match ? `${match[1]} ${match[2]}` : 'Unknown';
+        const platform = navigator.platform || (navigator.userAgentData && navigator.userAgentData.platform) || 'Unknown';
+        const fsAccess = ('showOpenFilePicker' in window) ? 'Yes' : 'No (download/upload fallback)';
+        const idb = ('indexedDB' in window) ? 'Yes' : 'No';
+
+        browserEl.innerHTML = `
+            <div class="about-info-row"><dt>Browser</dt><dd>${escapeHtml(browserName)}</dd></div>
+            <div class="about-info-row"><dt>Platform</dt><dd>${escapeHtml(platform)}</dd></div>
+            <div class="about-info-row"><dt>User Agent</dt><dd>${escapeHtml(ua)}</dd></div>
+            <div class="about-info-row"><dt>File System Access</dt><dd>${fsAccess}</dd></div>
+            <div class="about-info-row"><dt>IndexedDB</dt><dd>${idb}</dd></div>
+        `;
+    }
+}
+
+// Setup About dialog close button
+document.addEventListener('DOMContentLoaded', () => {
+    const dialog = document.getElementById('about-dialog');
     const closeBtn = dialog?.querySelector('.close');
     if (closeBtn) {
         closeBtn.addEventListener('click', () => dialog.close());
@@ -2197,6 +2258,7 @@ async function init() {
     document.getElementById('btn-validate')?.addEventListener('click', handleValidate);
     document.getElementById('btn-map')?.addEventListener('click', handleMap);
     document.getElementById('btn-shortcuts')?.addEventListener('click', toggleShortcutsDialog);
+    document.getElementById('btn-about')?.addEventListener('click', toggleAboutDialog);
     document.getElementById('map-close')?.addEventListener('click', closeMap);
     document.getElementById('map-floor-up')?.addEventListener('click', mapFloorUp);
     document.getElementById('map-floor-down')?.addEventListener('click', mapFloorDown);

@@ -15,6 +15,15 @@ export const MAX_WIDTH_HELP_TEXT = 80;
 export const MAX_VNUM = 65534;
 
 // ============================================================================
+// Application metadata (used by the About dialog)
+// ============================================================================
+
+export const APP_NAME = 'EditIt Web';
+export const APP_VERSION = '1.0.0 (beta)';
+export const APP_DESCRIPTION = 'Silmaril MUD area file editor';
+export const GITHUB_URL = 'https://github.com/silmarilmud/editit';
+
+// ============================================================================
 // ACT_* - Mobile action flags
 // ============================================================================
 

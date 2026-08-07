@@ -22,6 +22,7 @@
             <button id="btn-download" disabled>Download</button>
             <button id="btn-map" disabled>Map</button>
             <button id="btn-validate" disabled>Validate</button>
+            <button id="btn-about" class="outline secondary">About</button>
             <button id="btn-shortcuts" class="outline secondary">?</button>
             <div id="search-container">
                 <input type="search" id="search-input" placeholder="Search... (Ctrl+F)" autocomplete="off">
@@ -173,6 +174,38 @@
                         <div class="shortcut-row"><kbd>Ctrl/⌘ -</kbd><span>Collapse all / Zoom out (map)</span></div>
                         <div class="shortcut-row"><kbd>F1</kbd><span>This help</span></div>
                     </div>
+                </div>
+            </article>
+        </dialog>
+
+        <!-- About Dialog -->
+        <dialog id="about-dialog">
+            <article>
+                <header>
+                    <button class="close" rel="prev"></button>
+                    <h3>About</h3>
+                </header>
+                <div class="about-content">
+                    <div class="about-logo">
+                        <img src="favicon.ico" alt="EditIt logo" width="48" height="48">
+                        <div>
+                            <h4 id="about-app-name">EditIt Web</h4>
+                            <p id="about-version" class="about-version"></p>
+                        </div>
+                    </div>
+                    <p id="about-description" class="about-description"></p>
+                    <p class="about-link">
+                        <a id="about-github" href="#" target="_blank" rel="noopener noreferrer"></a>
+                    </p>
+                    <hr>
+                    <h5>Browser Information</h5>
+                    <dl id="about-browser-info" class="about-browser-info"></dl>
+                    <hr>
+                    <h5>Credits</h5>
+                    <p class="about-credits">
+                        Ported from the original EditIt MFC/C++ desktop application.
+                        Built with HTML5, Pico CSS, and vanilla JavaScript.
+                    </p>
                 </div>
             </article>
         </dialog>
