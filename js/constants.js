@@ -14,6 +14,9 @@ export const MAX_WIDTH_MOB_DESCR = 75;
 export const MAX_WIDTH_HELP_TEXT = 80;
 export const MAX_VNUM = 65534;
 
+// Reverse direction mapping: North↔South, East↔West, Up↔Down
+export const REV_DIR = [2, 3, 0, 1, 5, 4];
+
 // ============================================================================
 // Application metadata (used by the About dialog)
 // ============================================================================
@@ -1332,8 +1335,6 @@ export const dirName = ["a NORD", "a EST", "a SUD", "a OVEST", "in ALTO", "in BA
 export const dirSimpleName = ["Nord", "Est", "Sud", "Ovest", "Alto", "Basso"];
 
 export const dirSimpleNameEn = ["north", "east", "south", "west", "up", "down"];
-
-export const rev_dir = [2, 3, 0, 1, 5, 4];
 
 export const planeName = [
     "",

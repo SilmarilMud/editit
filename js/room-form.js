@@ -2,12 +2,12 @@
 
 import {
     roomFlagsName, sectTypeName, exitFlagsName, doorResetName,
-    dirSimpleName, dirName, createDoor,
+    dirSimpleName, dirName, dirSimpleNameEn, createDoor,
     createLoadedObject, createLoadedMob,
-    EX_ISDOOR, EX_WINDOW
+    EX_ISDOOR, EX_WINDOW, REV_DIR
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
-import { escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
+import { escapeHtml, wrapTextareaWithGuide, setupTabs, getRoomByVNum, showToast } from './utils.js';
 
 export function renderRoomForm(room, onChange, options = {}) {
     const { readonly = false, area = null } = options;
@@ -75,7 +75,7 @@ export function renderRoomForm(room, onChange, options = {}) {
     `;
     
     renderFlags(container, room, onChange, readonly);
-    renderExits(container, room, onChange, readonly);
+    renderExits(container, room, onChange, readonly, options);
     renderExtras(container, room, onChange, readonly);
     renderContents(container, room, onChange, readonly, area);
     setupTabs(container);
@@ -104,7 +104,7 @@ function renderFlags(container, room, onChange, readonly) {
     }, { columns: 3, disabled: readonly }).container);
 }
 
-function renderExits(container, room, onChange, readonly) {
+function renderExits(container, room, onChange, readonly, options = {}) {
     const el = container.querySelector('#room-exits');
     if (!el) return;
     
@@ -223,7 +223,32 @@ function renderExits(container, room, onChange, readonly) {
                     const v = parseInt(e.target.value, 10);
                     door.resetType = isNaN(v) ? -1 : v;
                 }
-                else if (field === 'reverse') door.reverse = e.target.checked;
+                else if (field === 'reverse') {
+                    door.reverse = e.target.checked;
+                    if (door.reverse && door.VNumTo !== -1 && options.area) {
+                        const destRoom = getRoomByVNum(options.area.rooms, door.VNumTo);
+                        if (!destRoom) {
+                            showToast(`Destination room #${door.VNumTo} not found`, 'error');
+                            door.reverse = false;
+                            e.target.checked = false;
+                        } else {
+                            const oppDir = REV_DIR[idx];
+                            if (!destRoom.doors[oppDir]) {
+                                destRoom.doors[oppDir] = createDoor();
+                            }
+                            const oppDoor = destRoom.doors[oppDir];
+                            oppDoor.VNumTo = room.VNum;
+                            oppDoor.keywords = door.keywords;
+                            oppDoor.exitFlags = door.exitFlags;
+                            oppDoor.keyVNum = door.keyVNum;
+                            oppDoor.resetType = door.resetType;
+                            oppDoor.reverse = false;
+                            door.reverse = false;
+                            e.target.checked = false;
+                            showToast(`Reverse exit created in Room #${door.VNumTo} (${dirSimpleNameEn[oppDir]})`);
+                        }
+                    }
+                }
                 
                 // Update status
                 const status = el.querySelector(`.exit-status[data-index="${idx}"], .exit-header[data-index="${idx}"] .exit-status`);
