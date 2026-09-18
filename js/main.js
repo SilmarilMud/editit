@@ -523,7 +523,9 @@ async function openRecentFile(filename) {
         state.text = autoSaved.text;
         
         try {
-            state.area = parseFile(autoSaved.text);
+            const result = parseFile(autoSaved.text);
+            state.area = result.data;
+            showParseWarnings(result.errors);
         } catch (e) {
             console.error('Parse error:', e);
             alert(`Failed to parse file: ${e.message}`);
@@ -1263,7 +1265,9 @@ async function handleOpen() {
         
         // Parse in next frame to avoid blocking UI
         await new Promise(resolve => requestAnimationFrame(resolve));
-        state.area = parseFile(result.text);
+        const parseResult = parseFile(result.text);
+        state.area = parseResult.data;
+        showParseWarnings(parseResult.errors);
         
         // Clear previous selection and tabs
         clearSelection();
@@ -1298,6 +1302,59 @@ async function handleOpen() {
         console.error('Open failed:', error);
         showParseError(error);
     }
+}
+
+/**
+ * Show parse warnings if any exist
+ * @param {Array} errors - Array of {severity, message, line} objects
+ */
+function showParseWarnings(errors) {
+    if (!errors || errors.length === 0) return;
+    
+    const warnings = errors.filter(e => e.severity === 'warning');
+    const hardErrors = errors.filter(e => e.severity === 'error');
+    
+    if (warnings.length === 0 && hardErrors.length === 0) return;
+    
+    let html = '<div style="max-height: 300px; overflow-y: auto;">';
+    
+    if (hardErrors.length > 0) {
+        html += `<h4 style="color: var(--pico-del-color);">Errors (${hardErrors.length})</h4>`;
+        html += '<ul style="margin: 0 0 1rem 0;">';
+        for (const e of hardErrors) {
+            html += `<li><strong>Line ${e.line}:</strong> ${escapeHtml(e.message)}</li>`;
+        }
+        html += '</ul>';
+    }
+    
+    if (warnings.length > 0) {
+        html += `<h4>Warnings (${warnings.length})</h4>`;
+        html += '<ul style="margin: 0;">';
+        for (const w of warnings) {
+            html += `<li><strong>Line ${w.line}:</strong> ${escapeHtml(w.message)}</li>`;
+        }
+        html += '</ul>';
+    }
+    
+    html += '</div>';
+    
+    const dialog = document.createElement('dialog');
+    dialog.className = 'error-dialog';
+    dialog.innerHTML = `
+        <article>
+            <header>
+                <button class="close" onclick="this.closest('dialog').close()"></button>
+                <h3>⚠ Parse Issues</h3>
+            </header>
+            <div>${html}</div>
+            <footer>
+                <button class="secondary" onclick="this.closest('dialog').close()">Close</button>
+            </footer>
+        </article>
+    `;
+    document.body.appendChild(dialog);
+    dialog.showModal();
+    dialog.addEventListener('close', () => dialog.remove());
 }
 
 /**
@@ -2136,7 +2193,9 @@ async function checkAutoSave() {
             state.text = autoSaved.text;
             
             try {
-                state.area = parseFile(autoSaved.text);
+                const result = parseFile(autoSaved.text);
+                state.area = result.data;
+                showParseWarnings(result.errors);
             } catch (e) {
                 console.error('Auto-save parse error:', e.message);
                 if (DEBUG) console.log('Auto-save text:', JSON.stringify(autoSaved.text));

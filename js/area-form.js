@@ -1,6 +1,6 @@
 /* area-form.js - Area editor form for EditIt */
 
-import { areaFlagsName, planeName, AFLAG_DONT_SET, AREA_NEWFORMAT, AREA_BATTLEGROUND } from './constants.js';
+import { areaFlagsName, planeName, AFLAG_DONT_SET, AREA_NEW_FORMAT, AREA_BATTLEGROUND } from './constants.js';
 import { createFlagGroup } from './flags.js';
 import { escapeHtml, wrapTextareaWithGuide, hasEntities, countEntities, validateVnumShift, shiftVnums } from './utils.js';
 
@@ -103,7 +103,7 @@ export function renderAreaForm(area, onChange, options = {}) {
             <h4>Miscellaneous</h4>
             <label>Plane</label>
             <select name="planeName" ${readonly ? 'disabled' : ''}>
-                ${planeName.map(p => `<option value="${p}" ${area.planeName === p ? 'selected' : ''}>${p || '(none)'}</option>`).join('')}
+                ${planeName.map(p => `<option value="${p}" ${area.planeName === p ? 'selected' : ''}>${p}</option>`).join('')}
             </select>
             
             <label>Music File</label>
@@ -176,11 +176,11 @@ export function renderAreaForm(area, onChange, options = {}) {
  * @param {Object} area
  */
 function updateFieldStates(container, area) {
-    const isNewFormat = (area.areaFlags & AREA_NEWFORMAT) !== 0;
+    const isNewFormat = (area.areaFlags & AREA_NEW_FORMAT) !== 0;
     const isBattleground = (area.areaFlags & AREA_BATTLEGROUND) !== 0;
     
     // Fields enabled only with New Format flag
-    const newFormatFields = ['areaMusic', 'resetMsg'];
+    const newFormatFields = ['areaMusic', 'resetMsg', 'planeName'];
     newFormatFields.forEach(name => {
         const el = container.querySelector(`[name="${name}"]`);
         if (el) el.disabled = !isNewFormat;
@@ -193,10 +193,15 @@ function updateFieldStates(container, area) {
     if (flagsContainer) {
         const checkboxes = flagsContainer.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
-            // Don't touch the New Format checkbox itself (bit 0)
-            if (parseInt(cb.value, 10) === AREA_NEWFORMAT) return;
             cb.disabled = !isNewFormat;
         });
+        // One-way toggle: once new format is checked, lock it
+        const newFormatCb = flagsContainer.querySelector(
+            `input[type="checkbox"][value="${AREA_NEW_FORMAT}"]`
+        );
+        if (newFormatCb) {
+            newFormatCb.disabled = newFormatCb.checked;
+        }
     }
 }
 
