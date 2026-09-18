@@ -132,8 +132,7 @@ class Writer {
             out += 'Recall\t' + ((g.recallVNum >= 0) ? g.recallVNum : 0) + '\n';
             out += 'Reset\t' + g.resetMsg + '~\n';
             out += 'Plane\t' + g.planeName + '~\n';
-            out += 'DSight\t' + g.SightDist + '\n';
-            out += 'Sight\t' + g.Sight + '~\n';
+
             out += 'End\n\n';
         } else {
             const authorPart = g.author ? g.author + ' ' : '';

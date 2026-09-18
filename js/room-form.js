@@ -2,12 +2,12 @@
 
 import {
     roomFlagsName, sectTypeName, exitFlagsName, doorResetName,
-    dirSimpleName, dirName, createDoor,
+    dirSimpleName, dirName, dirSimpleNameEn, createDoor,
     createLoadedObject, createLoadedMob,
-    EX_ISDOOR, EX_WINDOW
+    EX_ISDOOR, EX_WINDOW, REV_DIR
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
-import { escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
+import { escapeHtml, wrapTextareaWithGuide, setupTabs, getRoomByVNum, showToast } from './utils.js';
 
 export function renderRoomForm(room, onChange, options = {}) {
     const { readonly = false, area = null } = options;
@@ -75,7 +75,7 @@ export function renderRoomForm(room, onChange, options = {}) {
     `;
     
     renderFlags(container, room, onChange, readonly);
-    renderExits(container, room, onChange, readonly);
+    renderExits(container, room, onChange, readonly, options);
     renderExtras(container, room, onChange, readonly);
     renderContents(container, room, onChange, readonly, area);
     setupTabs(container);
@@ -104,7 +104,18 @@ function renderFlags(container, room, onChange, readonly) {
     }, { columns: 3, disabled: readonly }).container);
 }
 
-function renderExits(container, room, onChange, readonly) {
+function getReverseBtnLabel(room, dirIdx, options) {
+    const door = room.doors[dirIdx];
+    if (door.VNumTo === -1 || !options.area) return 'Create reverse exit';
+    const destRoom = getRoomByVNum(options.area.rooms, door.VNumTo);
+    if (!destRoom) return 'Create reverse exit';
+    const oppDir = REV_DIR[dirIdx];
+    const oppDoor = destRoom.doors[oppDir];
+    if (oppDoor && oppDoor.VNumTo === room.VNum) return 'Update reverse exit';
+    return 'Create reverse exit';
+}
+
+function renderExits(container, room, onChange, readonly, options = {}) {
     const el = container.querySelector('#room-exits');
     if (!el) return;
     
@@ -151,11 +162,8 @@ function renderExits(container, room, onChange, readonly) {
                             ${doorResetName.map(d => `<option value="${d.number}" ${door.resetType===d.number?'selected':''}>${d.name}</option>`).join('')}
                         </select>
                     </div>
-                    <div class="form-section">
-                        <label>
-                            <input type="checkbox" name="exit_reverse_${i}" ${door.reverse ? 'checked' : ''} ${readonly ? 'disabled' : ''}>
-                            Create reverse exit
-                        </label>
+                    <div class="reverse-exit-section">
+                        <button type="button" class="reverse-btn" data-index="${i}" ${readonly ? 'disabled' : ''}>${getReverseBtnLabel(room, i, options)}</button>
                     </div>
                 </div>
             </div>`;
@@ -185,12 +193,17 @@ function renderExits(container, room, onChange, readonly) {
         }
     });
     
-    // Toggle exit details
+    // Toggle exit details (only one open at a time)
     el.querySelectorAll('.exit-header').forEach(header => {
         header.addEventListener('click', () => {
             const idx = header.dataset.index;
             const details = el.querySelector(`.exit-details[data-index="${idx}"]`);
-            if (details) details.classList.toggle('expanded');
+            if (!details) return;
+            const wasExpanded = details.classList.contains('expanded');
+            // Close all
+            el.querySelectorAll('.exit-details').forEach(d => d.classList.remove('expanded'));
+            // Toggle the clicked one
+            if (!wasExpanded) details.classList.add('expanded');
         });
     });
     
@@ -223,7 +236,7 @@ function renderExits(container, room, onChange, readonly) {
                     const v = parseInt(e.target.value, 10);
                     door.resetType = isNaN(v) ? -1 : v;
                 }
-                else if (field === 'reverse') door.reverse = e.target.checked;
+
                 
                 // Update status
                 const status = el.querySelector(`.exit-status[data-index="${idx}"], .exit-header[data-index="${idx}"] .exit-status`);
@@ -231,6 +244,38 @@ function renderExits(container, room, onChange, readonly) {
                     status.textContent = door.VNumTo !== -1 ? `→ #${door.VNumTo}` : 'No exit';
                 }
                 
+                if (onChange) onChange(room);
+            });
+        });
+        
+        // Reverse exit button handlers
+        el.querySelectorAll('.reverse-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.index, 10);
+                const door = room.doors[idx];
+                if (!door) return;
+                if (door.VNumTo === -1) {
+                    showToast('Set a destination VNum first', 'error');
+                    return;
+                }
+                if (!options.area) return;
+                const destRoom = getRoomByVNum(options.area.rooms, door.VNumTo);
+                if (!destRoom) {
+                    showToast(`Destination room #${door.VNumTo} not found`, 'error');
+                    return;
+                }
+                const oppDir = REV_DIR[idx];
+                if (!destRoom.doors[oppDir]) {
+                    destRoom.doors[oppDir] = createDoor();
+                }
+                const oppDoor = destRoom.doors[oppDir];
+                oppDoor.VNumTo = room.VNum;
+                oppDoor.keywords = door.keywords;
+                oppDoor.exitFlags = door.exitFlags;
+                oppDoor.keyVNum = door.keyVNum;
+                oppDoor.resetType = door.resetType;
+                btn.textContent = getReverseBtnLabel(room, idx, options);
+                showToast(`Reverse exit created in Room #${door.VNumTo} (${dirSimpleNameEn[oppDir]})`);
                 if (onChange) onChange(room);
             });
         });

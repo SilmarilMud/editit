@@ -236,8 +236,7 @@ class Parser {
             else if (word === 'plane') general.planeName = this.readString();
             else if (word === 'recall') general.recallVNum = this.readNumber();
             else if (word === 'reset') general.resetMsg = this.readString();
-            else if (word === 'dsight') general.SightDist = this.readNumber();
-            else if (word === 'sight') general.Sight = this.readString();
+
             else if (word === 'end') break;
             else throw new Error(`LoadArea: Unknown field "${word}" (line ${this.fileRow})`);
         }
