@@ -94,19 +94,7 @@ export function renderAreaForm(area, onChange, options = {}) {
         
         <div class="form-section">
             <h4>Wilderness Settings</h4>
-            <label>Sight Description</label>
-            <input type="text" 
-                   name="Sight" 
-                   value="${escapeHtml(area.Sight)}" 
-                   placeholder="What players see in wilderness"
-                   ${readonly ? 'disabled' : ''}>
-            
-            <label>Sight Distance</label>
-            <input type="number" 
-                   name="SightDist" 
-                   value="${area.SightDist}" 
-                   min="0"
-                   ${readonly ? 'disabled' : ''}>
+
         </div>
         
         <div class="form-section">
@@ -190,12 +178,7 @@ function updateFieldStates(container, area) {
         if (el) el.disabled = !isNewFormat;
     });
     
-    // Sight fields: enabled with New Format, disabled with Battle Ground
-    const sightFields = ['Sight', 'SightDist'];
-    sightFields.forEach(name => {
-        const el = container.querySelector(`[name="${name}"]`);
-        if (el) el.disabled = !isNewFormat || isBattleground;
-    });
+
     
     // Other area flags (bits 1-10): disabled without New Format
     const flagsContainer = container.querySelector('#area-flags-container');
@@ -226,7 +209,7 @@ function attachChangeHandlers(container, area, onChange) {
             let value = e.target.value;
             
             // Parse number fields
-            if (['VNumStart', 'recallVNum', 'racMinLev', 'racMaxLev', 'SightDist'].includes(field)) {
+            if (['VNumStart', 'recallVNum', 'racMinLev', 'racMaxLev'].includes(field)) {
                 value = parseInt(value, 10) || 0;
             }
             

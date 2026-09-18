@@ -1366,8 +1366,7 @@ export function createArea() {
         areaName: "",
         recallVNum: 0,
         VNumStart: 1000,
-        Sight: "",
-        SightDist: 0,
+
     };
 }
 
