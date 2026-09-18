@@ -874,14 +874,41 @@
     font-weight: 600;
 }
 
+.textarea-status.near-limit {
+    color: #d69e2e;
+}
+
 .textarea-info .val {
     display: inline-block;
     width: 2ch;
     text-align: right;
 }
 
+.tidy-btn {
+    background: none;
+    border: 1px solid var(--pico-muted-color);
+    color: var(--pico-muted-color);
+    font-size: 0.7rem;
+    padding: 0 0.4rem;
+    margin: 0 0.5rem 0 1rem;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: monospace;
+    line-height: 1.4;
+}
+
+.tidy-btn:hover {
+    background: var(--pico-muted-color);
+    color: var(--pico-background);
+}
+
 .textarea-warn {
     margin-left: 0.5rem;
+}
+
+.textarea-warn.hard {
+    color: var(--pico-del-color);
+    font-weight: 600;
 }
 
 .line-markers {

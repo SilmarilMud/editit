@@ -1,6 +1,6 @@
 /* utils.js - Shared utility functions */
 
-import { MAX_VNUM } from './constants.js';
+import { SOFT_MAX_COLS, HARD_MAX_COLS, MAX_VNUM } from './constants.js';
 
 /**
  * Escape HTML special characters
@@ -63,10 +63,11 @@ export function getRoomByVNum(rooms, vnum) {
 /**
  * Wrap a textarea with column guide and line length status
  * @param {HTMLElement} textarea - The textarea element
- * @param {number} maxCols - Maximum columns (default: 80)
+ * @param {number} softMax - Soft max columns for warning (default: from constants)
+ * @param {number} hardMax - Hard max columns for error (default: from constants)
  * @returns {HTMLElement} The wrapper element
  */
-export function wrapTextareaWithGuide(textarea, maxCols = 80) {
+export function wrapTextareaWithGuide(textarea, softMax = SOFT_MAX_COLS, hardMax = HARD_MAX_COLS) {
     const wrapper = document.createElement('div');
     wrapper.className = 'textarea-wrapper';
     
@@ -96,9 +97,11 @@ export function wrapTextareaWithGuide(textarea, maxCols = 80) {
         const lastNewline = textBeforeCursor.lastIndexOf('\n');
         const currentCol = cursorPos - lastNewline;
         
-        // Check for lines exceeding maxCols
-        const longLines = lines.filter(l => l.length > maxCols);
-        const hasLongLines = longLines.length > 0;
+        // Check for lines exceeding limits
+        const softOverLines = lines.filter(l => l.length > softMax);
+        const hardOverLines = lines.filter(l => l.length > hardMax);
+        const hasSoftOver = softOverLines.length > 0;
+        const hasHardOver = hardOverLines.length > 0;
         
         // Update status text
         const statusText = document.createElement('span');
@@ -106,14 +109,39 @@ export function wrapTextareaWithGuide(textarea, maxCols = 80) {
         statusText.innerHTML = `Ln <span class="val">${String(currentLine).padStart(2)}</span>, Col <span class="val">${String(currentCol).padStart(2)}</span> | <span class="val">${String(lineCount).padStart(2)}</span> lines`;
         status.innerHTML = '';
         status.appendChild(statusText);
-        if (hasLongLines) {
+        
+        // Add Tidy button
+        const tidyBtn = document.createElement('button');
+        tidyBtn.type = 'button';
+        tidyBtn.className = 'tidy-btn';
+        tidyBtn.textContent = '✦ Tidy';
+        tidyBtn.title = 'Auto-format text to fit column limits';
+        tidyBtn.addEventListener('click', () => {
+            const original = textarea.value;
+            const formatted = arrangeText(original);
+            if (original !== formatted) {
+                textarea.value = formatted;
+                // Dispatch input event for real-time updates
+                textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                // Dispatch change event for undo recording
+                textarea.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+        status.appendChild(tidyBtn);
+        
+        if (hasHardOver) {
+            const warn = document.createElement('span');
+            warn.className = 'textarea-warn hard';
+            warn.textContent = ` | ${hardOverLines.length} line(s) exceed ${hardMax} cols`;
+            status.appendChild(warn);
+        } else if (hasSoftOver) {
             const warn = document.createElement('span');
             warn.className = 'textarea-warn';
-            warn.textContent = ` | ${longLines.length} line(s) exceed ${maxCols} cols`;
+            warn.textContent = ` | ${softOverLines.length} line(s) exceed ${softMax} cols`;
             status.appendChild(warn);
         }
         status.appendChild(markers);
-        status.className = `textarea-status${hasLongLines ? ' over-limit' : ''}`;
+        status.className = `textarea-status${hasHardOver ? ' over-limit' : hasSoftOver ? ' near-limit' : ''}`;
         
         // Update line markers (show max 30 lines)
         markers.innerHTML = '';
@@ -121,14 +149,10 @@ export function wrapTextareaWithGuide(textarea, maxCols = 80) {
         for (let i = 0; i < maxMarkers; i++) {
             const marker = document.createElement('span');
             const lineLen = lines[i] ? lines[i].length : 0;
-            const isLastLine = i === lineCount - 1;
-            const lineText = lines[i] || '';
-            const endsWithPeriod = lineText.trimEnd().endsWith('.');
-            const isEmpty = lineText.trim() === '';
             let state = 'ok';
-            if (lineLen > maxCols) {
+            if (lineLen > hardMax) {
                 state = 'error';
-            } else if (!isLastLine && !isEmpty && !endsWithPeriod && lineLen <= 60) {
+            } else if (lineLen > softMax) {
                 state = 'warn';
             }
             marker.className = `line-marker ${state}`;
@@ -153,6 +177,126 @@ export function wrapTextareaWithGuide(textarea, maxCols = 80) {
     updateStatus();
     
     return wrapper;
+}
+
+/**
+ * Arrange text to fit within column limits
+ * @param {string} text - Input text
+ * @returns {string} Formatted text
+ */
+export function arrangeText(text) {
+    if (!text) return text;
+    
+    const lines = text.split('\n');
+    const result = [];
+    const intentionalBreaks = new Set();
+    
+    // Step 1: Detect intentional breaks (short lines between long lines)
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        if (line.trim() === '' || line.length >= 60) continue;
+        
+        const prevLine = lines[i - 1];
+        const nextLine = lines[i + 1];
+        
+        if (prevLine && prevLine.length > 65 && nextLine && nextLine.trim() !== '' && nextLine.length > 65) {
+            intentionalBreaks.add(i);
+        }
+    }
+    
+    // Step 2: Build paragraphs (split on blank lines or intentional breaks)
+    const paragraphs = [];
+    let currentParagraph = [];
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        if (line.trim() === '') {
+            if (currentParagraph.length > 0) {
+                paragraphs.push(currentParagraph);
+                currentParagraph = [];
+            }
+            continue;
+        }
+        
+        // Start new paragraph after intentional break
+        if (intentionalBreaks.has(i) && currentParagraph.length > 0) {
+            paragraphs.push(currentParagraph);
+            currentParagraph = [];
+        }
+        
+        currentParagraph.push(line);
+    }
+    
+    if (currentParagraph.length > 0) {
+        paragraphs.push(currentParagraph);
+    }
+    
+    // Step 3: Rewrap each paragraph
+    let globalLineIndex = 0;
+    for (let p = 0; p < paragraphs.length; p++) {
+        const para = paragraphs[p];
+        
+        // Rewrap paragraph to fit column limits
+        // But preserve line breaks for intentional break lines
+        let currentLine = '';
+        for (let i = 0; i < para.length; i++) {
+            const line = para[i];
+            const isIntentionalBreak = intentionalBreaks.has(globalLineIndex + i);
+            
+            if (isIntentionalBreak) {
+                // Push current line if exists, then push the intentional break line as-is
+                if (currentLine) {
+                    result.push(currentLine);
+                    currentLine = '';
+                }
+                result.push(line);
+            } else {
+                // Normal rewrap logic
+                const words = line.split(/\s+/).filter(w => w.length > 0);
+                for (const word of words) {
+                    if (currentLine === '') {
+                        currentLine = word;
+                    } else if ((currentLine.length + 1 + word.length) <= HARD_MAX_COLS) {
+                        currentLine += ' ' + word;
+                    } else {
+                        result.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+            }
+        }
+        
+        if (currentLine) {
+            result.push(currentLine);
+        }
+        
+        globalLineIndex += para.length;
+        
+        // Add blank line between paragraphs ONLY if there was an intentional break
+        // Don't add blank lines for regular paragraph breaks (blank lines in input)
+        if (p < paragraphs.length - 1) {
+            // Check if the next paragraph starts with an intentional break
+            const nextParaStart = globalLineIndex;
+            if (intentionalBreaks.has(nextParaStart)) {
+                result.push('');
+            }
+        }
+    }
+    
+    // Step 4: Capitalize after sentence endings
+    let output = result.join('\n');
+    
+    output = output.replace(/([.!?])\s+([a-z])/g, (match, punct, letter) => {
+        return punct + ' ' + letter.toUpperCase();
+    });
+    
+    if (output.length > 0 && output[0] === output[0].toLowerCase() && output[0] !== output[0].toUpperCase()) {
+        output = output[0].toUpperCase() + output.slice(1);
+    }
+    
+    return output;
 }
 
 /**

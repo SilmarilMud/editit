@@ -7,11 +7,8 @@
 
 export const MAXLEVEL = 87;
 export const SHOPMAXTRADE = 5;
-export const MAX_WIDTH_ROOM_DESCR = 75;
-export const MAX_WIDTH_ROOM_EXTRADESCR = 80;
-export const MAX_WIDTH_OBJ_EXTRADESCR = 80;
-export const MAX_WIDTH_MOB_DESCR = 75;
-export const MAX_WIDTH_HELP_TEXT = 80;
+export const SOFT_MAX_COLS = 75;  // Warning threshold for line length
+export const HARD_MAX_COLS = 80;  // Error threshold for line length
 export const MAX_VNUM = 65534;
 
 // Reverse direction mapping: North↔South, East↔West, Up↔Down

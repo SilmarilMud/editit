@@ -2,7 +2,7 @@
 
 import { areaFlagsName, planeName, AFLAG_DONT_SET, AREA_NEWFORMAT, AREA_BATTLEGROUND } from './constants.js';
 import { createFlagGroup } from './flags.js';
-import { escapeHtml, hasEntities, countEntities, validateVnumShift, shiftVnums } from './utils.js';
+import { escapeHtml, wrapTextareaWithGuide, hasEntities, countEntities, validateVnumShift, shiftVnums } from './utils.js';
 
 /**
  * Render area form
@@ -125,6 +125,12 @@ export function renderAreaForm(area, onChange, options = {}) {
             <div id="area-flags-container"></div>
         </div>
     `;
+    
+    // Wrap resetMsg textarea with column guide
+    const resetMsgTa = container.querySelector('textarea[name="resetMsg"]');
+    if (resetMsgTa) {
+        wrapTextareaWithGuide(resetMsgTa);
+    }
     
     // Add flags group
     const flagsContainer = container.querySelector('#area-flags-container');
