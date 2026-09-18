@@ -116,6 +116,7 @@ export function wrapTextareaWithGuide(textarea, softMax = SOFT_MAX_COLS, hardMax
         tidyBtn.className = 'tidy-btn';
         tidyBtn.textContent = '✦ Tidy';
         tidyBtn.title = 'Auto-format text to fit column limits';
+        tidyBtn.disabled = !text;
         tidyBtn.addEventListener('click', () => {
             const original = textarea.value;
             const formatted = arrangeText(original);

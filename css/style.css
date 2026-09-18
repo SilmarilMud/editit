@@ -897,9 +897,14 @@
     line-height: 1.4;
 }
 
-.tidy-btn:hover {
+.tidy-btn:hover:not(:disabled) {
     background: var(--pico-muted-color);
     color: var(--pico-background);
+}
+
+.tidy-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .textarea-warn {
