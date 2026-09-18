@@ -11,6 +11,9 @@ export const SOFT_MAX_COLS = 75;  // Warning threshold for line length
 export const HARD_MAX_COLS = 80;  // Error threshold for line length
 export const MAX_VNUM = 65534;
 
+// Reverse direction mapping: North↔South, East↔West, Up↔Down
+export const REV_DIR = [2, 3, 0, 1, 5, 4];
+
 // ============================================================================
 // Application metadata (used by the About dialog)
 // ============================================================================
@@ -229,7 +232,7 @@ export const ITEM_WEAR_MASK =
     ITEM_WEAR_ARMS | ITEM_WEAR_SHIELD | ITEM_WEAR_ABOUT | ITEM_WEAR_WAIST |
     ITEM_WEAR_WRIST | ITEM_WIELD | ITEM_HOLD | ITEM_WEAR_EYES |
     ITEM_WEAR_SHOULDERS | ITEM_WEAR_EARS | ITEM_WEAR_FOREHEAD |
-    ITEM_WEAR_CHEST;
+    ITEM_WEAR_CHEST | ITEM_WEAR_SIDE;
 
 // ============================================================================
 // APPLY_* - Object apply types
@@ -1330,8 +1333,6 @@ export const dirSimpleName = ["Nord", "Est", "Sud", "Ovest", "Alto", "Basso"];
 
 export const dirSimpleNameEn = ["north", "east", "south", "west", "up", "down"];
 
-export const rev_dir = [2, 3, 0, 1, 5, 4];
-
 export const planeName = [
     "",
     "Materiale",
@@ -1363,8 +1364,7 @@ export function createArea() {
         areaName: "",
         recallVNum: 0,
         VNumStart: 1000,
-        Sight: "",
-        SightDist: 0,
+
     };
 }
 
@@ -1452,7 +1452,6 @@ export function createDoor() {
         exitFlags: 0,
         keyVNum: -1,
         resetType: DOOR_NOT_RESET,
-        reverse: false,
     };
 }
 
