@@ -232,7 +232,7 @@ export const ITEM_WEAR_MASK =
     ITEM_WEAR_ARMS | ITEM_WEAR_SHIELD | ITEM_WEAR_ABOUT | ITEM_WEAR_WAIST |
     ITEM_WEAR_WRIST | ITEM_WIELD | ITEM_HOLD | ITEM_WEAR_EYES |
     ITEM_WEAR_SHOULDERS | ITEM_WEAR_EARS | ITEM_WEAR_FOREHEAD |
-    ITEM_WEAR_CHEST;
+    ITEM_WEAR_CHEST | ITEM_WEAR_SIDE;
 
 // ============================================================================
 // APPLY_* - Object apply types

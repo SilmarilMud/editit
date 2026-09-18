@@ -196,7 +196,7 @@ function renderExits(container, room, onChange, readonly) {
     
     // Change handlers
     if (!readonly) {
-        el.querySelectorAll('input, select').forEach(inp => {
+        el.querySelectorAll('input, select, textarea').forEach(inp => {
             inp.addEventListener('change', e => {
                 // Name format: exit_fieldname_index (e.g., exit_vnumto_2)
                 const parts = e.target.name.split('_');
@@ -219,7 +219,10 @@ function renderExits(container, room, onChange, readonly) {
                 else if (field === 'keyvnum') door.keyVNum = parseInt(e.target.value, 10) || -1;
                 else if (field === 'keywords') door.keywords = e.target.value;
                 else if (field === 'descr') door.descr = e.target.value;
-                else if (field === 'resettype') door.resetType = parseInt(e.target.value, 10) || -1;
+                else if (field === 'resettype') {
+                    const v = parseInt(e.target.value, 10);
+                    door.resetType = isNaN(v) ? -1 : v;
+                }
                 else if (field === 'reverse') door.reverse = e.target.checked;
                 
                 // Update status
