@@ -2027,6 +2027,12 @@ function renderForm(container, node) {
                 const newLabel = `🗺️ ${area.areaName || 'Unnamed Area'}`;
                 updateNodeLabel('root', newLabel);
                 renameTab('root', newLabel);
+            }, {
+                fullArea: state.area,
+                onVnumShift: () => {
+                    renderTree(state.area);
+                    runValidation(state.area);
+                }
             }));
             break;
         }
