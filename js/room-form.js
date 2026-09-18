@@ -104,6 +104,17 @@ function renderFlags(container, room, onChange, readonly) {
     }, { columns: 3, disabled: readonly }).container);
 }
 
+function getReverseBtnLabel(room, dirIdx, options) {
+    const door = room.doors[dirIdx];
+    if (door.VNumTo === -1 || !options.area) return 'Create reverse exit';
+    const destRoom = getRoomByVNum(options.area.rooms, door.VNumTo);
+    if (!destRoom) return 'Create reverse exit';
+    const oppDir = REV_DIR[dirIdx];
+    const oppDoor = destRoom.doors[oppDir];
+    if (oppDoor && oppDoor.VNumTo === room.VNum) return 'Update reverse exit';
+    return 'Create reverse exit';
+}
+
 function renderExits(container, room, onChange, readonly, options = {}) {
     const el = container.querySelector('#room-exits');
     if (!el) return;
@@ -152,7 +163,7 @@ function renderExits(container, room, onChange, readonly, options = {}) {
                         </select>
                     </div>
                     <div class="reverse-exit-section">
-                        <button type="button" class="reverse-btn" data-index="${i}" ${readonly ? 'disabled' : ''}>Create reverse exit</button>
+                        <button type="button" class="reverse-btn" data-index="${i}" ${readonly ? 'disabled' : ''}>${getReverseBtnLabel(room, i, options)}</button>
                     </div>
                 </div>
             </div>`;
@@ -258,6 +269,7 @@ function renderExits(container, room, onChange, readonly, options = {}) {
                 oppDoor.exitFlags = door.exitFlags;
                 oppDoor.keyVNum = door.keyVNum;
                 oppDoor.resetType = door.resetType;
+                btn.textContent = getReverseBtnLabel(room, idx, options);
                 showToast(`Reverse exit created in Room #${door.VNumTo} (${dirSimpleNameEn[oppDir]})`);
                 if (onChange) onChange(room);
             });
