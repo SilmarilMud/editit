@@ -193,12 +193,17 @@ function renderExits(container, room, onChange, readonly, options = {}) {
         }
     });
     
-    // Toggle exit details
+    // Toggle exit details (only one open at a time)
     el.querySelectorAll('.exit-header').forEach(header => {
         header.addEventListener('click', () => {
             const idx = header.dataset.index;
             const details = el.querySelector(`.exit-details[data-index="${idx}"]`);
-            if (details) details.classList.toggle('expanded');
+            if (!details) return;
+            const wasExpanded = details.classList.contains('expanded');
+            // Close all
+            el.querySelectorAll('.exit-details').forEach(d => d.classList.remove('expanded'));
+            // Toggle the clicked one
+            if (!wasExpanded) details.classList.add('expanded');
         });
     });
     
