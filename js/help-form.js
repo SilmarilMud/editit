@@ -77,7 +77,7 @@ export function renderHelpForm(help, onChange, options = {}) {
     // Wrap text textarea with column guide
     const textTa = container.querySelector('textarea[name="text"]');
     if (textTa) {
-        wrapTextareaWithGuide(textTa, 80);
+        wrapTextareaWithGuide(textTa);
     }
     
     activeForms.set(help, formInstance);

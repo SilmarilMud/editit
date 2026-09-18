@@ -121,7 +121,7 @@ export function renderObjectForm(obj, onChange, options = {}) {
     
     // Wrap description textareas with column guide
     container.querySelectorAll('textarea[name="longDescr"], textarea[name="action"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 80);
+        wrapTextareaWithGuide(ta);
     });
     // Note: extra_descr textareas are wrapped in renderExtras > renderList
     
@@ -265,7 +265,7 @@ function renderExtras(container, obj, onChange, readonly) {
         
         // Wrap extra description textareas with column guide
         el.querySelectorAll('textarea[name^="extra_descr"]').forEach(ta => {
-            wrapTextareaWithGuide(ta, 80);
+            wrapTextareaWithGuide(ta);
         });
         
         if (!readonly) {

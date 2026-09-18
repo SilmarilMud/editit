@@ -268,10 +268,10 @@ export function renderMobileForm(mob, onChange, options = {}) {
     
     // Wrap description textareas with column guide
     container.querySelectorAll('textarea[name="longDescr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 80);
+        wrapTextareaWithGuide(ta);
     });
     container.querySelectorAll('textarea[name="descr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 75);
+        wrapTextareaWithGuide(ta);
     });
     
     // Attach change handlers

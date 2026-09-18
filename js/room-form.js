@@ -82,10 +82,10 @@ export function renderRoomForm(room, onChange, options = {}) {
     
     // Wrap description textareas with column guide
     container.querySelectorAll('textarea[name="descr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 75);
+        wrapTextareaWithGuide(ta);
     });
     container.querySelectorAll('textarea[name^="exit_descr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta, 80);
+        wrapTextareaWithGuide(ta);
     });
     // Note: extra_descr textareas are wrapped in renderExtras > renderList
     
@@ -254,7 +254,7 @@ function renderExtras(container, room, onChange, readonly) {
         
         // Wrap extra description textareas with column guide
         el.querySelectorAll('textarea[name^="extra_descr"]').forEach(ta => {
-            wrapTextareaWithGuide(ta, 80);
+            wrapTextareaWithGuide(ta);
         });
         
         if (!readonly) {
