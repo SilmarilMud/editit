@@ -310,7 +310,7 @@ export const WEAPON_CROSSBOW = 15;
 // AREA_* - Area flags
 // ============================================================================
 
-export const AREA_NEWFORMAT = 1;
+export const AREA_NEW_FORMAT = 1;
 export const AREA_HIDDEN = 2;
 export const AREA_GUILD = 4;
 export const AREA_LAWFUL = 8;
@@ -1334,7 +1334,6 @@ export const dirSimpleName = ["Nord", "Est", "Sud", "Ovest", "Alto", "Basso"];
 export const dirSimpleNameEn = ["north", "east", "south", "west", "up", "down"];
 
 export const planeName = [
-    "",
     "Materiale",
     "Classico",
     "Futuro",
@@ -1355,9 +1354,9 @@ export const planeName = [
 export function createArea() {
     return {
         author: "",
-        areaFlags: 0,
+        areaFlags: AREA_NEW_FORMAT,
         areaMusic: "",
-        planeName: "",
+        planeName: "Materiale",
         resetMsg: "",
         racMinLev: 0,
         racMaxLev: 0,

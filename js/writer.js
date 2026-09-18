@@ -4,7 +4,7 @@
 const DEBUG = false;
 
 import {
-    AREA_NEWFORMAT,
+    AREA_NEW_FORMAT,
     AREA_NEWRESET,
     ITEM_WARSOUND,
     ITEM_INSTRUMENT,
@@ -122,7 +122,7 @@ class Writer {
     saveArea() {
         const g = this.area.general;
         let out = '';
-        if (g.areaFlags & AREA_NEWFORMAT) {
+        if (g.areaFlags & AREA_NEW_FORMAT) {
             out += '#NEWAREA\n';
             out += 'Name\t' + g.areaName + '~\n';
             out += 'Author\t' + g.author + '~\n';
@@ -158,7 +158,7 @@ class Writer {
 
     saveRecall() {
         const g = this.area.general;
-        if (g.recallVNum <= 0 || (g.areaFlags & AREA_NEWFORMAT)) return '';
+        if (g.recallVNum <= 0 || (g.areaFlags & AREA_NEW_FORMAT)) return '';
         return '#RECALL ' + g.recallVNum + '\n\n';
     }
 
@@ -231,7 +231,7 @@ class Writer {
 
     saveRooms() {
         const rooms = this.area.rooms;
-        const isNew = this.area.general.areaFlags & AREA_NEWFORMAT;
+        const isNew = this.area.general.areaFlags & AREA_NEW_FORMAT;
         let out = '#ROOMS\n\n';
         for (const room of rooms) {
             if (room.resetOnly) continue;

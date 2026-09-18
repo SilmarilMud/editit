@@ -5,7 +5,7 @@ import {
     createArea, createMobile, createObject, createRoom, createDoor,
     createHelp, createExtraDescr, createApply, createLoadedObject,
     createLoadedMob, createMobObject,
-    AREA_NEWFORMAT, AREA_NEWRESET, ACT_MASK, AFF_MOB_MASK, AFF_OBJ_MASK,
+    AREA_NEW_FORMAT, AREA_NEWRESET, ACT_MASK, AFF_MOB_MASK, AFF_OBJ_MASK,
     ITEM_MASK, ITEM_WEAR_MASK, ROOM_MASK, LOOKUPNOTFOUND, WEAR_NONE,
     DOOR_NOT_RESET, EX_ISDOOR, EX_PICKPROOF, EX_BASHPROOF, EX_PASSPROOF,
     MAX_VNUM, MAX_DIR, SHOPMAXTRADE,
@@ -62,7 +62,13 @@ function createResetOnlyRoom(vnum) {
 class Parser {
     constructor(text) {
         this.text = text; this.pos = 0; this.length = text.length; this.fileRow = 1;
+        this.errors = [];
     }
+
+    addWarning(msg) {
+        this.errors.push({ severity: 'warning', message: msg, line: this.fileRow });
+    }
+
     readLetter() {
         while (this.pos < this.length) {
             const c = this.text[this.pos];
@@ -224,6 +230,48 @@ class Parser {
         return number;
     }
 
+    // Peek at next non-whitespace char without consuming
+    peekChar() {
+        let pos = this.pos;
+        while (pos < this.length) {
+            const c = this.text[pos];
+            if (c === '\n' || c === ' ' || c === '\t' || c === '\r') { pos++; continue; }
+            return c;
+        }
+        return null;
+    }
+
+    // Skip a value: if next is ~, skip string; if next is digit/sign, skip number
+    skipValue() {
+        const c = this.peekChar();
+        if (c === '~') {
+            this.readString();
+        } else if (c && ((c >= '0' && c <= '9') || c === '+' || c === '-')) {
+            this.readNumber();
+        } else {
+            // Unknown shape - skip to end of line
+            this.readToEol();
+        }
+    }
+
+    // Skip to the next section boundary (# at start of line, followed by a letter) or EOF
+    skipToNextSection() {
+        while (this.pos < this.length) {
+            const c = this.text[this.pos];
+            if (c === '\n') {
+                this.fileRow++;
+                this.pos++;
+                // Check if next line starts with # followed by a letter (section header)
+                let peek = this.pos;
+                while (peek < this.length && (this.text[peek] === ' ' || this.text[peek] === '\t')) peek++;
+                if (peek < this.length && this.text[peek] === '#' &&
+                    peek + 1 < this.length && /[A-Za-z]/.test(this.text[peek + 1])) return;
+                continue;
+            }
+            this.pos++;
+        }
+    }
+
     // Section parsers
     loadArea(general) {
         for (;;) {
@@ -238,7 +286,10 @@ class Parser {
             else if (word === 'reset') general.resetMsg = this.readString();
 
             else if (word === 'end') break;
-            else throw new Error(`LoadArea: Unknown field "${word}" (line ${this.fileRow})`);
+            else {
+                this.addWarning(`LoadArea: Unknown field "${word}" (line ${this.fileRow}), skipping`);
+                this.skipValue();
+            }
         }
 
     }
@@ -333,7 +384,7 @@ class Parser {
                 mob.level = clamp(mob.level, 0, 100);
             }
 
-            if (general.areaFlags & AREA_NEWFORMAT) {
+            if (general.areaFlags & AREA_NEW_FORMAT) {
                 mob.reputation = this.readNumber();
                 if (mob.reputation < -1000 || mob.reputation > 1000) {
                     console.warn(`LoadMobiles: VNum ${vnum} Reputation ${mob.reputation} out of range [-1000, 1000], clamping`);
@@ -348,7 +399,7 @@ class Parser {
             this.readNumber(); this.readLetter(); this.readNumber(); this.readLetter(); this.readNumber(); // dam
             mob.gold = this.readNumber();
 
-            if (general.areaFlags & AREA_NEWFORMAT) {
+            if (general.areaFlags & AREA_NEW_FORMAT) {
                 mob.guild = this.readNumber();
                 if (lookupNumber(mob.guild, guildName) === LOOKUPNOTFOUND) mob.guild = 0;
             } else {
@@ -521,7 +572,7 @@ class Parser {
                     if (door < 0 || door > 5) throw new Error(`LoadRooms: VNum ${vnum} invalid exit (${door})`);
                     room.doors[door].descr = stripBlankLines(this.readString());
                     room.doors[door].keywords = this.readString();
-                    if (general.areaFlags & AREA_NEWFORMAT) {
+                    if (general.areaFlags & AREA_NEW_FORMAT) {
                         const peek = this.readLetter();
                         if (peek === 'B') {
                             room.doors[door].exitFlags = this.readNumber();
@@ -562,7 +613,8 @@ class Parser {
                     ed.descr = stripBlankLines(this.readString());
                     room.extraDescr.push(ed);
                 } else {
-                    throw new Error(`LoadRooms: VNum ${vnum} unknown command '${l}' (line ${this.fileRow})`);
+                    this.addWarning(`LoadRooms: VNum ${vnum} unknown command '${l}' (line ${this.fileRow}), skipping`);
+                    this.readToEol();
                 }
             }
             rooms.push(room);
@@ -857,11 +909,14 @@ export function parseFile(text) {
         else if (wl === 'resets') parser.loadResets(data.rooms, data.mobs, data.objs, data.general);
         else if (wl === 'shops') parser.loadShops(data.mobs);
         else if (wl === 'specials') parser.loadSpecials(data.mobs, data.objs);
-        else throw new Error(`Unknown section "${word}" (line ${parser.fileRow})`);
+        else {
+            parser.addWarning(`Unknown section "${word}" (line ${parser.fileRow}), skipping`);
+            parser.skipToNextSection();
+        }
     }
 
     // If no entities found, default VNumStart to 1
     if (data.general.VNumStart === 0) data.general.VNumStart = 1;
 
-    return data;
+    return { data, errors: parser.errors };
 }
