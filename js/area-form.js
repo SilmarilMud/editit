@@ -2,7 +2,7 @@
 
 import { areaFlagsName, planeName, AFLAG_DONT_SET, AREA_NEWFORMAT, AREA_BATTLEGROUND } from './constants.js';
 import { createFlagGroup } from './flags.js';
-import { escapeHtml } from './utils.js';
+import { escapeHtml, hasEntities, countEntities, validateVnumShift, shiftVnums } from './utils.js';
 
 /**
  * Render area form
@@ -10,10 +10,12 @@ import { escapeHtml } from './utils.js';
  * @param {Function} onChange - Callback when form changes: (area) => void
  * @param {Object} options - Additional options
  * @param {boolean} options.readonly - Make form read-only (default: false)
+ * @param {Object} options.fullArea - Full area data for VNum shift (state.area)
+ * @param {Function} options.onVnumShift - Callback after VNums are shifted
  * @returns {HTMLElement}
  */
 export function renderAreaForm(area, onChange, options = {}) {
-    const { readonly = false } = options;
+    const { readonly = false, fullArea = null, onVnumShift = null } = options;
     
     // Create container
     const container = document.createElement('div');
@@ -166,7 +168,7 @@ export function renderAreaForm(area, onChange, options = {}) {
     
     // Attach change handlers
     if (!readonly) {
-        attachChangeHandlers(container, area, onChange);
+        attachChangeHandlers(container, area, onChange, fullArea, onVnumShift);
         // Initial state update based on flags
         updateFieldStates(container, area);
     }
@@ -212,17 +214,21 @@ function updateFieldStates(container, area) {
 /**
  * Attach change handlers to form inputs
  * @param {HTMLElement} container
- * @param {Object} area
+ * @param {Object} area - Area general data
  * @param {Function} onChange
+ * @param {Object|null} fullArea - Full area data for VNum shift
+ * @param {Function|null} onVnumShift - Callback after VNums are shifted
  */
-function attachChangeHandlers(container, area, onChange) {
+function attachChangeHandlers(container, area, onChange, fullArea, onVnumShift) {
     const inputs = container.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
         // Skip the flags container (handled separately)
         if (input.closest('#area-flags-container')) return;
         
+        const field = input.name;
+        const isVnumStart = field === 'VNumStart';
+        
         const handler = (e) => {
-            const field = e.target.name;
             let value = e.target.value;
             
             // Parse number fields
@@ -230,17 +236,68 @@ function attachChangeHandlers(container, area, onChange) {
                 value = parseInt(value, 10) || 0;
             }
             
-            // Update the area entity
-            area[field] = value;
-            
-            // Update field states when flags change
-            updateFieldStates(container, area);
-            
-            // Notify parent
-            if (onChange) onChange(area);
+            // Handle VNumStart changes - offer to shift existing entities
+            if (isVnumStart && value !== area.VNumStart && fullArea) {
+                const oldStart = area.VNumStart;
+                const offset = value - oldStart;
+                
+                if (hasEntities(fullArea)) {
+                    // Validate the shift first
+                    const validation = validateVnumShift(fullArea, offset);
+                    if (validation) {
+                        alert(`Cannot shift VNums: ${validation.error}`);
+                        e.target.value = oldStart; // Revert input
+                        return;
+                    }
+                    
+                    // Count entities for the dialog
+                    const counts = countEntities(fullArea);
+                    const parts = [];
+                    if (counts.mobs > 0) parts.push(`${counts.mobs} mobile${counts.mobs !== 1 ? 's' : ''}`);
+                    if (counts.objs > 0) parts.push(`${counts.objs} object${counts.objs !== 1 ? 's' : ''}`);
+                    if (counts.rooms > 0) parts.push(`${counts.rooms} room${counts.rooms !== 1 ? 's' : ''}`);
+                    
+                    const entityList = parts.join(', ');
+                    const direction = offset > 0 ? '+' : '';
+                    
+                    const message = `Starting VNum changed from ${oldStart} to ${value} (offset: ${direction}${offset}).\n\n` +
+                        `Area contains: ${entityList}\n\n` +
+                        `Do you want to shift all VNums by ${direction}${offset}?\n\n` +
+                        `Click OK to shift all VNums, or Cancel to revert.`;
+                    
+                    if (confirm(message)) {
+                        // User chose to shift
+                        shiftVnums(fullArea, offset);
+                        area[field] = value;
+                        updateFieldStates(container, area);
+                        if (onChange) onChange(area);
+                        if (onVnumShift) onVnumShift();
+                    } else {
+                        // User chose not to shift - revert the input
+                        e.target.value = oldStart;
+                        return;
+                    }
+                } else {
+                    // No entities, just update
+                    area[field] = value;
+                    updateFieldStates(container, area);
+                    if (onChange) onChange(area);
+                }
+            } else {
+                // Normal field update
+                area[field] = value;
+                updateFieldStates(container, area);
+                if (onChange) onChange(area);
+            }
         };
         
-        input.addEventListener('change', handler);
-        input.addEventListener('input', handler);
+        // VNumStart: only 'change' event (fires on blur/Enter)
+        // Other fields: both 'change' and 'input' for real-time updates
+        if (isVnumStart) {
+            input.addEventListener('change', handler);
+        } else {
+            input.addEventListener('change', handler);
+            input.addEventListener('input', handler);
+        }
     });
 }

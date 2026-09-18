@@ -807,7 +807,8 @@ function refreshEntityAfterUndo(entityType, vnum) {
     if (entityType === 'help') {
         nodeId = `help-${vnum}`;
     } else {
-        nodeId = `${entityType}-${vnum}`;
+        const prefix = entityType === 'object' ? 'obj' : entityType;
+        nodeId = `${prefix}-${vnum}`;
     }
     
     // Find the entity
@@ -957,7 +958,8 @@ function onEntityChange(entity, entityType, sourceTabId = null) {
         const index = state.area.helps.indexOf(entity);
         nodeId = `help-${index}`;
     } else {
-        nodeId = `${entityType}-${entity.VNum}`;
+        const prefix = entityType === 'object' ? 'obj' : entityType;
+        nodeId = `${prefix}-${entity.VNum}`;
     }
     
     // Update tree label
@@ -2025,6 +2027,12 @@ function renderForm(container, node) {
                 const newLabel = `🗺️ ${area.areaName || 'Unnamed Area'}`;
                 updateNodeLabel('root', newLabel);
                 renameTab('root', newLabel);
+            }, {
+                fullArea: state.area,
+                onVnumShift: () => {
+                    renderTree(state.area);
+                    runValidation(state.area);
+                }
             }));
             break;
         }

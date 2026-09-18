@@ -1,5 +1,7 @@
 /* utils.js - Shared utility functions */
 
+import { MAX_VNUM } from './constants.js';
+
 /**
  * Escape HTML special characters
  * @param {string} str - String to escape
@@ -187,6 +189,111 @@ export function showToast(message, type = 'success', duration = 3000) {
             toast.style.transition = '';
         }, 300);
     }, duration);
+}
+
+/**
+ * Check if area has any entities (mobs, objects, rooms)
+ * @param {Object} area - Full area data (state.area)
+ * @returns {boolean} True if area has entities
+ */
+export function hasEntities(area) {
+    return area.mobs.length > 0 || area.objs.length > 0 || area.rooms.length > 0;
+}
+
+/**
+ * Count entities in area
+ * @param {Object} area - Full area data (state.area)
+ * @returns {Object} Count of each entity type
+ */
+export function countEntities(area) {
+    return {
+        mobs: area.mobs.length,
+        objs: area.objs.length,
+        rooms: area.rooms.length,
+    };
+}
+
+/**
+ * Check if shifting VNums would cause collisions or out-of-range errors
+ * @param {Object} area - Full area data (state.area)
+ * @param {number} offset - Amount to shift
+ * @returns {Object|null} Error object {error: string} or null if ok
+ */
+export function validateVnumShift(area, offset) {
+    const oldStart = area.general.VNumStart;
+    const inRange = (v) => v >= oldStart && v > 0;
+    const shift = (v) => inRange(v) ? v + offset : v;
+
+    // Track VNums per entity type (mobs, objs, rooms can share VNums)
+    const mobVnums = new Set();
+    const objVnums = new Set();
+    const roomVnums = new Set();
+
+    const checkVnum = (v, label, vnumSet) => {
+        if (v <= 0) return null; // Skip unset/invalid
+        const newV = shift(v);
+        if (newV < 1 || newV >= MAX_VNUM) {
+            return { error: `${label} VNum ${v} would become ${newV}, out of range [1, ${MAX_VNUM}]` };
+        }
+        if (vnumSet.has(newV)) {
+            return { error: `Duplicate ${label} VNum ${v} would become ${newV}` };
+        }
+        vnumSet.add(newV);
+        return null;
+    };
+
+    // Check each entity type separately
+    for (const m of area.mobs) {
+        const err = checkVnum(m.VNum, 'Mobile', mobVnums);
+        if (err) return err;
+    }
+    for (const o of area.objs) {
+        const err = checkVnum(o.VNum, 'Object', objVnums);
+        if (err) return err;
+    }
+    for (const r of area.rooms) {
+        const err = checkVnum(r.VNum, 'Room', roomVnums);
+        if (err) return err;
+    }
+
+    return null; // All good
+}
+
+/**
+ * Shift all VNums in the area by the given offset.
+ * Only shifts VNums within the area's range (>= old VNumStart).
+ * @param {Object} area - Full area data (state.area)
+ * @param {number} offset - Amount to shift (can be negative)
+ */
+export function shiftVnums(area, offset) {
+    const oldStart = area.general.VNumStart;
+    const inRange = (v) => v >= oldStart && v > 0;
+    const shift = (v) => inRange(v) ? v + offset : v;
+
+    // 1. Shift entity primary keys
+    area.mobs.forEach(m => { m.VNum = shift(m.VNum); });
+    area.objs.forEach(o => { o.VNum = shift(o.VNum); });
+    area.rooms.forEach(r => {
+        r.VNum = shift(r.VNum);
+        // 2. Shift door references within each room
+        r.doors.forEach(d => {
+            d.VNumTo = shift(d.VNumTo);
+            d.keyVNum = shift(d.keyVNum);
+        });
+        // 3. Shift reset references (loaded mobs)
+        r.mobs.forEach(lm => {
+            lm.VNum = shift(lm.VNum);
+            lm.contain.forEach(child => { child.VNum = shift(child.VNum); });
+        });
+        // 4. Shift reset references (loaded objects)
+        r.objs.forEach(lo => {
+            lo.VNum = shift(lo.VNum);
+            lo.contain.forEach(child => { child.VNum = shift(child.VNum); });
+        });
+    });
+
+    // 5. Shift recall VNum
+    area.general.recallVNum = shift(area.general.recallVNum);
 }
 
 /**
