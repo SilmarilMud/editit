@@ -152,10 +152,7 @@ function renderExits(container, room, onChange, readonly, options = {}) {
                         </select>
                     </div>
                     <div class="form-section">
-                        <label>
-                            <input type="checkbox" name="exit_reverse_${i}" ${door.reverse ? 'checked' : ''} ${readonly ? 'disabled' : ''}>
-                            Create reverse exit
-                        </label>
+                        <button type="button" class="reverse-btn outline secondary" data-index="${i}" ${readonly ? 'disabled' : ''}>Create reverse exit</button>
                     </div>
                 </div>
             </div>`;
@@ -223,32 +220,7 @@ function renderExits(container, room, onChange, readonly, options = {}) {
                     const v = parseInt(e.target.value, 10);
                     door.resetType = isNaN(v) ? -1 : v;
                 }
-                else if (field === 'reverse') {
-                    door.reverse = e.target.checked;
-                    if (door.reverse && door.VNumTo !== -1 && options.area) {
-                        const destRoom = getRoomByVNum(options.area.rooms, door.VNumTo);
-                        if (!destRoom) {
-                            showToast(`Destination room #${door.VNumTo} not found`, 'error');
-                            door.reverse = false;
-                            e.target.checked = false;
-                        } else {
-                            const oppDir = REV_DIR[idx];
-                            if (!destRoom.doors[oppDir]) {
-                                destRoom.doors[oppDir] = createDoor();
-                            }
-                            const oppDoor = destRoom.doors[oppDir];
-                            oppDoor.VNumTo = room.VNum;
-                            oppDoor.keywords = door.keywords;
-                            oppDoor.exitFlags = door.exitFlags;
-                            oppDoor.keyVNum = door.keyVNum;
-                            oppDoor.resetType = door.resetType;
-                            oppDoor.reverse = false;
-                            door.reverse = false;
-                            e.target.checked = false;
-                            showToast(`Reverse exit created in Room #${door.VNumTo} (${dirSimpleNameEn[oppDir]})`);
-                        }
-                    }
-                }
+
                 
                 // Update status
                 const status = el.querySelector(`.exit-status[data-index="${idx}"], .exit-header[data-index="${idx}"] .exit-status`);
@@ -256,6 +228,37 @@ function renderExits(container, room, onChange, readonly, options = {}) {
                     status.textContent = door.VNumTo !== -1 ? `→ #${door.VNumTo}` : 'No exit';
                 }
                 
+                if (onChange) onChange(room);
+            });
+        });
+        
+        // Reverse exit button handlers
+        el.querySelectorAll('.reverse-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.index, 10);
+                const door = room.doors[idx];
+                if (!door) return;
+                if (door.VNumTo === -1) {
+                    showToast('Set a destination VNum first', 'error');
+                    return;
+                }
+                if (!options.area) return;
+                const destRoom = getRoomByVNum(options.area.rooms, door.VNumTo);
+                if (!destRoom) {
+                    showToast(`Destination room #${door.VNumTo} not found`, 'error');
+                    return;
+                }
+                const oppDir = REV_DIR[idx];
+                if (!destRoom.doors[oppDir]) {
+                    destRoom.doors[oppDir] = createDoor();
+                }
+                const oppDoor = destRoom.doors[oppDir];
+                oppDoor.VNumTo = room.VNum;
+                oppDoor.keywords = door.keywords;
+                oppDoor.exitFlags = door.exitFlags;
+                oppDoor.keyVNum = door.keyVNum;
+                oppDoor.resetType = door.resetType;
+                showToast(`Reverse exit created in Room #${door.VNumTo} (${dirSimpleNameEn[oppDir]})`);
                 if (onChange) onChange(room);
             });
         });

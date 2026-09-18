@@ -1455,7 +1455,6 @@ export function createDoor() {
         exitFlags: 0,
         keyVNum: -1,
         resetType: DOOR_NOT_RESET,
-        reverse: false,
     };
 }
 

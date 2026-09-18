@@ -859,7 +859,6 @@ function updateFormValues(entityType, entity) {
                 else if (field === 'keywords') el.value = door.keywords || '';
                 else if (field === 'descr') el.value = door.descr || '';
                 else if (field === 'resettype') el.value = door.resetType;
-                else if (field === 'reverse') el.checked = door.reverse;
             }
             return;
         }
