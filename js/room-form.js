@@ -151,8 +151,8 @@ function renderExits(container, room, onChange, readonly, options = {}) {
                             ${doorResetName.map(d => `<option value="${d.number}" ${door.resetType===d.number?'selected':''}>${d.name}</option>`).join('')}
                         </select>
                     </div>
-                    <div class="form-section">
-                        <button type="button" class="reverse-btn outline secondary" data-index="${i}" ${readonly ? 'disabled' : ''}>Create reverse exit</button>
+                    <div class="reverse-exit-section">
+                        <button type="button" class="reverse-btn" data-index="${i}" ${readonly ? 'disabled' : ''}>Create reverse exit</button>
                     </div>
                 </div>
             </div>`;
