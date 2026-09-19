@@ -191,7 +191,6 @@ export const ITEM_SHOOTABLE = 262144;
 export const ITEM_THROWABLE = 524288;
 export const ITEM_BOOMERANG_STYLE = 1048576;
 export const ITEM_MORTAL_POISONED = 2097152;
-export const ITEM_NO_RENT = 4194304;
 
 export const ITEM_MASK =
     ITEM_GLOW | ITEM_HUM | ITEM_DARK | ITEM_LOCK | ITEM_EVIL | ITEM_INVIS |
@@ -277,7 +276,6 @@ export const VALUE_IS_SPELL = 3;
 export const VALUE_IS_NUMBER_FROM_0 = 4;
 export const VALUE_IS_WEAPON = 5;
 export const VALUE_IS_CONTAINER_FLAGS = 6;
-export const VALUE_IS_KEY_VNUM = 7;
 export const VALUE_IS_LIQUID = 8;
 export const VALUE_IS_POISON = 9;
 export const VALUE_IS_VNUM = 10;
@@ -311,17 +309,10 @@ export const WEAPON_CROSSBOW = 15;
 // ============================================================================
 
 export const AREA_NEW_FORMAT = 1;
-export const AREA_HIDDEN = 2;
-export const AREA_GUILD = 4;
-export const AREA_LAWFUL = 8;
-export const AREA_WILDERNESS = 16;
-export const AREA_UNDERGROUND = 32;
 export const AREA_NEWRESET = 64;
 export const AREA_BATTLEGROUND = 1024;
-export const AREA_ROTHOLHA_FIELD = 2048;
-export const AREA_DELAYED_RESET = 4096;
 
-export const AFLAG_DONT_SET = AREA_BATTLEGROUND | AREA_DELAYED_RESET | AREA_ROTHOLHA_FIELD;
+export const AFLAG_DONT_SET = AREA_BATTLEGROUND;
 
 // ============================================================================
 // ============================================================================
@@ -353,7 +344,6 @@ export const EX_WINDOW = 512;
 export const EX_HEAVY = 1024;
 export const EX_COMPLEX = 2048;
 
-export const EFLAG_DONT_SET = EX_CLOSED | EX_LOCKED | EX_BASHED;
 export const EFLAG_FOR_DOOR = EX_ISDOOR | EX_CLOSED | EX_LOCKED | EX_BASHED |
     EX_BASHPROOF | EX_PICKPROOF | EX_PASSPROOF |
     EX_HIDDEN | EX_NOUN_MALE | EX_WINDOW | EX_HEAVY | EX_COMPLEX;
@@ -441,8 +431,6 @@ export const ROOM_MASK =
     ROOM_CONE_OF_SILENCE | ROOM_SAVEROOM | ROOM_DEATHTRAP |
     ROOM_NO_COMBAT | ROOM_MINI_SAVE | ROOM_THEATER | ROOM_SEATS;
 
-export const RFLAG_DONT_SET = 0;
-
 // ============================================================================
 // SECT_* - Sector types
 // ============================================================================
@@ -471,6 +459,7 @@ export const FURNITURE_REST_ON = 2;
 export const FURNITURE_SIT_ON = 4;
 export const FURNITURE_STAND_ON = 8;
 
+// ============================================================================
 // ============================================================================
 // TTRAP_* - Trap type flags
 // ============================================================================
@@ -507,74 +496,139 @@ export const LOOKUPNOTFOUND = -10000;
 // Lookup Tables
 // ============================================================================
 
-export const actName = [
-    "Mob",                           // 1
-    "Sentinella",                    // 2
-    "Raccoglie oggetti",             // 4
-    "Protetto dalla legge",          // 8
-    "Cacciatore",                    // 16
-    "Aggressivo",                    // 32
-    "Resta nell'area",               // 64
-    "Vigliacco",                     // 128
-    "Cucciolo",                      // 256
-    "Allenatore",                    // 512
-    "Maestro di Gilda",              // 1024
-    "Croupier",                      // 2048
-    "Vendicativo",                   // 4096
-    "Pacifico",                      // 8192
-    "Guardia",                       // 16384
-    "",                              // 32768
-    "",                              // 65536
-    "In movimento",                  // 131072
-    "",                              // 262144
-    "",                              // 524288
-    "",                              // 1048576
-    "",                              // 2097152
-    "",                              // 4194304
-    "",                              // 8388608
-    "",                              // 16777216
-    "",                              // 33554432
-    "",                              // 67108864
-    "",                              // 134217728
-    "",                              // 268435456
-    "Salva il mob",                  // 536870912
-    "Speciale",                      // 1073741824
-    "",                              // 2147483648
+// UI-ready flag data arrays with tooltips
+// These are used by the forms to create checkbox groups
+
+/** Action flags for mobile editor (excludes ACT_IS_NPC and DONT_SET flags) */
+export const actFlagsData = [
+    { value: 2, label: 'Sentinel',
+      desc: 'The mobile stays in its assigned room and will not wander. Used during area reset to keep guards and shopkeepers in place. (2)' },
+    { value: 4, label: 'Scavenger',
+      desc: 'The mobile picks up valuable objects from the ground and keeps them. Scavengers will take the most valuable item in the room. (4)' },
+    { value: 8, label: 'To Vindicate',
+      desc: 'The players will acquire the wanted status when killing this mobile, and will be hunted by mobile guards. (8)' },
+    { value: 32, label: 'Aggressive',
+      desc: 'The mobile attacks players on sight without provocation. Aggressive mobs will initiate combat when a player enters the room. (32)' },
+    { value: 64, label: 'Stay Area',
+      desc: 'The mobile will not leave its home area when chasing or wandering. Prevents mobs from following players into other zones. (64)' },
+    { value: 128, label: 'Wimpy',
+      desc: 'The mobile flees when badly hurt (below 25% HP). Wimpy mobs will attempt to flee from combat. (128)' },
+    { value: 512, label: 'Train',
+      desc: 'The mobile can train players in stats (strength, intelligence, etc). Immortals can use the "train" command near these mobs. (512)' },
+    { value: 1024, label: 'Practice',
+      desc: 'The mobile is a guildmaster who can teach skills/spells. Players can use the "practice" command near these mobs. (1024)' },
+    { value: 2048, label: 'Gamble',
+      desc: 'The mobile runs a gambling game (cards, dice, etc). Croupiers with this flag can interact with each other. Unused. (2048)' },
+    { value: 4096, label: 'Vindicative',
+      desc: 'The mobile actively tracks the player if they flee the combat. (4096)' },
+    { value: 8192, label: 'Peaceful',
+      desc: 'The mobile ignores hated races and wont attack based on racial hatred. Peaceful mobs are exempt from racial aggro behavior. (8192)' },
+    { value: 16384, label: 'Guard',
+      desc: 'The mobile is a city guard. It attacks criminals (PLR_KILLER, PLR_THIEF) and warns players with weapons in lawful areas. Also greets hero-reputation players and insults villains. (16384)' },
+    { value: 536870912, label: 'Save Mob',
+      desc: 'The mobiles data is saved to disk. Used for persistent NPCs that retain their state across reboots (e.g., shopkeepers with gold). (536870912)' },
+    { value: 1073741824, label: 'Special',
+      desc: 'The mobile has a special function that must be always executed, even if there are no players in the area (e.g. mayor). (1073741824)' }
 ];
 
-export const affName = [
-    "Cieco",                         // 1
-    "Invisibile",                    // 2
-    "Individua Male",                // 4
-    "Individua Invisibile",          // 8
-    "Individua Magia",               // 16
-    "Individua Nascosto",            // 32
-    "Bloccato",                      // 64
-    "Sanctuary",                     // 128
-    "Faerie Fire",                   // 256
-    "Infravisione",                  // 512
-    "Maledetto",                     // 1024
-    "Cambiato di Sesso",             // 2048
-    "Avvelenato",                    // 4096
-    "Protetto dal male",             // 8192
-    "Cambiato di Razza",             // 16384
-    "Si Muove in Silenzio",          // 32768
-    "Nascosto",                      // 65536
-    "Addormentato (magia)",          // 131072
-    "Charmato",                      // 262144
-    "Vola",                          // 524288
-    "Passa Porte",                   // 1048576
-    "",                              // 2097152
-    "E' un monsum",                  // 4194304
-    "Muto",                          // 8388608
-    "Respira sott'acqua",            // 16777216
-    "Morso da un Vampiro",           // 33554432
-    "Fantasma",                      // 67108864
-    "Scudo di Fiamme",               // 134217728
-    "Mortalmente avvelenato",        // 268435456
-    "",                              // 536870912
-    "Pietrificato",                  // 1073741824
-    "",                              // 2147483648
+/** Affect flags for mobile editor */
+export const affFlagsData = [
+    { value: 1, label: 'Blind',
+      desc: 'The character is blinded and cannot see. Reduces combat accuracy. (1)' },
+    { value: 2, label: 'Invisible',
+      desc: 'The character is invisible to normal sight. Requires detect invis to see. (2)' },
+    { value: 4, label: 'Detect Evil',
+      desc: 'The character can sense evil-aligned beings. Evil creatures glow red. (4)' },
+    { value: 8, label: 'Detect Invis',
+      desc: 'The character can see invisible creatures and objects. (8)' },
+    { value: 16, label: 'Detect Magic',
+      desc: 'The character can sense magical auras on objects and creatures. (16)' },
+    { value: 32, label: 'Detect Hidden',
+      desc: 'The character can detect hidden (sneaking/hiding) creatures. (32)' },
+    { value: 64, label: 'Hold',
+      desc: 'The character is held/paralyzed and cannot move or act. Normally set only by fight skills, use with care. (64)' },
+    { value: 128, label: 'Sanctuary',
+      desc: 'The character is protected by sanctuary. All damage is halved. (128)' },
+    { value: 256, label: 'Faerie Fire',
+      desc: 'The character is outlined by faerie fire and cannot hide. Also makes them vulnerable to additional damage. (256)' },
+    { value: 512, label: 'Infrared',
+      desc: 'The character has infravision and can see in the dark. (512)' },
+    { value: 1024, label: 'Curse',
+      desc: 'The character is cursed. Prevents recall and reduces stats. (1024)' },
+    { value: 4096, label: 'Poison',
+      desc: 'The character is poisoned and takes periodic damage. (4096)' },
+    { value: 8192, label: 'Protect',
+      desc: 'The character is protected from evil. Evil attackers deal less damage. (8192)' },
+    { value: 32768, label: 'Sneak',
+      desc: 'The character moves silently and is harder to detect. Sneaking characters dont generate movement messages. (32768)' },
+    { value: 65536, label: 'Hide',
+      desc: 'The character is hidden and cannot be seen without detect hidden. Attacking or moving reveals hidden characters. (65536)' },
+    { value: 131072, label: 'Sleep',
+      desc: 'The character is magically asleep and cannot act. Waking requires damage or a wake spell. (131072)' },
+    { value: 262144, label: 'Charm',
+      desc: 'The character is charmed and obeys the charm source. Charmed mobs follow their master; charmed players lose some control. Never set this manually. (262144)' },
+    { value: 524288, label: 'Flying',
+      desc: 'The character is flying and can cross water/chasms. Also provides immunity to ground-based traps. (524288)' },
+    { value: 1048576, label: 'Pass Door',
+      desc: 'The character can pass through closed doors and walls. (1048576)' },
+    { value: 2097152, label: 'Waterwalk',
+      desc: '[UNUSED] Marked as unused in source code. (2097152)' },
+    { value: 8388608, label: 'Mute',
+      desc: 'The character cannot cast verbal spells or speak. Blocks all spellcasting that requires verbal components. (8388608)' },
+    { value: 16777216, label: 'Gills',
+      desc: 'The character can breathe underwater without drowning. (16777216)' },
+    { value: 134217728, label: 'Flaming',
+      desc: 'The character is wreathed in flames. Deals fire damage to attackers in melee combat. (134217728)' },
+    { value: 536870912, label: 'Paralyzed',
+      desc: '[UNUSED] Marked as unused in source code. (536870912)' },
+    { value: 1073741824, label: 'Petrified',
+      desc: 'The character has been turned to stone (petrified). Completely immobilizes the target. Can be cured by Stone to Flesh. (1073741824)' }
+];
+
+/** Worn affliction flags for object editor */
+export const wearAffsData = [
+    { value: 1, label: 'Blind',
+      desc: 'The character is blinded and cannot see. Reduces combat accuracy. (1)' },
+    { value: 2, label: 'Invisible',
+      desc: 'The character is invisible to normal sight. Requires detect invis to see. (2)' },
+    { value: 4, label: 'Detect Evil',
+      desc: 'The character can sense evil-aligned beings. Evil creatures glow red. (4)' },
+    { value: 8, label: 'Detect Invis',
+      desc: 'The character can see invisible creatures and objects. (8)' },
+    { value: 16, label: 'Detect Magic',
+      desc: 'The character can sense magical auras on objects and creatures. (16)' },
+    { value: 32, label: 'Detect Hidden',
+      desc: 'The character can detect hidden (sneaking/hiding) creatures. (32)' },
+    { value: 64, label: 'Hold',
+      desc: 'The character is held/paralyzed and cannot move or act. Normally set only by fight skills, use with care. (64)' },
+    { value: 128, label: 'Sanctuary',
+      desc: 'The character is protected by sanctuary. All damage is halved. (128)' },
+    { value: 256, label: 'Faerie Fire',
+      desc: 'The character is outlined by faerie fire and cannot hide. Also makes them vulnerable to additional damage. (256)' },
+    { value: 512, label: 'Infrared',
+      desc: 'The character has infravision and can see in the dark. (512)' },
+    { value: 1024, label: 'Curse',
+      desc: 'The character is cursed. Prevents recall and reduces stats. (1024)' },
+    { value: 8192, label: 'Protect',
+      desc: 'The character is protected from evil. Evil attackers deal less damage. (8192)' },
+    { value: 32768, label: 'Sneak',
+      desc: 'The character moves silently and is harder to detect. Sneaking characters dont generate movement messages. (32768)' },
+    { value: 65536, label: 'Hide',
+      desc: 'The character is hidden and cannot be seen without detect hidden. Attacking or moving reveals hidden characters. (65536)' },
+    { value: 131072, label: 'Sleep',
+      desc: 'The character is magically asleep and cannot act. Waking requires damage or a wake spell. (131072)' },
+    { value: 524288, label: 'Flying',
+      desc: 'The character is flying and can cross water/chasms. Also provides immunity to ground-based traps. (524288)' },
+    { value: 1048576, label: 'Pass Door',
+      desc: 'The character can pass through closed doors and walls. (1048576)' },
+    { value: 2097152, label: 'Waterwalk',
+      desc: '[UNUSED] Marked as unused in source code. (2097152)' },
+    { value: 8388608, label: 'Mute',
+      desc: 'The character cannot cast verbal spells or speak. Blocks all spellcasting that requires verbal components. (8388608)' },
+    { value: 16777216, label: 'Gills',
+      desc: 'The character can breathe underwater without drowning. (16777216)' },
+    { value: 134217728, label: 'Flaming',
+      desc: 'The character is wreathed in flames. Deals fire damage to attackers in melee combat. (134217728)' }
 ];
 
 export const sexName = [
@@ -620,73 +674,84 @@ export const itemTypeName = [
 ];
 
 export const itemExtraFlagsName = [
-    "Luminoso",                     // 1
-    "Rumoroso",                     // 2
-    "Scuro",                        // 4
-    "Bloccato",                     // 8
-    "Malvagio",                     // 16
-    "Invisibile",                   // 32
-    "Magico",                       // 64
-    "Non lasciabile",               // 128
-    "Benedetto",                    // 256
-    "Anti Buoni",                   // 512
-    "Anti Malvagi",                 // 1024
-    "Anti Neutrali",                // 2048
-    "Non rimuovibile",              // 4096
-    "Inventario",                   // 8192
-    "Avvelenato",                   // 16384
-    "Scaccia Vampiri",              // 32768
-    "Sacro",                        // 65536
-    "Puo' Lanciare",                // 131072
-    "Puo' essere Lanciato",         // 262144
-    "Puo' essere Tirato",           // 524288
-    "Torna Indietro",               // 1048576
-    "Avvelenato Mortalmente",       // 2097152
-    "Raro (Unico)",                 // 4194304
-    "Puo' uscire dal gioco",        // 8388608
-    "Nascosto",                     // 16777216
-    "",                             // 33554432
-    "Immortale",                    // 67108864
-    "",                             // 134217728
-    "",                             // 268435456
-    "",                             // 536870912
-    "",                             // 1073741824
-    "",                             // 2147483648
+    { label: "Luminoso",
+      desc: "The object emits a soft glow of light. Illuminates the room when carried or in a room. (1)" },
+    { label: "Rumoroso",
+      desc: "The object emits a low humming sound. Cannot be used while hiding or sneaking effectively. (2)" },
+    null, // ITEM_DARK unused (2)
+    null, // ITEM_LOCK unused (3)
+    { label: "Malvagio",
+      desc: "The object radiates evil auras. Detect Evil spell holders will see it glow red. No effects in game. (16)" },
+    { label: "Invisibile",
+      desc: "The object is invisible. Requires Detect Invis to see. (32)" },
+    { label: "Magico",
+      desc: "The object is magical. Requires Detect Magic to identify. More resistant to corrosion. (64)" },
+    { label: "Non lasciabile",
+      desc: "The object is cursed and cannot be dropped. It stays in inventory. Cursed items often have this flag. (128)" },
+    { label: "Benedetto",
+      desc: "The object is blessed. Provides bonus against evil. More resistant to corrosion. (256)" },
+    { label: "Anti Buoni",
+      desc: "Good-aligned characters cannot wear/wield this object. (512)" },
+    { label: "Anti Malvagi",
+      desc: "Evil-aligned characters cannot wear/wield this object. (1024)" },
+    { label: "Anti Neutrali",
+      desc: "Neutral-aligned characters cannot wear/wield this object. (2048)" },
+    { label: "Non rimuovibile",
+      desc: "The object is cursed and cannot be removed once equipped. (4096)" },
+    { label: "Inventario",
+      desc: "Infinite shop supply item, disappears when owner dies. Never set this manually unless sure. (8192)" },
+    { label: "Avvelenato",
+      desc: "The object is coated with poison. Attacks with this weapon may poison the target. Normally set by skills that also give a timer to the weapon. Never set this manually unless sure. (16384)" },
+    { label: "Scaccia Vampiri",
+      desc: "When set on HOLD item, effective against vampiric bite. (32768)" },
+    { label: "Sacro",
+      desc: "The object is sanctified and holy. Causes small damage when gathered. When set on HOLD item, effective against vampiric bite. (65536)" },
+    { label: "Puo' Lanciare",
+      desc: "The object can fire projectile weapons (bows, crossbows). Must be wielded to shoot SHOOTABLE items. (131072)" },
+    { label: "Puo' essere Lanciato",
+      desc: "The object can be shot from a CAN_SHOOT weapon. Projectiles with this flag can be loaded and fired. (262144)" },
+    { label: "Puo' essere Tirato",
+      desc: "The object can be thrown at enemies. Dealt as a ranged attack with the \"throw\" command. (524288)" },
+    { label: "Torna Indietro",
+      desc: "A throwable object that returns to the thrower. The object flies back after being thrown. (1048576)" },
+    { label: "Avvelenato Mortalmente",
+      desc: "The object is coated with deadly mortal poison. Attacks with this weapon may poison the target and can be lethal. Normally set by skills that also give a timer to the weapon. Never set this manually unless sure. (2097152)" },
+    { label: "Raro (Unico)",
+      desc: "The object is rare and cannot quit the game. Must be kept in special storage or carried. (4194304)" },
+    { label: "Puo' uscire dal gioco",
+      desc: "Allow to quit items that normally can't quit (e.g. keys). (8388608)" },
+    { label: "Nascosto",
+      desc: "The object is hidden in the room. Requires special detection to find. (16777216)" },
+    { label: "Loggato",
+      desc: "Logging flag for object get/drop actions. When set, all get/drop of this object is logged. (33554432)" },
+    { label: "Immortale",
+      desc: "Only immortal players can take this object. Regular players cannot pick it up. (67108864)" },
+    { label: "Non localizzabile",
+      desc: "The object cannot be found by Locate Object spell. Provides magical concealment from divination. (134217728)" },
 ];
 
 export const itemWearFlagsName = [
-    "Puo' essere raccolto",         // 1
-    "Alle Dita",                    // 2
-    "Al Collo",                     // 4
-    "Sul Corpo",                    // 8
-    "Sulla Testa",                  // 16
-    "Sulle Gambe",                  // 32
-    "Ai Piedi",                     // 64
-    "Sulle Mani",                   // 128
-    "Sulle Braccia",                // 256
-    "Come Scudo",                   // 512
-    "Attorno al Corpo",             // 1024
-    "Alla Vita",                    // 2048
-    "Sui Polsi",                    // 4096
-    "Come Arma",                    // 8192
-    "In Mano",                      // 16384
-    "Sugli Occhi",                  // 32768
-    "Sulle Spalle",                 // 65536
-    "Alle Orecchie",                // 131072
-    "Sulla Fronte",                 // 262144
-    "Appuntato sul Petto",          // 524288
-    "Appeso al Fianco",             // 1048576
-    "",                             // 2097152
-    "",                             // 4194304
-    "",                             // 8388608
-    "",                             // 16777216
-    "",                             // 33554432
-    "",                             // 67108864
-    "",                             // 134217728
-    "",                             // 268435456
-    "",                             // 536870912
-    "",                             // 1073741824
-    "",                             // 2147483648
+    { label: "Puo' essere raccolto", desc: "The object can be picked up and carried. (1)" },
+    { label: "Alle Dita", desc: "Can be worn on a finger (rings). (2)" },
+    { label: "Al Collo", desc: "Can be worn around the neck (amulets, necklaces). (4)" },
+    { label: "Sul Corpo", desc: "Can be worn on the body (armor, robes). (8)" },
+    { label: "Sulla Testa", desc: "Can be worn on the head (helmets, crowns). (16)" },
+    { label: "Sulle Gambe", desc: "Can be worn on the legs (pants, greaves). (32)" },
+    { label: "Ai Piedi", desc: "Can be worn on the feet (boots, sandals). (64)" },
+    { label: "Sulle Mani", desc: "Can be worn on the hands (gloves, gauntlets). (128)" },
+    { label: "Sulle Braccia", desc: "Can be worn on the arms (bracers, vambraces). (256)" },
+    { label: "Come Scudo", desc: "Can be worn as a shield. (512)" },
+    { label: "Attorno al Corpo", desc: "Can be worn about the body (cloaks, capes). (1024)" },
+    { label: "Alla Vita", desc: "Can be worn around the waist (belts, sashes). (2048)" },
+    { label: "Sui Polsi", desc: "Can be worn on the wrist (bracelets, watches). (4096)" },
+    { label: "Come Arma", desc: "Can be wielded as a weapon. (8192)" },
+    { label: "In Mano", desc: "Can be held in hand (torches, books, instruments). (16384)" },
+    { label: "Sugli Occhi", desc: "Can be worn on the eyes (glasses, goggles). (32768)" },
+    { label: "Sulle Spalle", desc: "Can be worn on the shoulders (pauldrons, mantles). (65536)" },
+    { label: "Alle Orecchie", desc: "Can be worn on the ears (earrings, studs). (131072)" },
+    { label: "Sulla Fronte", desc: "Can be worn on the forehead (headbands, tiaras). (262144)" },
+    { label: "Appuntato sul Petto", desc: "Can be worn on the chest (brooches, medallions). (524288)" },
+    { label: "Appeso al Fianco", desc: "Can be worn at the side (scabbards, holsters). (1048576)" },
 ];
 
 export const applyName = [
@@ -996,27 +1061,46 @@ export const areaFlagsName = [
 ];
 
 export const roomFlagsName = [
-    "Buia",                         // 1
-    "",                             // 2
-    "Vietata ai Mob",               // 4
-    "Interno",                      // 8
-    "Sotterranea",                  // 16
-    "",                             // 32
-    "NO Teleport",                  // 64
-    "Nebbiosa",                     // 128
-    "NO Summon",                    // 256
-    "Privata",                      // 512
-    "Sicura",                       // 1024
-    "Solitaria",                    // 2048
-    "Negozio di Animali",           // 4096
-    "NO Ritorno",                   // 8192
-    "Cone Of Silence",              // 16384
-    "Deposito",                     // 32768
-    "Trappola Mortale",             // 65536
-    "NO Combattimento",             // 131072
-    "Deposito contenitori",         // 262144
-    "Teatro",                       // 524288
-    "Spalti",                       // 1048576
+    { label: "Buia",
+      desc: "The room is dark. Characters without infravision cannot see. A light source is needed to see in dark rooms. (1)" },
+    null, // bit 1 unused
+    { label: "Vietata ai Mob",
+      desc: "Mobiles (except charmed pets and guards) cannot enter this room. Used to protect quest NPCs or safe zones from mob intrusion. (4)" },
+    { label: "Interno",
+      desc: "The room is indoors. Weather effects dont apply. (8)" },
+    { label: "Sotterranea",
+      desc: "The room is underground. Similar to indoors but for caves/dungeons. Prevents weather effects and requires light sources. Prevents periodic damage to vampires. (16)" },
+    null, // bit 5 (ROOM_LOG) not exposed in editor
+    { label: "NO Teleport",
+      desc: "Teleport spells and abilities cannot target or arrive in this room. Prevents magical bypass of the room's defenses. (64)" },
+    { label: "Nebbiosa",
+      desc: "The room is filled with fog. Reduces combat accuracy and visibility. Attacks have a chance to miss due to obscured vision. (128)" },
+    { label: "NO Summon",
+      desc: "Summon spells cannot bring creatures into this room. Prevents players from summoning help into protected areas. (256)" },
+    { label: "Privata",
+      desc: "Only 2 characters can be in this room at once. Used for private meeting rooms or special encounter areas. (512)" },
+    { label: "Sicura",
+      desc: "No combat is allowed in this room. PvP and flagging are disabled. Safe rooms are typically temples or learning areas. (1024)" },
+    { label: "Solitaria",
+      desc: "Only 1 character can be in this room at once. Used for solo quest areas or personal chambers. (2048)" },
+    { label: "Negozio di Animali",
+      desc: "The room functions as a pet shop. Players can buy pets here. The room behind (south) should contain the available pets. (4096)" },
+    { label: "NO Ritorno",
+      desc: "Word of Recall spell does not work in this room. Characters cannot teleport back to their temple from here. (8192)" },
+    { label: "Cone Of Silence",
+      desc: "Magical silence pervades the room. No verbal spells can be cast. Also prevents speech between characters. (16384)" },
+    { label: "Deposito",
+      desc: "Objects on the ground in this room are saved to disk. Items dropped here persist across reboots (like donation rooms). (32768)" },
+    { label: "Trappola Mortale",
+      desc: "Characters entering this room take lethal damage. Anything that enters (including items) is destroyed. (65536)" },
+    { label: "NO Combattimento",
+      desc: "No combat of any kind is allowed. Even spells are blocked. Guards will glare at criminals but cannot attack. (131072)" },
+    { label: "Deposito contenitori",
+      desc: "Like Deposito but only saves non-takeable objects. Items with ITEM_TAKE flag are not saved (to prevent clutter). (262144)" },
+    { label: "Teatro",
+      desc: "The room is a theater, dispatching all messages to other rooms configured in a (mandatory) camera item present in this room. (524288)" },
+    { label: "Spalti",
+      desc: "The room has stadium/theater seating. Characters seated here can watch events unfold. Prevents some spam and stops food/thirst changes. (1048576)" },
 ];
 
 export const sectTypeName = [
@@ -1047,18 +1131,30 @@ export const doorResetName = [
 ];
 
 export const exitFlagsName = [
-    { value: EX_ISDOOR,     label: "E' una porta" },
-    { value: EX_CLOSED,     label: "Chiusa" },
-    { value: EX_LOCKED,     label: "Bloccata" },
-    { value: EX_BASHED,     label: "Sfondata" },
-    { value: EX_BASHPROOF,  label: "Non sfondabile" },
-    { value: EX_PICKPROOF,  label: "Non forzabile" },
-    { value: EX_PASSPROOF,  label: "Non attraversabile" },
-    { value: EX_HIDDEN,     label: "Nascosta" },
-    { value: EX_NOUN_MALE,  label: "Nome maschile" },
-    { value: EX_WINDOW,     label: "E' una finestra" },
-    { value: EX_HEAVY,      label: "Resistente" },
-    { value: EX_COMPLEX,    label: "Serr. Complessa" },
+    { value: EX_ISDOOR,     label: "E' una porta",
+      desc: "The exit is a door. Required for any door-related behavior. Without this flag, the exit is just an open passage. (1)" },
+    { value: EX_CLOSED,     label: "Chiusa",
+      desc: "The door is closed. Characters cannot pass through. Can be opened with the \"open\" command or by bashing. (2)" },
+    { value: EX_LOCKED,     label: "Bloccata",
+      desc: "The door is locked. Requires a key or lockpick to open. Characters cannot open it without the correct key or skill. (4)" },
+    { value: EX_BASHED,     label: "Sfondata",
+      desc: "The door has been bashed open by force. It remains open until repaired by a repairman NPC. (8)" },
+    { value: EX_BASHPROOF,  label: "Non sfondabile",
+      desc: "The door cannot be bashed open. Resists all brute force attempts. Only lockpicking or keys can open this door. (16)" },
+    { value: EX_PICKPROOF,  label: "Non forzabile",
+      desc: "The door cannot be picked with lockpicks. Only the correct key can open this door. (32)" },
+    { value: EX_PASSPROOF,  label: "Non attraversabile",
+      desc: "The door cannot be passed through magically. Pass Door spell and similar effects do not work on this door. (64)" },
+    { value: EX_HIDDEN,     label: "Nascosta",
+      desc: "The exit is hidden and not visible in room descriptions. Characters must find it through searching or special means. (128)" },
+    { value: EX_NOUN_MALE,  label: "Nome maschile",
+      desc: "The door uses masculine Italian noun forms. Affects article usage in Italian (il/la, un/una). (256)" },
+    { value: EX_WINDOW,     label: "E' una finestra",
+      desc: "The exit is a window, not a door. Cannot be bashed or locked like a regular door. Has a special watch through mechanic. (512)" },
+    { value: EX_HEAVY,      label: "Resistente",
+      desc: "[UNUSED] The door is heavier and harder to bash. Marked as not yet implemented in source. (1024)" },
+    { value: EX_COMPLEX,    label: "Serr. Complessa",
+      desc: "[UNUSED] The door has a complex lock mechanism. Marked as not yet implemented in source. (2048)" },
 ];
 
 export const wearName = [
@@ -1066,8 +1162,8 @@ export const wearName = [
     { number: WEAR_LIGHT,      name: "come Luce" },
     { number: WEAR_FINGER_L,   name: "al Dito Sinistro" },
     { number: WEAR_FINGER_R,   name: "al Dito Destro" },
-    { number: WEAR_NECK_1,     name: "al Collo (1)" },
-    { number: WEAR_NECK_2,     name: "al Collo (2)" },
+    { number: WEAR_NECK_1,     name: "al Collo (2)" },
+    { number: WEAR_NECK_2,     name: "al Collo (4)" },
     { number: WEAR_BODY,       name: "sul Corpo" },
     { number: WEAR_HEAD,       name: "sulla Testa" },
     { number: WEAR_LEGS,       name: "sulle Gambe" },
@@ -1289,42 +1385,42 @@ export const spells = [
 ];
 
 export const mobSpecFuncs = [
-    "",
-    "spec_breath_any",
-    "spec_breath_acid",
-    "spec_breath_fire",
-    "spec_breath_frost",
-    "spec_breath_gas",
-    "spec_breath_lightning",
-    "spec_cast_adept",
-    "spec_cast_cleric",
-    "spec_cast_ghost",
-    "spec_cast_judge",
-    "spec_cast_mage",
-    "spec_cast_psionicist",
-    "spec_cast_undead",
-    "spec_cast_anidead",
-    "spec_executioner",
-    "spec_fido",
-    "spec_guard",
-    "spec_janitor",
-    "spec_mayor",
-    "spec_poison",
-    "spec_repairman",
-    "spec_thief",
-    "spec_cast_beholder",
-    "spec_cast_medusa",
-    "spec_hunter",
-    "spec_gate_repair",
-    "spec_assassin",
-    "spec_bowman",
+    { value: '', label: '-- None --', desc: '' },
+    { value: 'spec_breath_any', label: 'spec_breath_any', desc: 'Dragon breath attack. Randomly selects one breath type when fighting.' },
+    { value: 'spec_breath_acid', label: 'spec_breath_acid', desc: 'Dragon breathes acid. Deals acid damage to the target.' },
+    { value: 'spec_breath_fire', label: 'spec_breath_fire', desc: 'Dragon breathes fire. Deals fire damage to the target.' },
+    { value: 'spec_breath_frost', label: 'spec_breath_frost', desc: 'Dragon breathes frost. Deals cold damage to the target.' },
+    { value: 'spec_breath_gas', label: 'spec_breath_gas', desc: 'Dragon breathes poisonous gas. Area-of-effect damage.' },
+    { value: 'spec_breath_lightning', label: 'spec_breath_lightning', desc: 'Dragon breathes lightning. Deals electrical damage.' },
+    { value: 'spec_cast_adept', label: 'spec_cast_adept', desc: 'Casts helpful spells on low-level players (armor, bless, cure light, etc). Only targets players below level 5.' },
+    { value: 'spec_cast_cleric', label: 'spec_cast_cleric', desc: 'Casts cleric spells. Heals self when hurt, buffs when idle, attacks with offensive spells.' },
+    { value: 'spec_cast_ghost', label: 'spec_cast_ghost', desc: 'Casts undead spells but is destroyed by sunlight.' },
+    { value: 'spec_cast_judge', label: 'spec_cast_judge', desc: 'Casts high explosive on its target when fighting.' },
+    { value: 'spec_cast_mage', label: 'spec_cast_mage', desc: 'Casts mage spells. Buffs self and attacks with offensive magic.' },
+    { value: 'spec_cast_psionicist', label: 'spec_cast_psionicist', desc: 'Uses psionic powers for healing, buffs, and attacks.' },
+    { value: 'spec_cast_undead', label: 'spec_cast_undead', desc: 'Casts undead-themed spells: curse, weaken, chill touch, blindness, etc.' },
+    { value: 'spec_cast_anidead', label: 'spec_cast_anidead', desc: 'Casts anti-dead spells: cause light/serious/critical, curse, weaken, etc.' },
+    { value: 'spec_executioner', label: 'spec_executioner', desc: 'Attacks criminals (PLR_KILLER, PLR_THIEF) on sight. Yells alert and summons guards.' },
+    { value: 'spec_fido', label: 'spec_fido', desc: 'Devours NPC corpses on the ground, scattering items on the floor.' },
+    { value: 'spec_guard', label: 'spec_guard', desc: 'City guard. Attacks criminals, defends against evil, warns about weapons in lawful areas.' },
+    { value: 'spec_janitor', label: 'spec_janitor', desc: 'Cleans up trash from the ground. Picks up drink containers, trash, and cheap objects.' },
+    { value: 'spec_mayor', label: 'spec_mayor', desc: 'Follows a daily routine, opening/closing city gates. Casts cleric spells when fighting. Reserved.' },
+    { value: 'spec_poison', label: 'spec_poison', desc: 'Poisons its target with a bite attack during combat.' },
+    { value: 'spec_repairman', label: 'spec_repairman', desc: 'Repairs bashed doors. Checks random directions for bashed exits and restores them.' },
+    { value: 'spec_thief', label: 'spec_thief', desc: 'Steals gold from players and uses snare ability in combat.' },
+    { value: 'spec_cast_beholder', label: 'spec_cast_beholder', desc: 'Casts beholder-specific spells: charm, sleep, telekinesis, flesh to stone, disintegrate, etc.' },
+    { value: 'spec_cast_medusa', label: 'spec_cast_medusa', desc: 'Casts medusa-themed spells: shocking grasp, chill touch, acid blast, fear, flesh to stone.' },
+    { value: 'spec_hunter', label: 'spec_hunter', desc: 'Hunts wanted criminals using a wanted list. Pursues targets across rooms. Reserved.' },
+    { value: 'spec_gate_repair', label: 'spec_gate_repair', desc: 'Follows a path to repair city gates. Similar to spec_mayor but focused on gates. Reserved.' },
+    { value: 'spec_assassin', label: 'spec_assassin', desc: 'Assassinates targets with backstab from hiding. Can instant-kill if level difference is large.' },
+    { value: 'spec_bowman', label: 'spec_bowman', desc: 'Uses ranged attacks with bow/crossbow weapons. Looks in random directions for targets.' },
 ];
 
 export const objSpecFuncs = [
-    "",
-    "obj_spec_guillotine",
-    "obj_spec_cauldron",
-    "obj_spec_event_heroes",
+    { value: '', label: '-- None --', desc: '' },
+    { value: 'obj_spec_guillotine', label: 'obj_spec_guillotine', desc: 'A furniture object that decapitates victims when activated. Reserved, dont use.' },
+    { value: 'obj_spec_cauldron', label: 'obj_spec_cauldron', desc: 'A container that cooks NPC corpses into stew. Reserved, dont use.' },
+    { value: 'obj_spec_event_heroes', label: 'obj_spec_event_heroes', desc: 'Triggers a scripted hero event sequence. Reserved, dont use.' },
 ];
 
 export const dirName = ["a NORD", "a EST", "a SUD", "a OVEST", "in ALTO", "in BASSO"];

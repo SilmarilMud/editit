@@ -60,6 +60,11 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
         const wrapper = document.createElement('label');
         wrapper.className = 'flag-checkbox-wrapper';
         
+        // Add tooltip if desc is provided
+        if (flag.desc) {
+            wrapper.title = flag.desc;
+        }
+        
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = `${name}_${flag.value}`;

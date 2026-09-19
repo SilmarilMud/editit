@@ -23,7 +23,11 @@ import { getMobByVNum, getObjByVNum, getRoomByVNum, clamp } from './utils.js';
 // Lookup helpers
 function lookupTable(value, table) {
     for (let i = 0; i < table.length; i++) {
-        if (table[i] !== undefined && value.toLowerCase() === table[i].toLowerCase()) return i;
+        if (table[i] !== undefined) {
+            // Handle both string arrays and object arrays {value, label, desc}
+            const entry = typeof table[i] === 'object' ? table[i].value : table[i];
+            if (value.toLowerCase() === entry.toLowerCase()) return i;
+        }
     }
     return LOOKUPNOTFOUND;
 }

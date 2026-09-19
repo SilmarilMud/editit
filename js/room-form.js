@@ -97,7 +97,7 @@ export function renderRoomForm(room, onChange, options = {}) {
 function renderFlags(container, room, onChange, readonly) {
     const el = container.querySelector('#room-flags');
     if (!el) return;
-    const flagsData = roomFlagsName.map((n, i) => n ? { value: Math.pow(2, i), label: n } : null).filter(Boolean);
+    const flagsData = roomFlagsName.map((f, i) => f ? { value: Math.pow(2, i), label: f.label, desc: f.desc } : null).filter(Boolean);
     el.appendChild(createFlagGroup('flags', flagsData, room.flags, v => {
         room.flags = v;
         if (onChange) onChange(room);
@@ -176,7 +176,7 @@ function renderExits(container, room, onChange, readonly, options = {}) {
         const door = room.doors[i];
         const flagsEl = el.querySelector(`#exit-flags-${i}`);
         if (flagsEl) {
-            const flagsData = exitFlagsName.map(f => ({ value: f.value, label: f.label }));
+            const flagsData = exitFlagsName.map(f => ({ value: f.value, label: f.label, desc: f.desc }));
             flagsEl.appendChild(createFlagGroup(`exit_flags_${i}`, flagsData, door.exitFlags, v => {
                 door.exitFlags = v;
                 // Update status
