@@ -135,16 +135,9 @@ export function renderAreaForm(area, onChange, options = {}) {
     // Add flags group
     const flagsContainer = container.querySelector('#area-flags-container');
     if (flagsContainer) {
-        const flagsData = areaFlagsName
-            .map((name, index) => {
-                if (!name) return null; // Skip empty entries
-                return { value: Math.pow(2, index), label: name };
-            })
-            .filter(Boolean);
-        
         const flagGroup = createFlagGroup(
             'areaFlags',
-            flagsData,
+            areaFlagsName,
             area.areaFlags,
             (newValue) => {
                 area.areaFlags = newValue;

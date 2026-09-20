@@ -179,15 +179,13 @@ function renderValues(container, obj, onChange, readonly) {
 }
 
 function renderFlags(container, obj, onChange, readonly) {
-    const makeFlags = (items) => items.map((f, i) => f ? { value: Math.pow(2, i), label: f.label, desc: f.desc } : null).filter(Boolean);
-    
     const extraEl = container.querySelector('#obj-extraflags');
     if (extraEl) {
-        extraEl.appendChild(createFlagGroup('extraFlags', makeFlags(itemExtraFlagsName), obj.extraFlags, v => { obj.extraFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly, exclude: ITEM_DONT_SET }).container);
+        extraEl.appendChild(createFlagGroup('extraFlags', itemExtraFlagsName, obj.extraFlags, v => { obj.extraFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly, exclude: ITEM_DONT_SET }).container);
     }
     const wearEl = container.querySelector('#obj-wearflags');
     if (wearEl) {
-        wearEl.appendChild(createFlagGroup('wearFlags', makeFlags(itemWearFlagsName), obj.wearFlags, v => { obj.wearFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
+        wearEl.appendChild(createFlagGroup('wearFlags', itemWearFlagsName, obj.wearFlags, v => { obj.wearFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
     }
     const affsEl = container.querySelector('#obj-wearaffs');
     if (affsEl) {

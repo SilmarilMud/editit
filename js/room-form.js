@@ -98,8 +98,7 @@ export function renderRoomForm(room, onChange, options = {}) {
 function renderFlags(container, room, onChange, readonly) {
     const el = container.querySelector('#room-flags');
     if (!el) return;
-    const flagsData = roomFlagsName.map((f, i) => f ? { value: Math.pow(2, i), label: f.label, desc: f.desc } : null).filter(Boolean);
-    el.appendChild(createFlagGroup('flags', flagsData, room.flags, v => {
+    el.appendChild(createFlagGroup('flags', roomFlagsName, room.flags, v => {
         room.flags = v;
         if (onChange) onChange(room);
     }, { columns: 3, disabled: readonly, exclude: ROOM_DONT_SET }).container);

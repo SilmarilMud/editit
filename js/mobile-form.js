@@ -119,7 +119,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
             </div>
             
             <div class="form-section">
-                <label>Guild</label>
+                <label>Class</label>
                 <select name="guild" ${readonly ? 'disabled' : ''}>
                     ${guildName.map(g => `<option value="${g.number}" ${mob.guild === g.number ? 'selected' : ''}>${g.name}</option>`).join('')}
                 </select>

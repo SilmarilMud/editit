@@ -59,6 +59,8 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
     
     // Create each checkbox
     flags.forEach(flag => {
+        // Skip null entries
+        if (!flag) return;
         // Skip flags that are in the exclude bitmask
         if (exclude && (flag.value & exclude)) return;
         
