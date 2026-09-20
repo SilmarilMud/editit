@@ -286,7 +286,7 @@ class Writer {
         const rooms = this.area.rooms;
         let out = '#RESETS\n\n';
         for (const room of rooms) {
-            let doit1 = room.isRandom !== 0;
+            let doit1 = !!room.isRandom;
             let doit2 = room.objs.length > 0;
             let doit3 = room.mobs.length > 0;
             if (!doit1) {
@@ -364,7 +364,7 @@ class Writer {
         const rooms = this.area.rooms;
         let out = '#RESETS\n\n';
         for (const room of rooms) {
-            let doit1 = room.isRandom !== 0;
+            let doit1 = !!room.isRandom;
             let doit2 = room.objs.length > 0;
             let doit3 = room.mobs.length > 0;
             if (!doit1) {

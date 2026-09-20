@@ -2,7 +2,7 @@
 
 import { areaFlagsName, planeName, AFLAG_DONT_SET, AREA_NEW_FORMAT, AREA_BATTLEGROUND } from './constants.js';
 import { createFlagGroup } from './flags.js';
-import { escapeHtml, wrapTextareaWithGuide, hasEntities, countEntities, validateVnumShift, shiftVnums } from './utils.js';
+import { escapeHtml, wrapTextareaWithGuide, hasEntities, countEntities, validateVnumShift, shiftVnums, showToast } from './utils.js';
 
 /**
  * Render area form
@@ -73,22 +73,22 @@ export function renderAreaForm(area, onChange, options = {}) {
             <h4>Level Range <span class="hint">(recommended for this area)</span></h4>
             <div class="form-row">
                 <div class="form-section">
-                    <label>Min Level</label>
+                    <label>Min Level <span class="hint">(1 - 50)</span></label>
                     <input type="number" 
                            name="racMinLev" 
                            value="${area.racMinLev}" 
-                           min="0" 
-                           max="87"
+                           min="1" 
+                           max="50"
                            ${readonly ? 'disabled' : ''}>
                 </div>
                 
                 <div class="form-section">
-                    <label>Max Level</label>
+                    <label>Max Level <span class="hint">(1 - 50)</span></label>
                     <input type="number" 
                            name="racMaxLev" 
                            value="${area.racMaxLev}" 
-                           min="0" 
-                           max="87"
+                           min="1" 
+                           max="50"
                            ${readonly ? 'disabled' : ''}>
                 </div>
             </div>
@@ -277,6 +277,11 @@ function attachChangeHandlers(container, area, onChange, fullArea, onVnumShift) 
                     updateFieldStates(container, area);
                     if (onChange) onChange(area);
                 }
+            } else if ((field === 'racMinLev' || field === 'racMaxLev') && (value < 1 || value > 50)) {
+                showToast(`${field === 'racMinLev' ? 'Min' : 'Max'} Level must be between 1 and 50`, 'warning');
+                area[field] = value;
+                updateFieldStates(container, area);
+                if (onChange) onChange(area);
             } else {
                 // Normal field update
                 area[field] = value;
@@ -286,9 +291,22 @@ function attachChangeHandlers(container, area, onChange, fullArea, onVnumShift) 
         };
         
         // VNumStart: only 'change' event (fires on blur/Enter)
+        // recallVNum: validate on blur only
         // Other fields: both 'change' and 'input' for real-time updates
         if (isVnumStart) {
             input.addEventListener('change', handler);
+        } else if (field === 'recallVNum') {
+            input.addEventListener('change', handler);
+            input.addEventListener('blur', () => {
+                const val = parseInt(input.value, 10) || 0;
+                if (val !== 0) {
+                    const rooms = fullArea ? fullArea.rooms : (area.rooms || []);
+                    const roomExists = rooms.some(r => r.VNum === val);
+                    if (!roomExists) {
+                        showToast(`Recall VNum ${val} does not exist in this area`, 'warning');
+                    }
+                }
+            });
         } else {
             input.addEventListener('change', handler);
             input.addEventListener('input', handler);
