@@ -24,6 +24,7 @@ const flagGroups = new Map();
  * @param {boolean} options.showAll - Show "Select All" / "Clear All" buttons (default: true)
  * @param {boolean} options.disabled - Disable all checkboxes (default: false)
  * @param {string} options.className - Additional CSS class
+ * @param {number} options.exclude - Bitmask of flags to exclude from display
  * @returns {FlagGroup}
  */
 export function createFlagGroup(name, flags, value, onChange, options = {}) {
@@ -32,7 +33,8 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
         columns = 3,
         showAll = true,
         disabled = false,
-        className = ''
+        className = '',
+        exclude = 0
     } = options;
 
     // Create container
@@ -57,6 +59,9 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
     
     // Create each checkbox
     flags.forEach(flag => {
+        // Skip flags that are in the exclude bitmask
+        if (exclude && (flag.value & exclude)) return;
+        
         const wrapper = document.createElement('label');
         wrapper.className = 'flag-checkbox-wrapper';
         

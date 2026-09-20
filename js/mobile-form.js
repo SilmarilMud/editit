@@ -1,6 +1,7 @@
 /* mobile-form.js - Mobile (NPC) editor form for EditIt */
 
 import {
+    ACT_DONT_SET, AFF_MOB_DONT_SET,
     sexName, races, guildName, mobSpecFuncs, itemTypeName,
     actFlagsData, affFlagsData
 } from './constants.js';
@@ -203,7 +204,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
         const flagGroup = createFlagGroup('actFlags', actFlagsData, mob.actFlags, (val) => {
             mob.actFlags = val;
             if (onChange) onChange(mob);
-        }, { columns: 3, disabled: readonly });
+        }, { columns: 3, disabled: readonly, exclude: ACT_DONT_SET });
         actContainer.appendChild(flagGroup.container);
     }
     
@@ -212,7 +213,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
         const flagGroup = createFlagGroup('affFlags', affFlagsData, mob.affFlags, (val) => {
             mob.affFlags = val;
             if (onChange) onChange(mob);
-        }, { columns: 3, disabled: readonly });
+        }, { columns: 3, disabled: readonly, exclude: AFF_MOB_DONT_SET });
         affContainer.appendChild(flagGroup.container);
     }
     

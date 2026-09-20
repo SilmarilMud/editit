@@ -5,6 +5,7 @@ import {
     VALUE_IS_NUMBER_FROM_0, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_LIQUID, VALUE_IS_POISON,
     VALUE_IS_VNUM, VALUE_IS_FURNITURE_FLAGS, VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE,
     ITEM_WAND, ITEM_STAFF, ITEM_INSTRUMENT, ITEM_WARSOUND, ITEM_TRAP,
+    ITEM_DONT_SET, AFF_OBJ_DONT_SET,
     itemTypeName, itemExtraFlagsName, itemWearFlagsName, applyName,
     itemValues, itemWeaponName, itemContainerFlagsName, itemLiquidName,
     itemPoisonName, itemFurnitureFlagsName, itemTrapType, itemTrapDamage,
@@ -182,7 +183,7 @@ function renderFlags(container, obj, onChange, readonly) {
     
     const extraEl = container.querySelector('#obj-extraflags');
     if (extraEl) {
-        extraEl.appendChild(createFlagGroup('extraFlags', makeFlags(itemExtraFlagsName), obj.extraFlags, v => { obj.extraFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
+        extraEl.appendChild(createFlagGroup('extraFlags', makeFlags(itemExtraFlagsName), obj.extraFlags, v => { obj.extraFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly, exclude: ITEM_DONT_SET }).container);
     }
     const wearEl = container.querySelector('#obj-wearflags');
     if (wearEl) {
@@ -190,7 +191,7 @@ function renderFlags(container, obj, onChange, readonly) {
     }
     const affsEl = container.querySelector('#obj-wearaffs');
     if (affsEl) {
-        affsEl.appendChild(createFlagGroup('wearAffs', wearAffsData, obj.wearAffs, v => { obj.wearAffs = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
+        affsEl.appendChild(createFlagGroup('wearAffs', wearAffsData, obj.wearAffs, v => { obj.wearAffs = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly, exclude: AFF_OBJ_DONT_SET }).container);
     }
 }
 

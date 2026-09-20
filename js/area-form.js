@@ -138,10 +138,7 @@ export function renderAreaForm(area, onChange, options = {}) {
         const flagsData = areaFlagsName
             .map((name, index) => {
                 if (!name) return null; // Skip empty entries
-                const value = Math.pow(2, index);
-                // Skip flags that shouldn't be set by user
-                if (value & AFLAG_DONT_SET) return null;
-                return { value, label: name };
+                return { value: Math.pow(2, index), label: name };
             })
             .filter(Boolean);
         
@@ -154,7 +151,7 @@ export function renderAreaForm(area, onChange, options = {}) {
                 updateFieldStates(container, area);
                 if (onChange) onChange(area);
             },
-            { columns: 2, disabled: readonly }
+            { columns: 2, disabled: readonly, exclude: AFLAG_DONT_SET }
         );
         
         flagsContainer.appendChild(flagGroup.container);

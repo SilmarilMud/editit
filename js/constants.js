@@ -52,7 +52,7 @@ export const ACT_MASK =
     ACT_GAMBLE | ACT_VINDICATIVE | ACT_PEACEFUL | ACT_GUARD | ACT_SAVEMOB | ACT_SPECIAL;
 
 export const ACT_DONT_SET = ACT_IS_NPC | ACT_HUNTER | ACT_PET | ACT_MOVED |
-                            ACT_TRAIN | ACT_GAMBLE | ACT_HUNTER;
+                            ACT_TRAIN | ACT_GAMBLE;
 
 // ============================================================================
 // AFF_* - Affect flags
