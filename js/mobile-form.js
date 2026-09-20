@@ -1,7 +1,6 @@
 /* mobile-form.js - Mobile (NPC) editor form for EditIt */
 
 import {
-    ACT_IS_NPC, ACT_DONT_SET, AFF_DONT_SET,
     sexName, races, guildName, mobSpecFuncs, itemTypeName,
     actFlagsData, affFlagsData
 } from './constants.js';

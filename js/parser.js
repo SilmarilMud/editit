@@ -5,7 +5,7 @@ import {
     createArea, createMobile, createObject, createRoom, createDoor,
     createHelp, createExtraDescr, createApply, createLoadedObject,
     createLoadedMob, createMobObject,
-    AREA_NEW_FORMAT, AREA_NEWRESET, ACT_MASK, AFF_MOB_MASK, AFF_OBJ_MASK,
+    AREA_NEW_FORMAT, AREA_NEW_RESET, ACT_MASK, AFF_MOB_MASK, AFF_OBJ_MASK,
     ITEM_MASK, ITEM_WEAR_MASK, ROOM_MASK, LOOKUPNOTFOUND, WEAR_NONE,
     DOOR_NOT_RESET, EX_ISDOOR, EX_PICKPROOF, EX_BASHPROOF, EX_PASSPROOF,
     MAX_VNUM, MAX_DIR, SHOPMAXTRADE,
@@ -820,7 +820,7 @@ class Parser {
         }
     }
     loadResets(rooms, mobs, objs, general) {
-        if (!(general.areaFlags & AREA_NEWRESET)) {
+        if (!(general.areaFlags & AREA_NEW_RESET)) {
             this.loadOldResets(rooms, mobs, objs, general);
             return;
         }

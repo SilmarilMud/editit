@@ -5,7 +5,7 @@ const DEBUG = false;
 
 import {
     AREA_NEW_FORMAT,
-    AREA_NEWRESET,
+    AREA_NEW_RESET,
     ITEM_WARSOUND,
     ITEM_INSTRUMENT,
     ITEM_STAFF,
@@ -260,7 +260,7 @@ class Writer {
     }
 
     saveResets() {
-        if (this.area.general.areaFlags & AREA_NEWRESET) {
+        if (this.area.general.areaFlags & AREA_NEW_RESET) {
             return this.saveNewResets();
         }
         return this.saveOldResets();

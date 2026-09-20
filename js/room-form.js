@@ -2,7 +2,7 @@
 
 import {
     roomFlagsName, sectTypeName, exitFlagsName, doorResetName,
-    dirSimpleName, dirName, dirSimpleNameEn, createDoor,
+    dirSimpleName, dirSimpleNameEn, createDoor,
     createLoadedObject, createLoadedMob,
     EX_ISDOOR, EX_WINDOW, REV_DIR
 } from './constants.js';

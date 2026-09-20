@@ -51,7 +51,8 @@ export const ACT_MASK =
     ACT_AGGRESSIVE | ACT_STAY_AREA | ACT_WIMPY | ACT_PET | ACT_TRAIN | ACT_PRACTICE |
     ACT_GAMBLE | ACT_VINDICATIVE | ACT_PEACEFUL | ACT_GUARD | ACT_SAVEMOB | ACT_SPECIAL;
 
-export const ACT_DONT_SET = ACT_HUNTER | ACT_PET | ACT_MOVED;
+export const ACT_DONT_SET = ACT_IS_NPC | ACT_HUNTER | ACT_PET | ACT_MOVED |
+                            ACT_TRAIN | ACT_GAMBLE | ACT_HUNTER;
 
 // ============================================================================
 // AFF_* - Affect flags
@@ -89,35 +90,30 @@ export const AFF_MORTAL_POISON = 268435456;
 export const AFF_PARALYZED = 536870912;
 export const AFF_PIETRIFIED = 1073741824;
 
-export const AFF_MASK =
-    AFF_BLIND | AFF_INVISIBLE | AFF_DETECT_EVIL | AFF_DETECT_INVIS |
-    AFF_DETECT_MAGIC | AFF_DETECT_HIDDEN | AFF_HOLD | AFF_SANCTUARY |
-    AFF_FAERIE_FIRE | AFF_INFRARED | AFF_CURSE | AFF_CHANGE_SEX |
-    AFF_POISON | AFF_PROTECT | AFF_POLYMORPH | AFF_SNEAK | AFF_HIDE |
-    AFF_SLEEP | AFF_CHARM | AFF_FLYING | AFF_PASS_DOOR | AFF_WATERWALK |
-    AFF_SUMMONED | AFF_MUTE | AFF_GILLS | AFF_VAMP_BITE | AFF_GHOUL | AFF_FLAMING |
-    AFF_MORTAL_POISON | AFF_PARALYZED | AFF_PIETRIFIED;
-
 export const AFF_MOB_MASK =
     AFF_BLIND | AFF_INVISIBLE | AFF_DETECT_EVIL | AFF_DETECT_INVIS |
     AFF_DETECT_MAGIC | AFF_DETECT_HIDDEN | AFF_HOLD | AFF_SANCTUARY |
-    AFF_FAERIE_FIRE | AFF_INFRARED | AFF_CURSE |
+    AFF_FAERIE_FIRE | AFF_INFRARED | AFF_CURSE | AFF_CHANGE_SEX |
     AFF_POISON | AFF_PROTECT | AFF_SNEAK | AFF_HIDE |
     AFF_SLEEP | AFF_CHARM | AFF_FLYING | AFF_PASS_DOOR | AFF_WATERWALK |
     AFF_SUMMONED | AFF_MUTE | AFF_GILLS | AFF_VAMP_BITE | AFF_GHOUL | AFF_FLAMING |
     AFF_MORTAL_POISON | AFF_PARALYZED | AFF_PIETRIFIED;
 
+export const AFF_MOB_DONT_SET = AFF_HOLD | AFF_PIETRIFIED | AFF_CHARM |
+                                AFF_WATERWALK | AFF_MORTAL_POISON |
+                                AFF_SUMMONED | AFF_VAMP_BITE | AFF_PARALYZED |
+                                AFF_FAERIE_FIRE | AFF_CHANGE_SEX;
+
 export const AFF_OBJ_MASK =
     AFF_BLIND | AFF_INVISIBLE | AFF_DETECT_EVIL | AFF_DETECT_INVIS |
-    AFF_DETECT_MAGIC | AFF_DETECT_HIDDEN | AFF_HOLD | AFF_SANCTUARY |
-    AFF_FAERIE_FIRE | AFF_INFRARED | AFF_CURSE | AFF_CHANGE_SEX |
+    AFF_DETECT_MAGIC | AFF_DETECT_HIDDEN | AFF_SANCTUARY |
+    AFF_INFRARED | AFF_CHANGE_SEX | AFF_POISON | AFF_MORTAL_POISON |
     AFF_PROTECT | AFF_SNEAK | AFF_HIDE |
     AFF_SLEEP | AFF_FLYING | AFF_PASS_DOOR | AFF_WATERWALK |
     AFF_MUTE | AFF_GILLS | AFF_FLAMING;
 
-export const AFF_DONT_SET =
-    AFF_POISON | AFF_POLYMORPH | AFF_CHARM | AFF_SUMMONED |
-    AFF_VAMP_BITE | AFF_GHOUL | AFF_MORTAL_POISON;
+export const AFF_OBJ_DONT_SET =
+    AFF_POLYMORPH | AFF_WATERWALK;
 
 // ============================================================================
 // SEX_* - Gender constants
@@ -191,13 +187,25 @@ export const ITEM_SHOOTABLE = 262144;
 export const ITEM_THROWABLE = 524288;
 export const ITEM_BOOMERANG_STYLE = 1048576;
 export const ITEM_MORTAL_POISONED = 2097152;
+export const ITEM_RARE = 4194304;
+export const ITEM_CAN_QUIT = 8388608;
+export const ITEM_HIDDEN = 16777216;
+export const ITEM_LOGGET = 33554432;
+export const ITEM_IMMORTAL = 67108864;
+export const ITEM_NO_LOCATE = 134217728;
 
 export const ITEM_MASK =
     ITEM_GLOW | ITEM_HUM | ITEM_DARK | ITEM_LOCK | ITEM_EVIL | ITEM_INVIS |
     ITEM_MAGIC | ITEM_NODROP | ITEM_BLESS | ITEM_ANTI_GOOD | ITEM_ANTI_EVIL |
     ITEM_ANTI_NEUTRAL | ITEM_NOREMOVE | ITEM_INVENTORY | ITEM_POISONED |
     ITEM_VAMPIRE_BANE | ITEM_HOLY | ITEM_CAN_SHOOT | ITEM_SHOOTABLE |
-    ITEM_THROWABLE | ITEM_BOOMERANG_STYLE | ITEM_MORTAL_POISONED;
+    ITEM_THROWABLE | ITEM_BOOMERANG_STYLE | ITEM_MORTAL_POISONED |
+    ITEM_RARE | ITEM_CAN_QUIT | ITEM_HIDDEN | ITEM_LOGGET | ITEM_IMMORTAL |
+    ITEM_NO_LOCATE;
+
+export const ITEM_DONT_SET =
+    ITEM_DARK | ITEM_INVENTORY | ITEM_POISONED | ITEM_MORTAL_POISONED |
+    ITEM_LOGGET;
 
 // ============================================================================
 // ITEM_* wear flags
@@ -309,10 +317,17 @@ export const WEAPON_CROSSBOW = 15;
 // ============================================================================
 
 export const AREA_NEW_FORMAT = 1;
-export const AREA_NEWRESET = 64;
+export const AREA_HIDDEN = 2;
+export const AREA_GUILD = 4;
+export const AREA_LAWFUL = 8;
+export const AREA_WILDERNESS = 16;
+export const AREA_UNDERGROUND = 32;
+export const AREA_NEW_RESET = 64;
 export const AREA_BATTLEGROUND = 1024;
+export const AREA_DELAYED_RESET = 4096;
 
-export const AFLAG_DONT_SET = AREA_BATTLEGROUND;
+export const AFLAG_DONT_SET = AREA_BATTLEGROUND | AREA_NEW_RESET |
+                              AREA_WILDERNESS | AREA_DELAYED_RESET;
 
 // ============================================================================
 // ============================================================================
@@ -347,6 +362,8 @@ export const EX_COMPLEX = 2048;
 export const EFLAG_FOR_DOOR = EX_ISDOOR | EX_CLOSED | EX_LOCKED | EX_BASHED |
     EX_BASHPROOF | EX_PICKPROOF | EX_PASSPROOF |
     EX_HIDDEN | EX_NOUN_MALE | EX_WINDOW | EX_HEAVY | EX_COMPLEX;
+
+export const EFLAG_DONT_SET =  EX_HEAVY | EX_COMPLEX;
 
 // ============================================================================
 // WEAR_* - Wear locations
@@ -409,8 +426,10 @@ export const ROOM_DARK = 1;
 export const ROOM_NO_MOB = 4;
 export const ROOM_INDOORS = 8;
 export const ROOM_UNDERGROUND = 16;
-export const ROOM_NO_TELEPORT = 128;
-export const ROOM_FOGGY = 256;
+export const ROOM_LOG = 32;
+export const ROOM_NO_TELEPORT = 64;
+export const ROOM_FOGGY = 128;
+export const ROOM_NO_SUMMON = 256;
 export const ROOM_PRIVATE = 512;
 export const ROOM_SAFE = 1024;
 export const ROOM_SOLITARY = 2048;
@@ -426,10 +445,14 @@ export const ROOM_SEATS = 1048576;
 
 export const ROOM_MASK =
     ROOM_DARK | ROOM_NO_MOB | ROOM_INDOORS | ROOM_UNDERGROUND |
-    ROOM_NO_TELEPORT | ROOM_FOGGY | ROOM_PRIVATE |
+    ROOM_LOG | ROOM_NO_TELEPORT | ROOM_FOGGY | ROOM_PRIVATE |
     ROOM_SAFE | ROOM_SOLITARY | ROOM_PET_SHOP | ROOM_NO_RECALL |
     ROOM_CONE_OF_SILENCE | ROOM_SAVEROOM | ROOM_DEATHTRAP |
-    ROOM_NO_COMBAT | ROOM_MINI_SAVE | ROOM_THEATER | ROOM_SEATS;
+    ROOM_NO_COMBAT | ROOM_MINI_SAVE | ROOM_THEATER | ROOM_SEATS |
+    ROOM_NO_SUMMON;
+
+export const ROOM_DONT_SET =
+    ROOM_LOG;
 
 // ============================================================================
 // SECT_* - Sector types
@@ -502,33 +525,33 @@ export const LOOKUPNOTFOUND = -10000;
 /** Action flags for mobile editor (excludes ACT_IS_NPC and DONT_SET flags) */
 export const actFlagsData = [
     { value: 2, label: 'Sentinel',
-      desc: 'Il mobile rimane nella sua assegnata stanza e non vaga. Usato durante il reset dell\'area per mantenere guardi e negozianti al loro posto. (2)' },
+      desc: 'Il mob rimane nella sua assegnata stanza e non vaga. Usato durante il reset dell\'area per mantenere guardie e negozianti al loro posto. (2)' },
     { value: 4, label: 'Scavenger',
-      desc: 'Il mobile raccoglie oggetti preziosi da terra e li tiene. Gli scavenger prendono l\'oggetto piu\' prezioso nella stanza. (4)' },
+      desc: 'Il mob raccoglie gli oggetti pi\u00f0 preziosi da terra. (4)' },
     { value: 8, label: 'To Vindicate',
-      desc: 'I giocatori acquisiscono lo status di ricercato quando uccidono questo mobile, e saranno braccati dalle guardie mobili. (8)' },
+      desc: 'I giocatori acquisiscono lo status di ricercato quando uccidono questo mob, e saranno braccati dalle guardie. (8)' },
     { value: 32, label: 'Aggressive',
-      desc: 'Il mobile attacca i giocatori a vista senza provocazione. I mob aggressivi inizieranno combattimento quando un giocatore entra nella stanza. (32)' },
+      desc: 'Il mob attacca i giocatori a vista senza provocazione non appena entrano nella stanza. (32)' },
     { value: 64, label: 'Stay Area',
-      desc: 'Il mobile non lascer\u00e0 la sua area di provenienza durante inseguimenti o vagabondaggi. Impedisce ai mob di seguire i giocatori in altre zone. (64)' },
+      desc: 'Il mob non lascer\u00e0 la sua area di provenienza durante inseguimenti o vagabondaggi. Impedisce ai mob di seguire i giocatori in altre zone. (64)' },
     { value: 128, label: 'Wimpy',
-      desc: 'Il mobile fugge quando \u00e8 gravemente ferito (sotto il 25% di HP). I mob wimpy tenteranno di fuggire dal combattimento. (128)' },
+      desc: 'Il mob fugge quando \u00e8 gravemente ferito (sotto il 25% di HP). (128)' },
     { value: 512, label: 'Train',
-      desc: 'Il mobile pu\u00f2 addestrare i giocatori nelle statistiche (forza, intelligenza, ecc). Gli immortali possono usare il comando \"train\" vicino a questi mob. (512)' },
+      desc: 'Il mob pu\u00f2 addestrare i giocatori nelle statistiche (forza, intelligenza, ecc). Gli immortali possono usare il comando \"allena\" vicino a questi mob. (512)' },
     { value: 1024, label: 'Practice',
-      desc: 'Il mobile \u00e8 un maestro di gilda che pu\u00f2 insegnare abilit\u00e0/incantesimi. I giocatori possono usare il comando \"practice\" vicino a questi mob. (1024)' },
+      desc: 'Il mob \u00e8 un maestro di gilda che pu\u00f2 insegnare abilit\u00e0/incantesimi. I giocatori possono usare il comando \"pratica\" vicino a questi mob. (1024)' },
     { value: 2048, label: 'Gamble',
-      desc: 'Il mobile gestisce un gioco d\'azzardo (carte, dadi, ecc). I croupier con questo flag possono interagire tra loro. Non utilizzato. (2048)' },
+      desc: 'Il mob gestisce il gioco d\'azzardo (carte, dadi, ecc). I croupier con questo flag possono interagire tra loro. Non utilizzato. (2048)' },
     { value: 4096, label: 'Vindicative',
-      desc: 'Il mobile insegue attivamente il giocatore se fugge dal combattimento. (4096)' },
+      desc: 'Il mob insegue attivamente il giocatore se fugge dal combattimento. (4096)' },
     { value: 8192, label: 'Peaceful',
-      desc: 'Il mobile ignora le razze odiate e non attaccher\u00e0 in base all\'odio razziale. I mob pacifici sono esenti dal comportamento di aggro razziale. (8192)' },
+      desc: 'Il mob ignora le razze odiate e non attaccher\u00e0 in base all\'odio razziale. (8192)' },
     { value: 16384, label: 'Guard',
-      desc: 'Il mobile \u00e8 una guardia cittadina. Attacca i criminali (PLR_KILLER, PLR_THIEF) e avverte i giocatori con armi in aree legali. Saluta anche i giocatori con reputazione hero e insulta i villain. (16384)' },
+      desc: 'Il mob \u00e8 una guardia cittadina. Attacca i criminali (PLR_KILLER, PLR_THIEF) e avverte i giocatori con armi in aree legali. Saluta anche i giocatori con reputazione hero e insulta i villain. (16384)' },
     { value: 536870912, label: 'Save Mob',
-      desc: 'I dati del mobile vengono salvati su disco. Usato per NPC persistenti che mantengono il loro stato tra i riavvii (es. negozianti con oro). (536870912)' },
+      desc: 'I dati del mob vengono salvati su disco. Usato per NPC persistenti che mantengono il loro stato tra i riavvii (es. negozianti con oro). (536870912)' },
     { value: 1073741824, label: 'Special',
-      desc: 'Il mobile ha una funzione speciale che deve essere sempre eseguita, anche se non ci sono giocatori nell\'area (es. sindaco). (1073741824)' }
+      desc: 'Il mob ha una funzione speciale che deve essere sempre eseguita, anche se non ci sono giocatori nell\'area (es. sindaco). (1073741824)' }
 ];
 
 /** Affect flags for mobile editor */
@@ -544,13 +567,13 @@ export const affFlagsData = [
     { value: 16, label: 'Detect Magic',
       desc: 'Il personaggio pu\u00f2 percepire le aure magiche su oggetti e creature. (16)' },
     { value: 32, label: 'Detect Hidden',
-      desc: 'Il personaggio pu\u00f2 rilevare creature nascoste (che si nascondono/furtano). (32)' },
+      desc: 'Il personaggio pu\u00f2 rilevare creature nascoste. (32)' },
     { value: 64, label: 'Hold',
       desc: 'Il personaggio \u00e8 trattenuto/paralizzato e non pu\u00f2 muoversi o agire. Normalmente impostato solo da abilit\u00e0 di combattimento, usare con cautela. (64)' },
     { value: 128, label: 'Sanctuary',
-      desc: 'Il personaggio \u00e8 protetto dal santuario. Tutti i danni vengono dimezzati. (128)' },
+      desc: 'Il personaggio \u00e8 protetto, tutti i danni vengono dimezzati. (128)' },
     { value: 256, label: 'Faerie Fire',
-      desc: 'Il personaggio \u00e8 delineato dalla faerie fire e non pu\u00f2 nascondersi. Rende anche vulnerabile a danni aggiuntivi. (256)' },
+      desc: 'Il personaggio non pu\u00f2 nascondersi. Rende anche vulnerabile a danni aggiuntivi. (256)' },
     { value: 512, label: 'Infrared',
       desc: 'Il personaggio ha l\'infravisione e pu\u00f2 vedere al buio. (512)' },
     { value: 1024, label: 'Curse',
@@ -560,19 +583,19 @@ export const affFlagsData = [
     { value: 8192, label: 'Protect',
       desc: 'Il personaggio \u00e8 protetto dal male. Gli attaccanti malvagi infliggono meno danni. (8192)' },
     { value: 32768, label: 'Sneak',
-      desc: 'Il personaggio si muove silenziosamente ed \u00e8 pi\u00f0 difficile da rilevare. I personaggi che si furtano non generano messaggi di movimento. (32768)' },
+      desc: 'Il personaggio si muove silenziosamente ed \u00e8 pi\u00f0 difficile da rilevare. (32768)' },
     { value: 65536, label: 'Hide',
       desc: 'Il personaggio \u00e8 nascosto e non pu\u00f2 essere visto senza detect hidden. Attaccare o muoversi rivela i personaggi nascosti. (65536)' },
     { value: 131072, label: 'Sleep',
       desc: 'Il personaggio \u00e8 magicamente addormentato e non pu\u00f2 agire. Il risveglio richiede danni o un incantesimo di risveglio. (131072)' },
     { value: 262144, label: 'Charm',
-      desc: 'Il personaggio \u00e8 incantato e obbedisce alla fonte dell\'incantesimo. I mob incantati seguono il loro padrone; i giocatori incantati perdono parte del controllo. Non impostare mai manualmente. (262144)' },
+      desc: 'Il personaggio \u00e8 incantato. I mob incantati seguono il loro padrone; i giocatori incantati perdono parte del controllo. Non impostare mai manualmente. (262144)' },
     { value: 524288, label: 'Flying',
-      desc: 'Il personaggio sta volando e pu\u00f2 attraversare acque/baratri. Fornisce anche l\'immunit\u00e0 alle trappole a terra. (524288)' },
+      desc: 'Il personaggio vola e pu\u00f2 attraversare acque/baratri. Fornisce anche l\'immunit\u00e0 alle trappole a terra. (524288)' },
     { value: 1048576, label: 'Pass Door',
       desc: 'Il personaggio pu\u00f2 attraversare porte chiuse e muri. (1048576)' },
     { value: 2097152, label: 'Waterwalk',
-      desc: '[NON UTILIZZATO] Contrassegnato come non utilizzato nel codice sorgente. (2097152)' },
+      desc: 'Non utilizzato. (2097152)' },
     { value: 8388608, label: 'Mute',
       desc: 'Il personaggio non pu\u00f2 lanciare incantesimi verbali o parlare. Blocca tutti gli incantesimi che richiedono componenti verbali. (8388608)' },
     { value: 16777216, label: 'Gills',
@@ -580,7 +603,7 @@ export const affFlagsData = [
     { value: 134217728, label: 'Flaming',
       desc: 'Il personaggio \u00e8 avvolto dalle fiamme. Infligge danni da fuoco agli attaccanti nel combattimento corpo a corpo. (134217728)' },
     { value: 536870912, label: 'Paralyzed',
-      desc: '[NON UTILIZZATO] Contrassegnato come non utilizzato nel codice sorgente. (536870912)' },
+      desc: 'Non utilizzato. (536870912)' },
     { value: 1073741824, label: 'Petrified',
       desc: 'Il personaggio \u00e8 stato trasformato in pietra (pietrificato). Immobilizza completamente il bersaglio. Pu\u00f2 essere curato con Stone to Flesh. (1073741824)' }
 ];
@@ -598,21 +621,21 @@ export const wearAffsData = [
     { value: 16, label: 'Detect Magic',
       desc: 'Il personaggio pu\u00f2 percepire le aure magiche su oggetti e creature. (16)' },
     { value: 32, label: 'Detect Hidden',
-      desc: 'Il personaggio pu\u00f2 rilevare creature nascoste (che si nascondono/furtano). (32)' },
+      desc: 'Il personaggio pu\u00f2 rilevare creature nascoste. (32)' },
     { value: 64, label: 'Hold',
       desc: 'Il personaggio \u00e8 trattenuto/paralizzato e non pu\u00f2 muoversi o agire. Normalmente impostato solo da abilit\u00e0 di combattimento, usare con cautela. (64)' },
     { value: 128, label: 'Sanctuary',
-      desc: 'Il personaggio \u00e8 protetto dal santuario. Tutti i danni vengono dimezzati. (128)' },
+      desc: 'Il personaggio \u00e8 protetto. Tutti i danni vengono dimezzati. (128)' },
     { value: 256, label: 'Faerie Fire',
-      desc: 'Il personaggio \u00e8 delineato dalla faerie fire e non pu\u00f2 nascondersi. Rende anche vulnerabile a danni aggiuntivi. (256)' },
+      desc: 'Il personaggio non pu\u00f2 nascondersi. Rende anche vulnerabile a danni aggiuntivi. (256)' },
     { value: 512, label: 'Infrared',
       desc: 'Il personaggio ha l\'infravisione e pu\u00f2 vedere al buio. (512)' },
     { value: 1024, label: 'Curse',
-      desc: 'Il personaggio \u00e8 maledetto. Impedisce il richiamo e riduce le statistiche. (1024)' },
+      desc: 'Il personaggio \u00e8 maledetto. Impedisce il ritorno e riduce le statistiche. (1024)' },
     { value: 8192, label: 'Protect',
       desc: 'Il personaggio \u00e8 protetto dal male. Gli attaccanti malvagi infliggono meno danni. (8192)' },
     { value: 32768, label: 'Sneak',
-      desc: 'Il personaggio si muove silenziosamente ed \u00e8 pi\u00f0 difficile da rilevare. I personaggi che si furtano non generano messaggi di movimento. (32768)' },
+      desc: 'Il personaggio si muove silenziosamente ed \u00e8 pi\u00f0 difficile da rilevare. (32768)' },
     { value: 65536, label: 'Hide',
       desc: 'Il personaggio \u00e8 nascosto e non pu\u00f2 essere visto senza detect hidden. Attaccare o muoversi rivela i personaggi nascosti. (65536)' },
     { value: 131072, label: 'Sleep',
@@ -622,7 +645,7 @@ export const wearAffsData = [
     { value: 1048576, label: 'Pass Door',
       desc: 'Il personaggio pu\u00f2 attraversare porte chiuse e muri. (1048576)' },
     { value: 2097152, label: 'Waterwalk',
-      desc: '[NON UTILIZZATO] Contrassegnato come non utilizzato nel codice sorgente. (2097152)' },
+      desc: 'Non utilizzato. (2097152)' },
     { value: 8388608, label: 'Mute',
       desc: 'Il personaggio non pu\u00f2 lanciare incantesimi verbali o parlare. Blocca tutti gli incantesimi che richiedono componenti verbali. (8388608)' },
     { value: 16777216, label: 'Gills',
@@ -674,84 +697,84 @@ export const itemTypeName = [
 ];
 
 export const itemExtraFlagsName = [
-    { label: "Luminoso",
-      desc: "L'oggetto emette un bagliore di luce morbida. Illumina la stanza quando portato o in una stanza. (1)" },
-    { label: "Rumoroso",
-      desc: "L'oggetto emette un suono di ronzio basso. Non pu\u00f2 essere usato efficacemente while nascondendosi o furtando. (2)" },
+    { label: "Glow",
+      desc: "L'oggetto emette un bagliore di luce morbida. Rende difficile nascondersi o rubare. (1)" },
+    { label: "Hum",
+      desc: "L'oggetto è rumoroso. Rende difficile nascondersi o rubare. (2)" },
     null, // ITEM_DARK unused (2)
     null, // ITEM_LOCK unused (3)
-    { label: "Malvagio",
-      desc: "L'oggetto irradia aure malvagie. I portatori dell'incantesimo Detect Evil vedranno brillare di rosso. Nessun effetto nel gioco. (16)" },
-    { label: "Invisibile",
+    { label: "Evil",
+      desc: "L'oggetto irradia un'aura malvagia. I portatori dell'incantesimo Detect Evil lo vedranno brillare di rosso. Effetto cosmetico. (16)" },
+    { label: "Invis",
       desc: "L'oggetto \u00e8 invisibile. Richiede Detect Invis per essere visto. (32)" },
-    { label: "Magico",
+    { label: "Magic",
       desc: "L'oggetto \u00e8 magico. Richiede Detect Magic per essere identificato. Pi\u00f0 resistente alla corrosione. (64)" },
-    { label: "Non lasciabile",
-      desc: "L'oggetto \u00e8 maledetto e non pu\u00f2 essere lasciato. Resta nell'inventario. Gli oggetti maledetti spesso hanno questo flag. (128)" },
-    { label: "Benedetto",
+    { label: "No drop",
+      desc: "L'oggetto \u00e8 maledetto e non pu\u00f2 essere lasciato. Resta nell'inventario. (128)" },
+    { label: "Bless",
       desc: "L'oggetto \u00e8 benedetto. Fornisce un bonus contro il male. Pi\u00f0 resistente alla corrosione. (256)" },
-    { label: "Anti Buoni",
-      desc: "I personaggi allineati al bene non possono indossare/maneggiare questo oggetto. (512)" },
-    { label: "Anti Malvagi",
-      desc: "I personaggi allineati al male non possono indossare/maneggiare questo oggetto. (1024)" },
-    { label: "Anti Neutrali",
-      desc: "I personaggi allineati alla neutralit\u00e0 non possono indossare/maneggiare questo oggetto. (2048)" },
-    { label: "Non rimuovibile",
+    { label: "Anti good",
+      desc: "I personaggi di allineamento buono non possono indossare/maneggiare questo oggetto. (512)" },
+    { label: "Anti evil",
+      desc: "I personaggi di allineamento malvagio non possono indossare/maneggiare questo oggetto. (1024)" },
+    { label: "Anti neutral",
+      desc: "I personaggi di allineamento neutrale non possono indossare/maneggiare questo oggetto. (2048)" },
+    { label: "No remove",
       desc: "L'oggetto \u00e8 maledetto e non pu\u00f2 essere rimosso una volta equipaggiato. (4096)" },
-    { label: "Inventario",
+    { label: "Inventory",
       desc: "Oggetto di negozio a quantit\u00e0 infinita, scompare quando il proprietario muore. Non impostare mai manualmente a meno che non si sia sicuri. (8192)" },
-    { label: "Avvelenato",
+    { label: "Poisoned",
       desc: "L'oggetto \u00e8 rivestito di veleno. Gli attacchi con quest'arma possono avvelenare il bersaglio. Normalmente impostato da abilit\u00e0 che danno anche un timer all'arma. Non impostare mai manualmente a meno che non si sia sicuri. (16384)" },
-    { label: "Scaccia Vampiri",
+    { label: "Vampire Bane",
       desc: "Quando impostato su un oggetto HOLD, efficace contro il morso dei vampiri. (32768)" },
-    { label: "Sacro",
+    { label: "Holy",
       desc: "L'oggetto \u00e8 consacrato e sacro. Causa piccoli danni quando raccolto. Quando impostato su un oggetto HOLD, efficace contro il morso dei vampiri. (65536)" },
-    { label: "Puo' Lanciare",
+    { label: "Can shoot",
       desc: "L'oggetto pu\u00f2 lanciare proiettili (archi, balestre). Deve essere maneggiato per sparare oggetti SHOOTABLE. (131072)" },
-    { label: "Puo' essere Lanciato",
+    { label: "Shootable",
       desc: "L'oggetto pu\u00f2 essere sparato da un'arma CAN_SHOOT. I proiettili con questo flag possono essere caricati e sparati. (262144)" },
-    { label: "Puo' essere Tirato",
+    { label: "Throwable",
       desc: "L'oggetto pu\u00f2 essere lanciato contro i nemici. Gestito come un attacco a distanza con il comando \"throw\". (524288)" },
-    { label: "Torna Indietro",
+    { label: "Boomerang style",
       desc: "Un oggetto lanciabile che torna al lanciatore. L'oggetto vola indietro dopo essere stato lanciato. (1048576)" },
-    { label: "Avvelenato Mortalmente",
+    { label: "Mortal poisoned",
       desc: "L'oggetto \u00e8 rivestito di veleno mortale. Gli attacchi con quest'arma possono avvelenare il bersaglio e possono essere letali. Normalmente impostato da abilit\u00e0 che danno anche un timer all'arma. Non impostare mai manualmente a meno che non si sia sicuri. (2097152)" },
-    { label: "Raro (Unico)",
+    { label: "Rare",
       desc: "L'oggetto \u00e8 raro e non pu\u00f2 uscire dal gioco. Deve essere tenuto in un deposito speciale o portato con s\u00e9. (4194304)" },
-    { label: "Puo' uscire dal gioco",
+    { label: "Can quit",
       desc: "Consente di far uscire dal gioco gli oggetti che normalmente non possono uscire (es. chiavi). (8388608)" },
-    { label: "Nascosto",
+    { label: "Hidden",
       desc: "L'oggetto \u00e8 nascosto nella stanza. Richiede un rilevamento speciale per essere trovato. (16777216)" },
-    { label: "Loggato",
-      desc: "Flag di registrazione per le azioni di presa/depoca dell'oggetto. Quando impostato, tutte le presi/depoca di questo oggetto vengono registrate. (33554432)" },
-    { label: "Immortale",
+    { label: "Logget",
+      desc: "Quando impostato, tutte le azioni su questo oggetto vengono registrate. (33554432)" },
+    { label: "Immortal",
       desc: "Solo i giocatori immortali possono prendere questo oggetto. I giocatori normali non possono raccoglierlo. (67108864)" },
-    { label: "Non localizzabile",
-      desc: "L'oggetto non pu\u00f2 essere trovato dall'incantesimo Locate Object. Fornisce nascondiglio magico dalla divinazione. (134217728)" },
+    { label: "No locate",
+      desc: "L'oggetto non pu\u00f2 essere trovato dall'incantesimo Locate Object. (134217728)" },
 ];
 
 export const itemWearFlagsName = [
-    { label: "Puo' essere raccolto", desc: "L'oggetto pu\u00f2 essere raccolto e portato. (1)" },
-    { label: "Alle Dita", desc: "Pu\u00f2 essere indossato a un dito (anelli). (2)" },
-    { label: "Al Collo", desc: "Pu\u00f2 essere indossato al collo (amuleti, collane). (4)" },
-    { label: "Sul Corpo", desc: "Pu\u00f2 essere indossato sul corpo (armature, abiti). (8)" },
-    { label: "Sulla Testa", desc: "Pu\u00f2 essere indossato sulla testa (elmi, corone). (16)" },
-    { label: "Sulle Gambe", desc: "Pu\u00f2 essere indossato sulle gambe (pantaloni, gambali). (32)" },
-    { label: "Ai Piedi", desc: "Pu\u00f2 essere indossato sui piedi (stivali, sandali). (64)" },
-    { label: "Sulle Mani", desc: "Pu\u00f2 essere indossato sulle mani (guanti, guantiacci). (128)" },
-    { label: "Sulle Braccia", desc: "Pu\u00f2 essere indossato sulle braccia (bracciali, vambraci). (256)" },
-    { label: "Come Scudo", desc: "Pu\u00f2 essere indossato come scudo. (512)" },
-    { label: "Attorno al Corpo", desc: "Pu\u00f2 essere indossato attorno al corpo (mantelli, cappucci). (1024)" },
-    { label: "Alla Vita", desc: "Pu\u00f2 essere indossato alla vita (cinture, fasce). (2048)" },
-    { label: "Sui Polsi", desc: "Pu\u00f2 essere indossato ai polsi (braccialetti, orologi). (4096)" },
-    { label: "Come Arma", desc: "Pu\u00f2 essere maneggiato come un'arma. (8192)" },
-    { label: "In Mano", desc: "Pu\u00f2 essere tenuto in mano (torce, libri, strumenti). (16384)" },
-    { label: "Sugli Occhi", desc: "Pu\u00f2 essere indossato sugli occhi (occhiali, maschere). (32768)" },
-    { label: "Sulle Spalle", desc: "Pu\u00f2 essere indossato sulle spalle (spallacci, mantelli). (65536)" },
-    { label: "Alle Orecchie", desc: "Pu\u00f2 essere indossato sulle orecchie (orecchini, spine). (131072)" },
-    { label: "Sulla Fronte", desc: "Pu\u00f2 essere indossato sulla fronte (bande per capelli, diademi). (262144)" },
-    { label: "Appuntato sul Petto", desc: "Pu\u00f2 essere indossato sul petto (spille, medaglioni). (524288)" },
-    { label: "Appeso al Fianco", desc: "Pu\u00f2 essere indossato al fianco (foderi, fondine). (1048576)" },
+    { label: "Take", desc: "L'oggetto pu\u00f2 essere raccolto e portato. (1)" },
+    { label: "Finger", desc: "Pu\u00f2 essere indossato a un dito (anelli). (2)" },
+    { label: "Neck", desc: "Pu\u00f2 essere indossato al collo (amuleti, collane). (4)" },
+    { label: "Body", desc: "Pu\u00f2 essere indossato sul corpo (armature, abiti). (8)" },
+    { label: "Head", desc: "Pu\u00f2 essere indossato sulla testa (elmi, corone). (16)" },
+    { label: "Legs", desc: "Pu\u00f2 essere indossato sulle gambe (pantaloni, gambali). (32)" },
+    { label: "Feet", desc: "Pu\u00f2 essere indossato sui piedi (stivali, sandali). (64)" },
+    { label: "Hands", desc: "Pu\u00f2 essere indossato sulle mani (guanti, guantiacci). (128)" },
+    { label: "Arms", desc: "Pu\u00f2 essere indossato sulle braccia (bracciali, vambraci). (256)" },
+    { label: "Shield", desc: "Pu\u00f2 essere indossato come scudo. (512)" },
+    { label: "About", desc: "Pu\u00f2 essere indossato attorno al corpo (mantelli, cappucci). (1024)" },
+    { label: "Waist", desc: "Pu\u00f2 essere indossato alla vita (cinture, fasce). (2048)" },
+    { label: "Wrist", desc: "Pu\u00f2 essere indossato ai polsi (braccialetti, orologi). (4096)" },
+    { label: "Wield", desc: "Pu\u00f2 essere maneggiato come un'arma. (8192)" },
+    { label: "Hold", desc: "Pu\u00f2 essere tenuto in mano (torce, libri, strumenti). (16384)" },
+    { label: "Eyes", desc: "Pu\u00f2 essere indossato sugli occhi (occhiali, maschere). (32768)" },
+    { label: "Shoulders", desc: "Pu\u00f2 essere indossato sulle spalle (spallacci, mantelli). (65536)" },
+    { label: "Ears", desc: "Pu\u00f2 essere indossato sulle orecchie (orecchini, spine). (131072)" },
+    { label: "Forehead", desc: "Pu\u00f2 essere indossato sulla fronte (bande per capelli, diademi). (262144)" },
+    { label: "Chest", desc: "Pu\u00f2 essere indossato sul petto (spille, medaglioni). (524288)" },
+    { label: "Side", desc: "Pu\u00f2 essere indossato al fianco (foderi, fondine). (1048576)" },
 ];
 
 export const applyName = [
@@ -1045,62 +1068,62 @@ export const itemTrapDamage = [
 ];
 
 export const areaFlagsName = [
-    "Nuovo formato",                // 1
-    "Nascosta",                     // 2
-    "Gilda",                        // 4
-    "Legale",                       // 8
+    "New format",                // 1
+    "Hidden",                     // 2
+    "Guild",                        // 4
+    "Lawful",                       // 8
     "Wilderness",                   // 16
-    "Sotterranea",                  // 32
-    "Nuovi Reset",                  // 64
+    "Underground",                  // 32
+    "New reset",                  // 64
     "",                             // 128
     "",                             // 256
     "",                             // 512
-    "Campo di Battaglia",           // 1024
-    "Campo Rotholha",               // 2048
-    "Reset Ritardato",              // 4096
+    "Battleground",           // 1024
+    "",               // 2048
+    "Delayed reset",              // 4096
 ];
 
 export const roomFlagsName = [
-    { label: "Buia",
-      desc: "La stanza \u00e8 buia. I personaggi senza infravisione non possono vedere. \u00c8 necessaria una fonte di luce per vedere nelle stanze buie. (1)" },
+    { label: "Dark",
+      desc: "La stanza \u00e8 buia. I personaggi senza infravisione non possono vedere senza una fonte di luce. (1)" },
     null, // bit 1 unused
-    { label: "Vietata ai Mob",
-      desc: "I mob (eccetto domestici incantati e guardie) non possono entrare in questa stanza. Usato per proteggere NPC di missione o zone sicure dall'intrusione dei mob. (4)" },
-    { label: "Interno",
+    { label: "No Mob",
+      desc: "I mob (eccetto charmed e guardie) non possono entrare in questa stanza. Usato per proteggere PNG di missione, fare in modo che i mob non escano da una zona, ecc. (4)" },
+    { label: "Inside",
       desc: "La stanza \u00e8 al chiuso. Gli effetti meteorologici non si applicano. (8)" },
-    { label: "Sotterranea",
+    { label: "Underground",
       desc: "La stanza \u00e8 sotterranea. Simile all'interno ma per grotte/dungeon. Previene gli effetti meteorologici e richiede fonti di luce. Previene i danni periodici ai vampiri. (16)" },
     null, // bit 5 (ROOM_LOG) not exposed in editor
-    { label: "NO Teleport",
-      desc: "Gli incantesimi e le abilit\u00e0 di teletrasporto non possono puntare o arrivare in questa stanza. Previene il bypass magico delle difese della stanza. (64)" },
-    { label: "Nebbiosa",
-      desc: "La stanza \u00e8 piena di nebbia. Riduce la precisione in combattimento e la visibilit\u00e0. Gli attacchi hanno la possibilit\u00e0 di mancare a causa della visibilit\u00e0 oscurata. (128)" },
-    { label: "NO Summon",
-      desc: "Gli incantesimi di invocazione non possono portare creature in questa stanza. Impedisce ai giocatori di evocare aiuti in aree protette. (256)" },
-    { label: "Privata",
+    { label: "No teleport",
+      desc: "Gli incantesimi e le abilit\u00e0 di teletrasporto non possono arrivare in questa stanza. (64)" },
+    { label: "Foggy",
+      desc: "La stanza \u00e8 piena di nebbia. Previene gli attacchi a distanza. (128)" },
+    { label: "No summon",
+      desc: "Gli incantesimi di invocazione non possono portare mob in questa stanza. Impedisce ai giocatori di evocare aiuti in aree protette. (256)" },
+    { label: "Private",
       desc: "Solo 2 personaggi possono essere in questa stanza alla volta. Usato per stanze di incontro private o aree di incontro speciali. (512)" },
-    { label: "Sicura",
+     { label: "Safe",
       desc: "Non \u00e8 consentito alcun combattimento in questa stanza. PvP e segnalazioni sono disabilitati. Le stanze sicure sono tipicamente templi o aree di apprendimento. (1024)" },
-    { label: "Solitaria",
+    { label: "Solitary",
       desc: "Solo 1 personaggio pu\u00f2 essere in questa stanza alla volta. Usato per aree di missione solitarie o camere personali. (2048)" },
-    { label: "Negozio di Animali",
-      desc: "La stanza funge da negozio di animali. I giocatori possono acquistare animali qui. La stanza dietro (sud) dovrebbe contenere gli animali disponibili. (4096)" },
-    { label: "NO Ritorno",
-      desc: "L'incantesimo Word of Recall non funziona in questa stanza. I personaggi non possono teletrasportarsi al loro tempio da qui. (8192)" },
+    { label: "Pet shop",
+      desc: "La stanza funge da negozio di animali. Una stanza non collegatai (vnum + 1) deve contenere gli animali disponibili. (4096)" },
+    { label: "No recall",
+      desc: "L'incantesimo Word of Recall non funziona in questa stanza. (8192)" },
     { label: "Cone Of Silence",
-      desc: "Un silenzio magico permea la stanza. Nessun incantesimo verbale pu\u00f2 essere lanciato. Impedisce anche il discorso tra i personaggi. (16384)" },
-    { label: "Deposito",
-      desc: "Gli oggetti a terra in questa stanza vengono salvati su disco. Gli oggetti lasciati qui persistono tra i riavvii (come le stanze di donazione). (32768)" },
-    { label: "Trappola Mortale",
-      desc: "I personaggi che entrano in questa stanza subiscono danni letali. Qualsiasi cosa entri (inclusi gli oggetti) viene distrutta. (65536)" },
-    { label: "NO Combattimento",
-      desc: "Non \u00e8 consentito alcun tipo di combattimento. Anche gli incantesimi vengono bloccati. Le guardie guarderanno i criminali ma non potranno attaccare. (131072)" },
-    { label: "Deposito contenitori",
-      desc: "Come Deposito ma salva solo oggetti non prendibili. Gli oggetti con il flag ITEM_TAKE non vengono salvati (per prevenire confusione). (262144)" },
-    { label: "Teatro",
-      desc: "La stanza \u00e8 un teatro, inviando tutti i messaggi ad altre stanze configurate in un oggetto fotocamera (obbligatorio) presente in questa stanza. (524288)" },
-    { label: "Spalti",
-      desc: "La stanza ha sedili da stadio/teatro. I personaggi seduti qui possono guardare gli eventi svolgersi. Previene parte dello spam e ferma i cambiamenti di cibo/sete. (1048576)" },
+      desc: "Un silenzio magico permea la stanza. Nessun incantesimo verbale pu\u00f2 essere lanciato. Impedisce anche le comunicazioni tra i personaggi. (16384)" },
+    { label: "Save",
+      desc: "Gli oggetti a terra in questa stanza persistono tra i riavvii (come le stanze di donazione). (32768)" },
+    { label: "Death Trap",
+      desc: "I personaggi che entrano in questa stanza subiscono danni letali. (65536)" },
+    { label: "No combat",
+      desc: "Non \u00e8 consentito alcun tipo di combattimento. Le guardie guarderanno i criminali ma non potranno attaccare. (131072)" },
+    { label: "Mini save",
+      desc: "Come Save, ma salva solo oggetti non prendibili. Gli oggetti con il flag ITEM_TAKE non vengono salvati. (262144)" },
+    { label: "Theater",
+      desc: "La stanza \u00e8 un teatro, inviando tutti i messaggi ad altre stanze configurate in un oggetto ITEM_CAMERA (obbligatorio) presente in questa stanza. (524288)" },
+    { label: "Seats",
+      desc: "La stanza ha sedili da stadio/teatro, generalmente obiettivo di un ITEM_CAMERA. I personaggi seduti qui possono guardare gli eventi svolgersi. Previene parte dello spam e ferma i cambiamenti di cibo/sete. (1048576)" },
 ];
 
 export const sectTypeName = [
@@ -1132,29 +1155,29 @@ export const doorResetName = [
 
 export const exitFlagsName = [
     { value: EX_ISDOOR,     label: "E' una porta",
-      desc: "L'uscita \u00e8 una porta. Necessario per qualsiasi comportamento legato alle porte. Senza questo flag, l'uscita \u00e8 solo un passaggio aperto. (1)" },
+      desc: "L'uscita \u00e8 una porta. Senza questo flag, l'uscita \u00e8 solo un passaggio aperto. (1)" },
     { value: EX_CLOSED,     label: "Chiusa",
-      desc: "La porta \u00e8 chiusa. I personaggi non possono passare. Pu\u00f2 essere aperta con il comando \"open\" o con la forza. (2)" },
+      desc: "La porta \u00e8 chiusa. Pu\u00f2 essere aperta con il comando \"apri\" o con la forza. (2)" },
     { value: EX_LOCKED,     label: "Bloccata",
-      desc: "La porta \u00e8 bloccata. Richiede una chiave o grimaldello per essere aperta. I personaggi non possono aprirla senza la chiave corretta o l'abilit\u00e0. (4)" },
+      desc: "La porta \u00e8 bloccata. I personaggi non possono aprirla senza la chiave corretta o l'abilit\u00e0 Pick Lock. (4)" },
     { value: EX_BASHED,     label: "Sfondata",
-      desc: "La stata stata sfondata con la forza. Resta aperta fino a quando non riparata da un NPC riparatore. (8)" },
+      desc: "La stata stata sfondata con la forza. Resta aperta fino a quando non riparata da un mob riparatore. (8)" },
     { value: EX_BASHPROOF,  label: "Non sfondabile",
-      desc: "La porta non pu\u00f2 essere sfondata. Resiste a tutti i tentativi di forza bruta. Solo il scassinamento o le chiavi possono aprire questa porta. (16)" },
+      desc: "La porta non pu\u00f2 essere sfondata. Resiste a tutti i tentativi di forza bruta. Solo lo scassinamento o le chiavi possono aprire questa porta. (16)" },
     { value: EX_PICKPROOF,  label: "Non forzabile",
-      desc: "La porta non pu\u00f2 essere forzata con i grimaldelli. Solo la chiave corretta pu\u00f2 aprire questa porta. (32)" },
+      desc: "La porta non pu\u00f2 essere forzata con Pick Lock. Solo la chiave corretta o lo sfondamento possono aprire questa porta. (32)" },
     { value: EX_PASSPROOF,  label: "Non attraversabile",
-      desc: "La porta non pu\u00f2 essere attraversata magicamente. L'incantesimo Pass Door e simili effetti non funzionano su questa porta. (64)" },
+      desc: "La porta non pu\u00f2 essere attraversata magicamente. (64)" },
     { value: EX_HIDDEN,     label: "Nascosta",
-      desc: "L'uscita \u00e8 nascosta e non \u00e8 visibile nelle descrizioni della stanza. I personaggi devono trovarla attraverso la ricerca o mezzi speciali. (128)" },
+      desc: "L'uscita \u00e8 nascosta e non \u00e8 visibile nelle descrizioni della stanza. I personaggi devono trovarla attraverso la ricerca. (128)" },
     { value: EX_NOUN_MALE,  label: "Nome maschile",
-      desc: "La porta usa le forme dei sostantivi maschili italiani. Influenzà l'uso degli articoli in italiano (il/la, un/una). (256)" },
+      desc: "La porta usa le forme dei sostantivi maschili. Utili per la grammatica dei messaggi. (256)" },
     { value: EX_WINDOW,     label: "E' una finestra",
-      desc: "L'uscita \u00e8 una finestra, non una porta. Non pu\u00f2 essere sfondata o bloccata come una porta normale. Ha una meccanica speciale di guardare attraverso. (512)" },
+      desc: "L'uscita \u00e8 una finestra, non una porta, quindi non attraversabile. Ha una meccanica speciale quando viene esaminata. (512)" },
     { value: EX_HEAVY,      label: "Resistente",
-      desc: "[NON UTILIZZATO] La porta \u00e8 pi\u00f0 pesante e difficile da sfondare. Contrassegnato come non ancora implementato nel sorgente. (1024)" },
+      desc: "[NON UTILIZZATO] La porta \u00e8 pi\u00f0 pesante e difficile da sfondare. (1024)" },
     { value: EX_COMPLEX,    label: "Serr. Complessa",
-      desc: "[NON UTILIZZATO] La porta ha un meccanismo di serratura complesso. Contrassegnato come non ancora implementato nel sorgente. (2048)" },
+      desc: "[NON UTILIZZATO] La porta ha un meccanismo di serratura complesso. (2048)" },
 ];
 
 export const wearName = [
@@ -1386,41 +1409,41 @@ export const spells = [
 
 export const mobSpecFuncs = [
     { value: '', label: '-- None --', desc: '' },
-    { value: 'spec_breath_any', label: 'spec_breath_any', desc: 'Attacco di alito di drago. Seleziona casualmente un tipo di alito durante il combattimento.' },
-    { value: 'spec_breath_acid', label: 'spec_breath_acid', desc: 'Il drago sputa acido. Infligge danni da acido al bersaglio.' },
-    { value: 'spec_breath_fire', label: 'spec_breath_fire', desc: 'Il drago sputa fuoco. Infligge danni da fuoco al bersaglio.' },
-    { value: 'spec_breath_frost', label: 'spec_breath_frost', desc: 'Il drago sputa ghiaccio. Infligge danni da freddo al bersaglio.' },
-    { value: 'spec_breath_gas', label: 'spec_breath_gas', desc: 'Il drago sputa gas velenoso. Danni ad area.' },
-    { value: 'spec_breath_lightning', label: 'spec_breath_lightning', desc: 'Il drago sputa fulmini. Infligge danni elettrici.' },
-    { value: 'spec_cast_adept', label: 'spec_cast_adept', desc: 'Lancia incantesimi utili sui giocatori di basso livello (armatura, benedizione, cura leggera, ecc). Punta solo i giocatori sotto il livello 5.' },
-    { value: 'spec_cast_cleric', label: 'spec_cast_cleric', desc: 'Lancia incantesimi da clerico. Si cura quando ferito, si buffa quando inattivo, attacca con incantesimi offensivi.' },
+    { value: 'spec_breath_any', label: 'spec_breath_any', desc: 'Seleziona casualmente un tipo di soffio di drago durante il combattimento.' },
+    { value: 'spec_breath_acid', label: 'spec_breath_acid', desc: 'Il drago sputa acido. Infligge danni ed effetti da acido al bersaglio.' },
+    { value: 'spec_breath_fire', label: 'spec_breath_fire', desc: 'Il drago sputa fuoco. Infligge danni ed effetti da fuoco al bersaglio.' },
+    { value: 'spec_breath_frost', label: 'spec_breath_frost', desc: 'Il drago sputa ghiaccio. Infligge danni ed effetti da freddo al bersaglio.' },
+    { value: 'spec_breath_gas', label: 'spec_breath_gas', desc: 'Il drago sputa gas velenoso. Danni ed effetti ad area.' },
+    { value: 'spec_breath_lightning', label: 'spec_breath_lightning', desc: 'Il drago sputa fulmini. Infligge danni elettrici al bersaglio.' },
+    { value: 'spec_cast_adept', label: 'spec_cast_adept', desc: 'Lancia incantesimi utili sui giocatori di basso livello (armatura, benedizione, cura leggera, ecc). Punta solo i giocatori sotto il livello 13.' },
+    { value: 'spec_cast_cleric', label: 'spec_cast_cleric', desc: 'Lancia incantesimi da clerico. Si cura quando ferito, si protegge quando inattivo, attacca con incantesimi offensivi.' },
     { value: 'spec_cast_ghost', label: 'spec_cast_ghost', desc: 'Lancia incantesimi da non morto ma viene distrutto dalla luce del sole.' },
     { value: 'spec_cast_judge', label: 'spec_cast_judge', desc: 'Lancia high explosive sul bersaglio durante il combattimento.' },
-    { value: 'spec_cast_mage', label: 'spec_cast_mage', desc: 'Lancia incantesimi da mago. Si buffa e attacca con magia offensiva.' },
-    { value: 'spec_cast_psionicist', label: 'spec_cast_psionicist', desc: 'Usa poteri psionici per cura, buff e attacchi.' },
-    { value: 'spec_cast_undead', label: 'spec_cast_undead', desc: 'Lancia incantesimi a tema non morto: maledizione, indebolimento, tocco gelido, cecit\u00e0, ecc.' },
-    { value: 'spec_cast_anidead', label: 'spec_cast_anidead', desc: 'Lancia incantesimi anti-morto: causa leggera/seria/critica, maledizione, indebolimento, ecc.' },
-    { value: 'spec_executioner', label: 'spec_executioner', desc: 'Attacca i criminali (PLR_KILLER, PLR_THIEF) a vista. Urla allarme e chiama le guardie.' },
-    { value: 'spec_fido', label: 'spec_fido', desc: 'Divora i cadaveri degli NPC a terra, spargendo gli oggetti sul pavimento.' },
-    { value: 'spec_guard', label: 'spec_guard', desc: 'Guardia cittadina. Attacca i criminali, difende dal male, avverte sulle armi in aree legali.' },
-    { value: 'spec_janitor', label: 'spec_janitor', desc: 'Pulisce la spazzatura da terra. Raccoglie contenitori per bevande, trash e oggetti economici.' },
-    { value: 'spec_mayor', label: 'spec_mayor', desc: 'Segue una routine quotidiana, aprendo/chiudendo le porte della citt\u00e0. Lancia incantesimi da clerico durante il combattimento. Riservato.' },
-    { value: 'spec_poison', label: 'spec_poison', desc: 'Avvelena il bersaglio con un attacco di morso durante il combattimento.' },
+    { value: 'spec_cast_mage', label: 'spec_cast_mage', desc: 'Lancia incantesimi da mago. Si protegge e attacca con magia offensiva.' },
+    { value: 'spec_cast_psionicist', label: 'spec_cast_psionicist', desc: 'Usa poteri psionici per cura, protezione e attacchi.' },
+    { value: 'spec_cast_undead', label: 'spec_cast_undead', desc: 'Lancia incantesimi da non-morto: maledizione, indebolimento, tocco gelido, cecit\u00e0, ecc. Se vampiro, usa vampiric bite.' },
+    { value: 'spec_cast_anidead', label: 'spec_cast_anidead', desc: 'Usato su mob Animate Dead dei chierici malvagi. Lancia incantesimi come cause light/serious/critical, curse, energy drain, ecc.' },
+    { value: 'spec_executioner', label: 'spec_executioner', desc: 'Attacca i criminali (PLR_KILLER, PLR_THIEF) a vista. Chiama le guardie se presenti nell\'area.' },
+    { value: 'spec_fido', label: 'spec_fido', desc: 'Divora i cadaveri dei mob a terra, spargendo gli oggetti sul pavimento.' },
+    { value: 'spec_guard', label: 'spec_guard', desc: 'Guardia cittadina. Attacca i criminali, difende dal male, avverte sulle armi in aree legali, interagisce con la reputazione dei personaggi.' },
+    { value: 'spec_janitor', label: 'spec_janitor', desc: 'Pulisce la spazzatura da terra. Raccoglie contenitori per bevande, oggetti spazzatura ed oggetti economici.' },
+    { value: 'spec_mayor', label: 'spec_mayor', desc: 'Segue una routine quotidiana, aprendo/chiudendo le porte della citt\u00e0. Lancia incantesimi da chierico durante il combattimento. Riservato.' },
+    { value: 'spec_poison', label: 'spec_poison', desc: 'Avvelena il bersaglio con un attacco di tipo morso durante il combattimento.' },
     { value: 'spec_repairman', label: 'spec_repairman', desc: 'Ripara le porte sfondate. Controlla direzioni casuali per uscite sfondate e le ripristina.' },
-    { value: 'spec_thief', label: 'spec_thief', desc: 'Ruba oro dai giocatori e usa l\'abilit\u00e0 trappola nel combattimento.' },
-    { value: 'spec_cast_beholder', label: 'spec_cast_beholder', desc: 'Lancia incantesimi specifici del beholder: incantesimo, sonno, telecinesi, carne a pietra, dissoluzione, ecc.' },
-    { value: 'spec_cast_medusa', label: 'spec_cast_medusa', desc: 'Lancia incantesimi a tema medusa: presa scioccante, tocco gelido, esplosione di acido, paura, carne a pietra.' },
+    { value: 'spec_thief', label: 'spec_thief', desc: 'Ruba oro dai giocatori e usa l\'abilit\u00e0 Snare nel combattimento.' },
+    { value: 'spec_cast_beholder', label: 'spec_cast_beholder', desc: 'Lancia incantesimi specifici del beholder: charm, sleep, telekinesis, flesh to stop, disintegrate, ecc.' },
+    { value: 'spec_cast_medusa', label: 'spec_cast_medusa', desc: 'Lancia incantesimi a tema medusa: flesh to stone, chill touch, acid blast, fear, curse, ecc.' },
     { value: 'spec_hunter', label: 'spec_hunter', desc: 'Bracca i criminali ricercati usando una lista di ricercati. Insegue i bersagli attraverso le stanze. Riservato.' },
     { value: 'spec_gate_repair', label: 'spec_gate_repair', desc: 'Segue un percorso per riparare le porte della citt\u00e0. Simile a spec_mayor ma focalizzato sulle porte. Riservato.' },
-    { value: 'spec_assassin', label: 'spec_assassin', desc: 'Assassina i bersagli con un colpo alla schiena dalla nascondiglio. Pu\u00f2 uccidere istantaneamente se la differenza di livello \u00e8 grande.' },
+    { value: 'spec_assassin', label: 'spec_assassin', desc: 'Assassina i bersagli con un colpo alla schiena dalla nascondiglio. Pu\u00f2 uccidere istantaneamente se la differenza di livello \u00e8 grande. Ha bisogno di armi con danno di tipo Pierce.' },
     { value: 'spec_bowman', label: 'spec_bowman', desc: 'Usa attacchi a distanza con armi arco/balestra. Guarda direzioni casuali per bersagli.' },
 ];
 
 export const objSpecFuncs = [
     { value: '', label: '-- None --', desc: '' },
-    { value: 'obj_spec_guillotine', label: 'obj_spec_guillotine', desc: 'Un oggetto arredamento che decapita le vittime quando attivato. Riservato, non usare.' },
-    { value: 'obj_spec_cauldron', label: 'obj_spec_cauldron', desc: 'Un contenitore che cuoce i cadaveri degli NPC in stufato. Riservato, non usare.' },
-    { value: 'obj_spec_event_heroes', label: 'obj_spec_event_heroes', desc: 'Attiva una sequenza di eventi eroici predefinita. Riservato, non usare.' },
+    { value: 'obj_spec_guillotine', label: 'obj_spec_guillotine', desc: 'Un oggetto arredamento che decapita le vittime quando attivato. Riservato.' },
+    { value: 'obj_spec_cauldron', label: 'obj_spec_cauldron', desc: 'Un contenitore che cuoce i cadaveri degli NPC in stufato. Riservato.' },
+    { value: 'obj_spec_event_heroes', label: 'obj_spec_event_heroes', desc: 'Attiva una sequenza di eventi per celebrare antichi eroi. Riservato.' },
 ];
 
 export const dirName = ["a NORD", "a EST", "a SUD", "a OVEST", "in ALTO", "in BASSO"];
