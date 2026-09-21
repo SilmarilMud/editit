@@ -897,7 +897,14 @@
     line-height: 1.4;
 }
 
-.tidy-btn:hover:not(:disabled) {
+@media (hover: hover) and (pointer: fine) {
+    .tidy-btn:hover:not(:disabled) {
+        background: var(--pico-muted-color);
+        color: var(--pico-background);
+    }
+}
+
+.tidy-btn:active:not(:disabled) {
     background: var(--pico-muted-color);
     color: var(--pico-background);
 }
