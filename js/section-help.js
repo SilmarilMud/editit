@@ -66,14 +66,14 @@ const SECTION_HELP_TEXT = {
         title: 'Impostazioni Area',
         text: `Questa è la scheda delle impostazioni generali dell'area. Da qui puoi configurare:
 
-**Area name e Author** — I nomi indicati compaiono nel comando \`aree\`.
-**Starting VNum** — Questo numero va concordato con gli Antichi.
-**Recall VNum** — E' la stanza in cui vanno i giocatori che usano ritorna. Usa \`0\` se non serve.
-**Level Range** — Il livello minimo e massimo consigliato per questa area, mostrato nel comando \`aree\`. Indica la difficoltà, in genere dipende dai livello minimo e massimo dei mob creati.
-**Plane** — Il piano dimensionale dell'area.
+**Area name e Author** - I nomi indicati compaiono nel comando \`aree\`.
+**Starting VNum** - Questo numero va concordato con gli Antichi.
+**Recall VNum** - E' la stanza in cui vanno i giocatori che usano ritorna. Usa \`0\` se non serve.
+**Level Range** - Il livello minimo e massimo consigliato per questa area, mostrato nel comando \`aree\`. Indica la difficoltà, in genere dipende dai livello minimo e massimo dei mob creati.
+**Plane** - Il piano dimensionale dell'area.
 **Music File** - Nome dell'eventuale file colonna sonora dell'area.
 **Reset Message** - Messaggio opzionale che compare quando l'area si rinnova.
-**Area Flags** — Muovi il cursore sui nomi (o selezionali su cellulare) per mostrare la descrizione.`
+**Area Flags** - Muovi il cursore sui nomi (o selezionali su cellulare) per mostrare la descrizione.`
     },
 
     'rooms-stats': {
@@ -81,9 +81,9 @@ const SECTION_HELP_TEXT = {
         title: 'Statistiche Stanze',
         text: `Panoramica di tutte le stanze dell'area.
 
-- **Creare stanze** — Clicca col tasto destro su **Rooms** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** una stanza.
-- **With description** — Il numero di stanze senza descrizione (empty) deve essere 0.
-- **By sector type** — Sommario della distribuzione delle stanze per ambiente
+- **Creare stanze** - Clicca col tasto destro su **Rooms** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** una stanza.
+- **With description** - Il numero di stanze senza descrizione (empty) deve essere 0.
+- **By sector type** - Sommario della distribuzione delle stanze per ambiente
 
 Seleziona una stanza nell'albero a sinistra per aprirla e modificarla.`
     },
@@ -93,11 +93,11 @@ Seleziona una stanza nell'albero a sinistra per aprirla e modificarla.`
         title: 'Statistiche Mob',
         text: `Panoramica di tutti i mob dell'area.
 
-- **Creare mob** — Clicca col tasto destro su **Mobiles** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** un mob.
-- **Average level** — Livello medio dei mob, con il range minimo e massimo per verificare se il livello indicato per l'area è corretto.
-- **Total gold** — La somma dell'oro posseduto da tutti i mob dell'area. Il valore dovrebbe essere concordato per evitare sbilanciamenti all'economia.
-- **Shopkeepers** — Numero dei mob configurati come negozianti.
-- **With specials** — Numero dei mob a cui è associata una procedura speciale.
+- **Creare mob** - Clicca col tasto destro su **Mobiles** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** un mob.
+- **Average level** - Livello medio dei mob, con il range minimo e massimo per verificare se il livello indicato per l'area è corretto.
+- **Total gold** - La somma dell'oro posseduto da tutti i mob dell'area. Il valore dovrebbe essere concordato per evitare sbilanciamenti all'economia.
+- **Shopkeepers** - Numero dei mob configurati come negozianti.
+- **With specials** - Numero dei mob a cui è associata una procedura speciale.
 - **By Alignment** - Distribuzione del numero di mob per allineamento.
 
 Seleziona un mob nell'albero a sinistra per aprirlo e modificarlo.`
@@ -108,10 +108,10 @@ Seleziona un mob nell'albero a sinistra per aprirlo e modificarlo.`
         title: 'Statistiche Oggetti',
         text: `Panoramica di tutti gli oggetti dell'area.
 
-- **Creare oggetti** — Clicca col tasto destro su **Objects** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** un oggetto.
-- **Average weight** — Peso totale e medio degli oggetti creati.
-- **Average cost** — Costo totale e medio degli oggetti creati.
-- **By Type** — Distribuzione degli oggetti per categoria.
+- **Creare oggetti** - Clicca col tasto destro su **Objects** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** un oggetto.
+- **Average weight** - Peso totale e medio degli oggetti creati.
+- **Average cost** - Costo totale e medio degli oggetti creati.
+- **By Type** - Distribuzione degli oggetti per categoria.
 
 Seleziona un oggetto nell'albero a sinistra per aprirlo e modificarlo.`
     },
@@ -121,7 +121,7 @@ Seleziona un oggetto nell'albero a sinistra per aprirlo e modificarlo.`
         title: 'Statistiche Help',
         text: `Panoramica di tutte le voci di help dell'area.
 
-- **Creare help** — Clicca col tasto destro su **Helps** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** una voce di help.
+- **Creare help** - Clicca col tasto destro su **Helps** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** una voce di help.
 
 Le voci di help vengono mostrate ai giocatori quando usano il comando \`aiuto\`. Ogni voce ha un livello minimo e una lista di keyword che ne determinano l'attivazione. Seleziona un help nell'albero a sinistra per aprirlo e modificarlo.`
     },
@@ -131,10 +131,10 @@ Le voci di help vengono mostrate ai giocatori quando usano il comando \`aiuto\`.
         title: 'Statistiche Negozi',
         text: `Panoramica di tutti i negozi dell'area.
 
-- **Creare negozio** — I negozi vengono creato attivando il box **Is Shop Keeper** nel tab **Shop** di un mob.
-- **Total Shops** — Numero di negozianti nell'area.
-- **Avg Profit Buy/Sell** — Percentuali medie di acquisto e vendita.
-- **Opening hours** — Ore della giornata in cui i negozi sono aperti.
+- **Creare negozio** - I negozi vengono creato attivando il box **Is Shop Keeper** nel tab **Shop** di un mob.
+- **Total Shops** - Numero di negozianti nell'area.
+- **Avg Profit Buy/Sell** - Percentuali medie di acquisto e vendita.
+- **Opening hours** - Ore della giornata in cui i negozi sono aperti.
 
 Seleziona un negozio nell'albero a sinistra per aprirlo e modificarlo. Se vuoi rimuovere un negozio, disattiva il box **Is Shop Keeper** nei dettagli del mob corrispondente.`
     },
@@ -144,13 +144,13 @@ Seleziona un negozio nell'albero a sinistra per aprirlo e modificarlo. Se vuoi r
         title: 'Reset Area',
         text: `I reset controllano cosa viene generato automaticamente nell'area quando viene caricata o quando l'area si rigenera.
 
-- **M** (Mobile) — Posiziona un mob in una stanza.
-- **O** (Object) — Posiziona un oggetto in una stanza.
-- **G** (Give) — Mette un oggetto nell'inventario di un mob.
-- **E** (Equip) — Equipaggia un oggetto su un mob.
-- **P** (Put) — Mette un oggetto dentro un contenitore (altro oggetto).
-- **D** (Door) — Imposta lo stato di una porta.
-- **R** (Room) — Rende casuale la connessione tra le stanze (labirinti). Usato raramente.
+- **M** (Mobile) - Posiziona un mob in una stanza.
+- **O** (Object) - Posiziona un oggetto in una stanza.
+- **G** (Give) - Mette un oggetto nell'inventario di un mob.
+- **E** (Equip) - Equipaggia un oggetto su un mob.
+- **P** (Put) - Mette un oggetto dentro un contenitore (altro oggetto).
+- **D** (Door) - Imposta lo stato di una porta.
+- **R** (Room) - Rende casuale la connessione tra le stanze (labirinti). Usato raramente.
 
 **Nota:** i mob e gli oggetti devono essere definiti prima di poterli usare nei reset.`
     },
@@ -209,9 +209,9 @@ Gli oggetti vengono posizionati nell'area o addosso ai mob tramite i **Reset**.`
         title: 'Voce Help',
         text: `Questa è una voce della guida del gioco. Da qui puoi modificare:
 
-- **Level** — Livello minimo richiesto per consultare questa voce (0 = tutti)
-- **Keyword** — Lista parole chiave che i giocatori usano con il comando \`aiuto\`.
-- **Text** — Contenuto della voce dell'help.
+- **Level** - Livello minimo richiesto per consultare questa voce (0 = tutti)
+- **Keyword** - Lista parole chiave che i giocatori usano con il comando \`aiuto\`.
+- **Text** - Contenuto della voce dell'help.
 
 Le keyword sono separate da spazi. Quando un giocatore digita \`aiuto <keyword>\`, il MUD cerca la voce con la keyword più lunga che corrisponde.
 
@@ -224,8 +224,8 @@ Le keyword sono separate da spazi. Quando un giocatore digita \`aiuto <keyword>\
         text: `Questa è la scheda di un negozio. Da qui puoi configurare:
 
 - **Trade Types** - Lista del tipo di merci.
-- **Profit buy/sell** — Percentuali di acquisto e vendita rispetto al valore originale dell'oggetto. Generalmente nessun negoziante vende con un buon margine!  (100 = prezzo pieno)
-- **Open/Clouse Hour** — Orario di apertura di un negozio (0-23)
+- **Profit buy/sell** - Percentuali di acquisto e vendita rispetto al valore originale dell'oggetto. Generalmente nessun negoziante vende con un buon margine!  (100 = prezzo pieno)
+- **Open/Clouse Hour** - Orario di apertura di un negozio (0-23)
 
 Un negoziante è un mob con la proprietà "Shop Keeper" attiva. Il mob deve esistere prima di poter configurare il suo negozio.
 
