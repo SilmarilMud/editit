@@ -264,7 +264,26 @@ Per rimuovere un negozio, disattiva la proprietà "Negziante" nella scheda del m
  *
  * @param {string} sectionId - Section identifier (e.g., 'area', 'resets')
  */
+const STORAGE_KEY = 'editit-section-help-enabled';
+
+/**
+ * Check if section help tips are enabled.
+ * @returns {boolean}
+ */
+export function isSectionHelpEnabled() {
+    return localStorage.getItem(STORAGE_KEY) !== 'false';
+}
+
+/**
+ * Enable or disable section help tips.
+ * @param {boolean} enabled
+ */
+export function setSectionHelpEnabled(enabled) {
+    localStorage.setItem(STORAGE_KEY, enabled ? 'true' : 'false');
+}
+
 export function showSectionHelp(sectionId) {
+    if (!isSectionHelpEnabled()) return;
     const help = SECTION_HELP_TEXT[sectionId];
     if (!help) return;
 

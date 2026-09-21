@@ -60,7 +60,7 @@ import { renderResetPanel } from './reset-panel.js';
 import { renderShopForm } from './shop-form.js';
 import { renderSpecialsPanel } from './specials-panel.js';
 import { renderStatsPanel } from './stats-panel.js';
-import { showSectionHelp } from './section-help.js';
+import { showSectionHelp, isSectionHelpEnabled, setSectionHelpEnabled } from './section-help.js';
 import { showToast, getMobByVNum, getObjByVNum, getRoomByVNum, escapeHtml } from './utils.js';
 import {
     validateAll,
@@ -2404,6 +2404,21 @@ async function init() {
     // Setup tree toolbar buttons
     document.getElementById('btn-expand-all')?.addEventListener('click', expandAll);
     document.getElementById('btn-collapse-all')?.addEventListener('click', collapseAll);
+    
+    // Setup section help toggle
+    const helpToggle = document.getElementById('btn-toggle-help');
+    if (helpToggle) {
+        const updateHelpBtn = () => {
+            const enabled = isSectionHelpEnabled();
+            helpToggle.classList.toggle('help-off', !enabled);
+            helpToggle.title = enabled ? 'Hide section help tips' : 'Show section help tips';
+        };
+        updateHelpBtn();
+        helpToggle.addEventListener('click', () => {
+            setSectionHelpEnabled(!isSectionHelpEnabled());
+            updateHelpBtn();
+        });
+    }
     
     // Setup keyboard shortcuts
     document.addEventListener('keydown', (e) => {

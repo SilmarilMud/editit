@@ -499,6 +499,10 @@
     font-size: 0.875rem;
 }
 
+#btn-toggle-help.help-off {
+    opacity: 0.4;
+}
+
 #tree {
     flex: 1;
     overflow-y: auto;
