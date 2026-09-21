@@ -310,6 +310,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeBtn) {
         closeBtn.addEventListener('click', () => dialog.close());
     }
+
+    // Prevent mouse wheel from changing number input values
+    document.addEventListener('wheel', (e) => {
+        if (e.target.type === 'number' && !e.target.disabled) {
+            e.preventDefault();
+        }
+    }, { passive: false });
 });
 
 /**

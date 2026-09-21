@@ -310,13 +310,13 @@ class Parser {
                 general.racMinLev = parseInt(parts[0], 10) || 0;
                 general.racMaxLev = parseInt(parts[1], 10) || 50;
             }
-            if (general.racMinLev < 0 || general.racMinLev > 100) {
-                console.warn(`LoadArea: racMinLev ${general.racMinLev} out of range [0, 100], clamping`);
-                general.racMinLev = clamp(general.racMinLev, 0, 100);
+            if (general.racMinLev < 1 || general.racMinLev > 50) {
+                console.warn(`LoadArea: racMinLev ${general.racMinLev} out of range [1, 50], clamping`);
+                general.racMinLev = clamp(general.racMinLev, 1, 50);
             }
-            if (general.racMaxLev < 0 || general.racMaxLev > 100) {
-                console.warn(`LoadArea: racMaxLev ${general.racMaxLev} out of range [0, 100], clamping`);
-                general.racMaxLev = clamp(general.racMaxLev, 0, 100);
+            if (general.racMaxLev < 1 || general.racMaxLev > 50) {
+                console.warn(`LoadArea: racMaxLev ${general.racMaxLev} out of range [1, 50], clamping`);
+                general.racMaxLev = clamp(general.racMaxLev, 1, 50);
             }
         }
         

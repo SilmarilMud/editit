@@ -88,14 +88,14 @@ export function renderMobileForm(mob, onChange, options = {}) {
         <div class="form-tab-content" data-tab="combat">
             <div class="form-row">
                 <div class="form-section">
-                    <label>Level</label>
+                    <label>Level <span class="hint">(0 - 100)</span></label>
                     <input type="number" name="level" value="${mob.level}" 
                            min="1" max="87"
                            ${readonly ? 'disabled' : ''}>
                 </div>
                 
                 <div class="form-section">
-                    <label>Alignment <span class="hint">(${getAlignLabel(mob.align)})</span></label>
+                    <label>Alignment <span class="hint">(-1000 - 1000)</span></label>
                     <input type="number" name="align" value="${mob.align}" 
                            min="-1000" max="1000"
                            ${readonly ? 'disabled' : ''}>
@@ -111,7 +111,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
                 </div>
                 
                 <div class="form-section">
-                    <label>Reputation</label>
+                    <label>Reputation <span class="hint">(-1000 - 1000)</span></label>
                     <input type="number" name="reputation" value="${mob.reputation}" 
                            min="-1000" max="1000"
                            ${readonly ? 'disabled' : ''}>
@@ -165,30 +165,30 @@ export function renderMobileForm(mob, onChange, options = {}) {
                 
                 <div class="form-row">
                     <div class="form-section">
-                        <label>Profit Buy (%) <span class="hint">(buying from players)</span></label>
+                        <label>Profit Buy (%) <span class="hint">(10 - 200)</span></label>
                         <input type="number" name="profitBuy" value="${mob.profitBuy}" 
-                               min="1" max="1000000"
+                               min="10" max="200"
                                ${readonly ? 'disabled' : ''}>
                     </div>
                     
                     <div class="form-section">
-                        <label>Profit Sell (%) <span class="hint">(selling to players)</span></label>
+                        <label>Profit Sell (%) <span class="hint">(10 - 200)</span></label>
                         <input type="number" name="profitSell" value="${mob.profitSell}" 
-                               min="1" max="1000000"
+                               min="10" max="200"
                                ${readonly ? 'disabled' : ''}>
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-section">
-                        <label>Open Hour</label>
+                        <label>Open Hour <span class="hint">(0 - 23)</span></label>
                         <input type="number" name="openHour" value="${mob.openHour}" 
                                min="0" max="23"
                                ${readonly ? 'disabled' : ''}>
                     </div>
                     
                     <div class="form-section">
-                        <label>Close Hour</label>
+                        <label>Close Hour <span class="hint">(0 - 23)</span></label>
                         <input type="number" name="closeHour" value="${mob.closeHour}" 
                                min="0" max="23"
                                ${readonly ? 'disabled' : ''}>
@@ -261,8 +261,8 @@ function attachChangeHandlers(container, mob, onChange) {
             reputation: { min: -1000, max: 1000, warning: 'Reputation must be between -1000 and 1000' },
             openHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },
             closeHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },
-            profitBuy: { min: 1, max: 1000000, warning: 'Profit buy must be between 1 and 1000000' },
-            profitSell: { min: 1, max: 1000000, warning: 'Profit sell must be between 1 and 1000000' },
+            profitBuy: { min: 10, max: 200, warning: 'Profit buy must be between 10 and 200' },
+            profitSell: { min: 10, max: 200, warning: 'Profit sell must be between 10 and 200' },
         };
         
         // Add blur validation for number fields
@@ -328,17 +328,4 @@ function attachChangeHandlers(container, mob, onChange) {
         input.addEventListener('change', handler);
         input.addEventListener('input', handler);
     });
-}
-
-/**
- * Get alignment label
- * @param {number} align
- * @returns {string}
- */
-function getAlignLabel(align) {
-    if (align <= -500) return 'Evil';
-    if (align < -100) return 'Neutral Evil';
-    if (align <= 100) return 'Neutral';
-    if (align < 500) return 'Neutral Good';
-    return 'Good';
 }

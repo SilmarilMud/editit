@@ -583,6 +583,36 @@ function checkResets(area) {
 }
 
 // ============================================================================
+// Area General Checks
+// ============================================================================
+
+function checkAreaGeneral(area) {
+    const issues = [];
+    if (!area || !area.general) return issues;
+
+    const g = area.general;
+
+    // Level range validation (1-50)
+    if (g.racMinLev < 1 || g.racMinLev > 50) {
+        issues.push(issue('E-VNUM-RANGE', 'area', 0, 'racMinLev', {
+            message: `Min Level ${g.racMinLev} outside range (1 to 50)`
+        }));
+    }
+    if (g.racMaxLev < 1 || g.racMaxLev > 50) {
+        issues.push(issue('E-VNUM-RANGE', 'area', 0, 'racMaxLev', {
+            message: `Max Level ${g.racMaxLev} outside range (1 to 50)`
+        }));
+    }
+    if (g.racMinLev > g.racMaxLev) {
+        issues.push(issue('E-VNUM-RANGE', 'area', 0, 'racMinLev', {
+            message: `Min Level (${g.racMinLev}) is greater than Max Level (${g.racMaxLev})`
+        }));
+    }
+
+    return issues;
+}
+
+// ============================================================================
 // Integrity Checks
 // ============================================================================
 
@@ -700,7 +730,10 @@ export function validateAll(area) {
     // 7. Reset validation
     allIssues.push(...checkResets(area));
 
-    // 8. Integrity checks
+    // 8. Area general validation
+    allIssues.push(...checkAreaGeneral(area));
+
+    // 9. Integrity checks
     allIssues.push(...checkIntegrity(area));
 
     // Sort by severity (errors first, then warnings, then info)
