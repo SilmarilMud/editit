@@ -1811,6 +1811,46 @@ input[type="number"] {
     font-style: italic;
 }
 
+/* ========================================
+   Section Help Dialog
+   ======================================== */
+.section-help-dialog article {
+    max-width: 600px;
+    color: var(--pico-color);
+    background: var(--pico-card-background-color);
+}
+
+.section-help-dialog header {
+    color: var(--pico-color);
+}
+
+.section-help-body p {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.section-help-body ul {
+    margin: 0.25rem 0 0.75rem 1.25rem;
+    font-size: 0.9rem;
+}
+
+.section-help-body li {
+    margin-bottom: 0.35rem;
+    line-height: 1.45;
+}
+
+.section-help-body code {
+    font-size: 0.85rem;
+    padding: 0.1rem 0.3rem;
+    background: var(--pico-muted-background-color);
+    border-radius: 3px;
+}
+
+.section-help-close-btn {
+    margin: 0;
+}
+
 /* Stats panel */
 .stats-panel .form-header {
     margin-bottom: 1.5rem;
