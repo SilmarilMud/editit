@@ -494,9 +494,16 @@
 }
 
 #tree-header button {
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.35rem;
     margin: 0;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+#tree-header button img {
+    display: block;
+    width: 0.875em;
+    height: 0.875em;
 }
 
 #tree {
