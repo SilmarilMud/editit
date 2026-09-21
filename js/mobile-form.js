@@ -42,14 +42,14 @@ export function renderMobileForm(mob, onChange, options = {}) {
             </div>
             
             <div class="form-section">
-                <label>Short Description <span class="hint">(shown in room)</span></label>
+                <label>Short Description <span class="hint">(shown during actions)</span></label>
                 <input type="text" name="shortDescr" value="${escapeHtml(mob.shortDescr)}"
                        placeholder="a shopkeeper"
                        ${readonly ? 'disabled' : ''}>
             </div>
             
             <div class="form-section">
-                <label>Long Description <span class="hint">(shown when looking)</span></label>
+                <label>Long Description <span class="hint">(shown in room)</span></label>
                 <textarea name="longDescr" rows="6"
                           placeholder="A shopkeeper stands here."
                           ${readonly ? 'disabled' : ''}>${escapeHtml(mob.longDescr)}</textarea>
@@ -88,9 +88,9 @@ export function renderMobileForm(mob, onChange, options = {}) {
         <div class="form-tab-content" data-tab="combat">
             <div class="form-row">
                 <div class="form-section">
-                    <label>Level <span class="hint">(0 - 100)</span></label>
+                    <label>Level <span class="hint">(1 - 100)</span></label>
                     <input type="number" name="level" value="${mob.level}" 
-                           min="1" max="87"
+                           min="1" max="100"
                            ${readonly ? 'disabled' : ''}>
                 </div>
                 
@@ -257,7 +257,7 @@ function attachChangeHandlers(container, mob, onChange) {
         // Validation rules: { min, max, warning }
         const validationRules = {
             align: { min: -1000, max: 1000, warning: 'Alignment must be between -1000 and 1000' },
-            level: { min: 0, max: 100, warning: 'Level must be between 0 and 100' },
+            level: { min: 1, max: 100, warning: 'Level must be between 0 and 100' },
             reputation: { min: -1000, max: 1000, warning: 'Reputation must be between -1000 and 1000' },
             openHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },
             closeHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },

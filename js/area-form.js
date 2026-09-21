@@ -95,11 +95,6 @@ export function renderAreaForm(area, onChange, options = {}) {
         </div>
         
         <div class="form-section">
-            <h4>Wilderness Settings</h4>
-
-        </div>
-        
-        <div class="form-section">
             <h4>Miscellaneous</h4>
             <label>Plane</label>
             <select name="planeName" ${readonly ? 'disabled' : ''}>

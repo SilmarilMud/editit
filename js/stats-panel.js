@@ -2,6 +2,7 @@
 
 import { sectTypeName, itemTypeName, wearName, sexName, races } from './constants.js';
 import { getMobByVNum, getObjByVNum } from './utils.js';
+import { showSectionHelp } from './section-help.js';
 
 /**
  * Render stats panel for a category
@@ -15,9 +16,11 @@ export function renderStatsPanel(categoryType, area) {
     
     const stats = calculateStats(categoryType, area);
     
+    const sectionId = `${categoryType}-stats`;
     container.innerHTML = `
         <div class="form-header">
             <h3>${stats.title}</h3>
+            <button class="form-help-btn outline secondary small" data-section="${sectionId}" title="Help">?</button>
         </div>
         <div class="stats-grid">
             ${stats.items.map(item => `
@@ -43,6 +46,9 @@ export function renderStatsPanel(categoryType, area) {
             </div>
         ` : ''}
     `;
+    
+    // Wire up help button
+    container.querySelector('.form-help-btn')?.addEventListener('click', () => showSectionHelp(sectionId, true));
     
     return container;
 }

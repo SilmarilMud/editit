@@ -55,7 +55,7 @@ export function renderObjectForm(obj, onChange, options = {}) {
                 <textarea name="longDescr" rows="6" ${readonly ? 'disabled' : ''}>${escapeHtml(obj.longDescr)}</textarea>
             </div>
             <div class="form-section">
-                <label>Action Description <span class="hint">(wand/staff/instrument/trap)</span></label>
+                <label>Action Description <span class="hint">(play/activate)</span></label>
                 <textarea name="action" rows="3" ${readonly ? 'disabled' : ''}>${escapeHtml(obj.action)}</textarea>
             </div>
             <div class="form-row">

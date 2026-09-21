@@ -2,6 +2,7 @@
 
 import { dirSimpleName, createLoadedObject, createLoadedMob, createMobObject, wearName, ITEM_TAKE, ITEM_CONTAINER } from './constants.js';
 import { esc, getMobByVNum, getObjByVNum, getRoomByVNum, showToast } from './utils.js';
+import { showSectionHelp } from './section-help.js';
 
 // Mapping from wearFlag bits to wear location numbers
 const WEAR_FLAG_TO_LOCS = {
@@ -51,6 +52,7 @@ export function renderResetPanel(area, onChange) {
         <div class="form-header">
             <h3>Resets</h3>
             <small>Resets define what loads where. Add items to mobs (Give/Equip) or containers (Put).</small>
+            <button class="form-help-btn outline secondary small" title="Help">?</button>
         </div>
         <div class="reset-toolbar">
             <button type="button" class="reset-add-btn" data-type="M">+ Mob</button>
@@ -59,6 +61,9 @@ export function renderResetPanel(area, onChange) {
         </div>
         <div id="reset-list"></div>
     `;
+    
+    // Wire up help button
+    container.querySelector('.form-help-btn')?.addEventListener('click', () => showSectionHelp('resets', true));
     
     renderResetList(container);
     setupEventListeners(container);

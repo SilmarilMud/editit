@@ -60,6 +60,7 @@ import { renderResetPanel } from './reset-panel.js';
 import { renderShopForm } from './shop-form.js';
 import { renderSpecialsPanel } from './specials-panel.js';
 import { renderStatsPanel } from './stats-panel.js';
+import { showSectionHelp, isSectionHelpEnabled, setSectionHelpEnabled } from './section-help.js';
 import { showToast, getMobByVNum, getObjByVNum, getRoomByVNum, escapeHtml } from './utils.js';
 import {
     validateAll,
@@ -102,6 +103,18 @@ let searchActiveIndex = -1;
 let searchDebounceTimer = null;
 
 let dirtyTimeout = null;
+
+// Track which section help dialogs have been shown this session
+const shownSectionHelp = new Set();
+
+// Map entity types to their help section IDs
+const ENTITY_HELP_SECTION = {
+    room: 'room',
+    mob: 'mob',
+    object: 'object',
+    help: 'help',
+    shop: 'shop'
+};
 
 /**
  * Initialize search UI
@@ -541,6 +554,7 @@ async function openRecentFile(filename) {
         
         clearSelection();
         closeAllTabs();
+        shownSectionHelp.clear();
         undoManager.clear();
         renderTree(state.area);
         runValidation(state.area);
@@ -1279,6 +1293,7 @@ async function handleOpen() {
         // Clear previous selection and tabs
         clearSelection();
         closeAllTabs();
+        shownSectionHelp.clear();
         undoManager.clear(); // Clear undo history for new file
         
         // Render tree
@@ -1602,6 +1617,7 @@ function handleNew() {
     // Clear UI and render empty tree
     clearSelection();
     closeAllTabs();
+    shownSectionHelp.clear();
     undoManager.clear(); // Clear undo history for new file
     renderTree(state.area);
     
@@ -1623,6 +1639,7 @@ function handleNew() {
  * Handle tree node selection
  * @param {Object} node - Selected tree node
  */
+
 function handleNodeSelection(node) {
     state.selectedNode = node;
     
@@ -1648,9 +1665,17 @@ function handleNodeSelection(node) {
                         markDirty();
                         updateStatusBar();
                     }));
+                    if (!shownSectionHelp.has(tabId)) {
+                        shownSectionHelp.add(tabId);
+                        showSectionHelp(tabId);
+                    }
                 }
             } else {
                 showTab(tabId);
+                if (!shownSectionHelp.has(tabId)) {
+                    shownSectionHelp.add(tabId);
+                    showSectionHelp(tabId);
+                }
             }
             state.activeTab = tabId;
         } else if (node.id === 'specials') {
@@ -1672,9 +1697,17 @@ function handleNodeSelection(node) {
                             renderTree(state.area);
                         }
                     }));
+                    if (!shownSectionHelp.has(tabId)) {
+                        shownSectionHelp.add(tabId);
+                        showSectionHelp(tabId);
+                    }
                 }
             } else {
                 showTab(tabId);
+                if (!shownSectionHelp.has(tabId)) {
+                    shownSectionHelp.add(tabId);
+                    showSectionHelp(tabId);
+                }
             }
             state.activeTab = tabId;
         } else if (['rooms', 'mobs', 'objects', 'helps', 'shops'].includes(node.id)) {
@@ -1694,10 +1727,18 @@ function handleNodeSelection(node) {
                 const content = createTab(tabId, labels[node.id] + ' Stats', icons[node.id]);
                 if (content) {
                     renderFn(content);
+                    if (!shownSectionHelp.has(tabId)) {
+                        shownSectionHelp.add(tabId);
+                        showSectionHelp(tabId);
+                    }
                 }
             } else {
                 refreshTab(tabId, renderFn);
                 showTab(tabId);
+                if (!shownSectionHelp.has(tabId)) {
+                    shownSectionHelp.add(tabId);
+                    showSectionHelp(tabId);
+                }
             }
             state.activeTab = tabId;
         }
@@ -1724,8 +1765,19 @@ function handleNodeSelection(node) {
         }
         
         renderForm(content, node);
+        // Show help dialog for new entity tabs (first time this session)
+        const helpSection = ENTITY_HELP_SECTION[node.type];
+        if (helpSection && !shownSectionHelp.has(helpSection)) {
+            shownSectionHelp.add(helpSection);
+            showSectionHelp(helpSection);
+        }
     } else {
         showTab(tabId);
+        // Show help dialog for area tab if first time this session
+        if (tabId === 'root' && !shownSectionHelp.has('area')) {
+            shownSectionHelp.add('area');
+            showSectionHelp('area');
+        }
     }
     
     state.activeTab = tabId;
@@ -1848,7 +1900,14 @@ function addEntity(entityType) {
         if (!hasTab(id)) {
             const icon = TYPE_ICONS[entityType] || '';
             const content = createTab(id, node.label, icon);
-            if (content) renderForm(content, node);
+            if (content) {
+                renderForm(content, node);
+                const helpSection = ENTITY_HELP_SECTION[entityType];
+                if (helpSection && !shownSectionHelp.has(helpSection)) {
+                    shownSectionHelp.add(helpSection);
+                    showSectionHelp(helpSection);
+                }
+            }
         } else {
             showTab(id);
         }
@@ -2066,12 +2125,33 @@ function handleDuplicateAction(node) {
                 const content = createTab(tabId, newNode.label, icon);
                 if (content) {
                     renderForm(content, newNode);
+                    const helpSection = ENTITY_HELP_SECTION[node.type];
+                    if (helpSection && !shownSectionHelp.has(helpSection)) {
+                        shownSectionHelp.add(helpSection);
+                        showSectionHelp(helpSection);
+                    }
                 }
             } else {
                 showTab(tabId);
             }
         }, 50);
     }
+}
+
+/**
+ * Add a [?] help button to a form's header.
+ * @param {HTMLElement} container - Form container with .form-header
+ * @param {string} sectionId - Section ID for the help dialog
+ */
+function addFormHelpButton(container, sectionId) {
+    const header = container.querySelector('.form-header');
+    if (!header) return;
+    const btn = document.createElement('button');
+    btn.className = 'form-help-btn outline secondary small';
+    btn.textContent = '?';
+    btn.title = 'Help';
+    btn.addEventListener('click', () => showSectionHelp(sectionId, true));
+    header.appendChild(btn);
 }
 
 /**
@@ -2097,6 +2177,11 @@ function renderForm(container, node) {
                     runValidation(state.area);
                 }
             }));
+            addFormHelpButton(container, 'area');
+            if (!shownSectionHelp.has('area')) {
+                shownSectionHelp.add('area');
+                showSectionHelp('area');
+            }
             break;
         }
             
@@ -2107,6 +2192,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(help, 'help', node.id);
             }).container);
+            addFormHelpButton(container, 'help');
             break;
         }
             
@@ -2117,6 +2203,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(room, 'room', node.id);
             }, { area: state.area }));
+            addFormHelpButton(container, 'room');
             break;
         }
             
@@ -2127,6 +2214,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(mob, 'mob', node.id);
             }));
+            addFormHelpButton(container, 'mob');
             break;
         }
             
@@ -2137,6 +2225,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(obj, 'object', node.id);
             }));
+            addFormHelpButton(container, 'object');
             break;
         }
             
@@ -2154,6 +2243,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(mob, 'mob', node.id);
             }, { mobs: state.area?.mobs || [] }));
+            addFormHelpButton(container, 'shop');
             break;
         }
             
@@ -2343,6 +2433,21 @@ async function init() {
     // Setup tree toolbar buttons
     document.getElementById('btn-expand-all')?.addEventListener('click', expandAll);
     document.getElementById('btn-collapse-all')?.addEventListener('click', collapseAll);
+    
+    // Setup section help toggle
+    const helpToggle = document.getElementById('btn-toggle-help');
+    if (helpToggle) {
+        const updateHelpBtn = () => {
+            const enabled = isSectionHelpEnabled();
+            helpToggle.classList.toggle('help-off', !enabled);
+            helpToggle.title = enabled ? 'Hide section help tips' : 'Show section help tips';
+        };
+        updateHelpBtn();
+        helpToggle.addEventListener('click', () => {
+            setSectionHelpEnabled(!isSectionHelpEnabled());
+            updateHelpBtn();
+        });
+    }
     
     // Setup keyboard shortcuts
     document.addEventListener('keydown', (e) => {

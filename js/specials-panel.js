@@ -2,6 +2,7 @@
 
 import { mobSpecFuncs, objSpecFuncs } from './constants.js';
 import { esc } from './utils.js';
+import { showSectionHelp } from './section-help.js';
 
 let currentArea = null;
 let onChangeCallback = null;
@@ -23,9 +24,13 @@ export function renderSpecialsPanel(area, onChange) {
         <div class="form-header">
             <h3>Specials</h3>
             <small>Special procedures assigned to mobiles. Edit in the Mobiles section or click to change here.</small>
+            <button class="form-help-btn outline secondary small" title="Help">?</button>
         </div>
         <div id="specials-list"></div>
     `;
+    
+    // Wire up help button
+    container.querySelector('.form-help-btn')?.addEventListener('click', () => showSectionHelp('specials', true));
     
     renderSpecialsList(container);
     setupEventListeners(container);
