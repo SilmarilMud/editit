@@ -2132,6 +2132,22 @@ function handleDuplicateAction(node) {
 }
 
 /**
+ * Add a [?] help button to a form's header.
+ * @param {HTMLElement} container - Form container with .form-header
+ * @param {string} sectionId - Section ID for the help dialog
+ */
+function addFormHelpButton(container, sectionId) {
+    const header = container.querySelector('.form-header');
+    if (!header) return;
+    const btn = document.createElement('button');
+    btn.className = 'form-help-btn outline secondary small';
+    btn.textContent = '?';
+    btn.title = 'Help';
+    btn.addEventListener('click', () => showSectionHelp(sectionId, true));
+    header.appendChild(btn);
+}
+
+/**
  * Render form for a node
  * @param {HTMLElement} container - Content container
  * @param {Object} node - Tree node
@@ -2154,6 +2170,7 @@ function renderForm(container, node) {
                     runValidation(state.area);
                 }
             }));
+            addFormHelpButton(container, 'area');
             if (!shownSectionHelp.has('area')) {
                 shownSectionHelp.add('area');
                 showSectionHelp('area');
@@ -2168,6 +2185,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(help, 'help', node.id);
             }).container);
+            addFormHelpButton(container, 'help');
             break;
         }
             
@@ -2178,6 +2196,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(room, 'room', node.id);
             }, { area: state.area }));
+            addFormHelpButton(container, 'room');
             break;
         }
             
@@ -2188,6 +2207,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(mob, 'mob', node.id);
             }));
+            addFormHelpButton(container, 'mob');
             break;
         }
             
@@ -2198,6 +2218,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(obj, 'object', node.id);
             }));
+            addFormHelpButton(container, 'object');
             break;
         }
             
@@ -2215,6 +2236,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(mob, 'mob', node.id);
             }, { mobs: state.area?.mobs || [] }));
+            addFormHelpButton(container, 'shop');
             break;
         }
             

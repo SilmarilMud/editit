@@ -282,8 +282,8 @@ export function setSectionHelpEnabled(enabled) {
     localStorage.setItem(STORAGE_KEY, enabled ? 'true' : 'false');
 }
 
-export function showSectionHelp(sectionId) {
-    if (!isSectionHelpEnabled()) return;
+export function showSectionHelp(sectionId, force = false) {
+    if (!force && !isSectionHelpEnabled()) return;
     const help = SECTION_HELP_TEXT[sectionId];
     if (!help) return;
 

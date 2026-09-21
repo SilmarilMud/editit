@@ -793,6 +793,8 @@
 }
 
 .form-header {
+    display: flex;
+    align-items: center;
     margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--pico-muted-border-color);
@@ -800,6 +802,15 @@
 
 .form-header h3 {
     margin: 0;
+    flex: 1;
+}
+
+.form-help-btn {
+    margin: 0 0 0 1rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 1;
 }
 
 .form-section {
