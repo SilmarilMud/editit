@@ -68,12 +68,12 @@ const SECTION_HELP_TEXT = {
 
 **Area name e Author** — I nomi indicati compaiono nel comando \`aree\`.
 **Starting VNum** — Questo numero va concordato con gli Antichi.
-**Recall VNum** — E' la stanza in cui vanno i giocatori che usano ritorna. Usare \`0\` se non serve.
+**Recall VNum** — E' la stanza in cui vanno i giocatori che usano ritorna. Usa \`0\` se non serve.
 **Level Range** — Il livello minimo e massimo consigliato per questa area, mostrato nel comando \`aree\`. Indica la difficoltà, in genere dipende dai livello minimo e massimo dei mob creati.
 **Plane** — Il piano dimensionale dell'area.
 **Music File** - Nome dell'eventuale file colonna sonora dell'area.
 **Reset Message** - Messaggio opzionale che compare quando l'area si rinnova.
-**Area Flags** — Muovere il cursore sui nomi (o selezionarli su cellulare) per avere informazioni.`
+**Area Flags** — Muovi il cursore sui nomi (o selezionali su cellulare) per mostrare la descrizione.`
     },
 
     'rooms-stats': {
@@ -81,12 +81,11 @@ const SECTION_HELP_TEXT = {
         title: 'Statistiche Stanze',
         text: `Panoramica di tutte le stanze dell'area.
 
-- **Totale stanze** — il numero complessivo di stanze definite
-- **Range VNum** — l'intervallo di VNum utilizzati
-- **Con descrizione** — quante stanze hanno un testo descrittivo visibile ai giocatori
-- **Per tipo di settore** — distribuzione delle stanze per ambiente (foresta, dungeon, città, ecc.)
+- **Creare stanze** — Clicca col tasto destro su **Rooms** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** una stanza.
+- **With description** — Il numero di stanze senza descrizione (empty) deve essere 0.
+- **By sector type** — Sommario della distribuzione delle stanze per ambiente
 
-Puoi fare doppio clic su una stanza nell'albero a sinistra per aprirla e modificarla.`
+Seleziona una stanza nell'albero a sinistra per aprirla e modificarla.`
     },
 
     'mobs-stats': {
@@ -94,14 +93,14 @@ Puoi fare doppio clic su una stanza nell'albero a sinistra per aprirla e modific
         title: 'Statistiche Mob',
         text: `Panoramica di tutti i mob dell'area.
 
-- **Totale mob** — il numero complessivo di mob definiti
-- **Range VNum** — l'intervallo di VNum utilizzati
-- **Livello medio** — il livello medio dei mob, con il range minimo e massimo
-- **Oro totale** — la somma dell'oro che tutti i mob dell'area portano
-- **Bottegai** — i mob configurati come negozianti (hanno una scheda negozio)
-- **Con special** — i mob a cui è associata una funzione speciale
+- **Creare mob** — Clicca col tasto destro su **Mobiles** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** un mob.
+- **Average level** — Livello medio dei mob, con il range minimo e massimo per verificare se il livello indicato per l'area è corretto.
+- **Total gold** — La somma dell'oro posseduto da tutti i mob dell'area. Il valore dovrebbe essere concordato per evitare sbilanciamenti all'economia.
+- **Shopkeepers** — Numero dei mob configurati come negozianti.
+- **With specials** — Numero dei mob a cui è associata una procedura speciale.
+- **By Alignment** - Distribuzione del numero di mob per allineamento.
 
-Puoi fare doppio clic su un mob nell'albero a sinistra per aprirlo e modificarlo.`
+Seleziona un mob nell'albero a sinistra per aprirlo e modificarlo.`
     },
 
     'objects-stats': {
@@ -109,13 +108,12 @@ Puoi fare doppio clic su un mob nell'albero a sinistra per aprirlo e modificarlo
         title: 'Statistiche Oggetti',
         text: `Panoramica di tutti gli oggetti dell'area.
 
-- **Totale oggetti** — il numero complessivo di oggetti definiti
-- **Range VNum** — l'intervallo di VNum utilizzati
-- **Peso medio** — il peso medio degli oggetti, con il peso totale
-- **Costo medio** — il costo medio degli oggetti, con il costo totale
-- **Per tipo** — distribuzione degli oggetti per categoria (arma, armatura, scudo, ecc.)
+- **Creare oggetti** — Clicca col tasto destro su **Objects** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** un oggetto.
+- **Average weight** — Peso totale e medio degli oggetti creati.
+- **Average cost** — Costo totale e medio degli oggetti creati.
+- **By Type** — Distribuzione degli oggetti per categoria.
 
-Puoi fare doppio clic su un oggetto nell'albero a sinistra per aprirlo e modificarlo.`
+Seleziona un oggetto nell'albero a sinistra per aprirlo e modificarlo.`
     },
 
     'helps-stats': {
@@ -123,12 +121,9 @@ Puoi fare doppio clic su un oggetto nell'albero a sinistra per aprirlo e modific
         title: 'Statistiche Help',
         text: `Panoramica di tutte le voci di help dell'area.
 
-- **Totale voci** — il numero complessivo di voci di help
-- **Range livelli** — l'intervallo di livelli delle voci
-- **Con descrizione** — quante voci hanno un testo descrittivo (non vuote)
-- **Lunghezza media keyword** — la lunghezza media delle keyword di ricerca
+- **Creare help** — Clicca col tasto destro su **Helps** (o premi a lungo su cellulare) e seleziona **Add**. Dallo stesso menù è possibile **rimuovere** o **duplicare** una voce di help.
 
-Le voci di help vengono mostrate ai giocatori quando usano il comando \`help\`. Ogni voce ha un livello minimo e una lista di keyword che ne determinano l'attivazione.`
+Le voci di help vengono mostrate ai giocatori quando usano il comando \`aiuto\`. Ogni voce ha un livello minimo e una lista di keyword che ne determinano l'attivazione. Seleziona un help nell'albero a sinistra per aprirlo e modificarlo.`
     },
 
     'shops-stats': {
@@ -136,42 +131,39 @@ Le voci di help vengono mostrate ai giocatori quando usano il comando \`help\`. 
         title: 'Statistiche Negozi',
         text: `Panoramica di tutti i negozi dell'area.
 
-- **Totale negozi** — il numero di bottegai configurati
-- **Profitto medio acquisto/vendita** — le percentuali medie di markup/markdown
-- **Orari di apertura** — l'intervallo orario coperto dai negozi
-- **Tipi commerciali** — distribuzione delle categorie merceologiche accettate
+- **Creare negozio** — I negozi vengono creato attivando il box **Is Shop Keeper** nel tab **Shop** di un mob.
+- **Total Shops** — Numero di negozianti nell'area.
+- **Avg Profit Buy/Sell** — Percentuali medie di acquisto e vendita.
+- **Opening hours** — Ore della giornata in cui i negozi sono aperti.
 
-I negozi sono mob con la proprietà "Negziante" attiva. Per configurare un negozio, apri il mob corrispondente e vai nella scheda "Negozio".`
+Seleziona un negozio nell'albero a sinistra per aprirlo e modificarlo. Se vuoi rimuovere un negozio, disattiva il box **Is Shop Keeper** nei dettagli del mob corrispondente.`
     },
 
     'resets': {
         icon: '🔄',
         title: 'Reset Area',
-        text: `I reset controllano cosa viene generato automaticamente nell'area quando viene caricata o quando un giocatore entra.
+        text: `I reset controllano cosa viene generato automaticamente nell'area quando viene caricata o quando l'area si rigenera.
 
-- **M** (Mobile) — posiziona un mob in una stanza
-- **O** (Object) — posiziona un oggetto in una stanza
-- **G** (Give) — mette un oggetto nell'inventario di un mob
-- **E** (Equip) — equipaggia un oggetto su un mob
-- **P** (Put) — mette un oggetto dentro un contenitore (altro oggetto)
-- **D** (Door) — imposta la chiusura di una porta
-- **R** (Room) — rimuove un oggetto da una stanza (usa raramente)
-
-I reset vengono eseguiti in ordine. Per modificare l'ordine, usa il drag-and-drop o i pulsanti su ogni riga.
+- **M** (Mobile) — Posiziona un mob in una stanza.
+- **O** (Object) — Posiziona un oggetto in una stanza.
+- **G** (Give) — Mette un oggetto nell'inventario di un mob.
+- **E** (Equip) — Equipaggia un oggetto su un mob.
+- **P** (Put) — Mette un oggetto dentro un contenitore (altro oggetto).
+- **D** (Door) — Imposta lo stato di una porta.
+- **R** (Room) — Rende casuale la connessione tra le stanze (labirinti). Usato raramente.
 
 **Nota:** i mob e gli oggetti devono essere definiti prima di poterli usare nei reset.`
     },
 
     'specials': {
         icon: '✨',
-        title: 'Special Program',
-        text: `Gli special associano funzioni speciali ai mob dell'area. Queste funzioni definiscono comportamenti particolari come dialoghi, vendita di oggetti, o reazioni a eventi.
+        title: 'Funzioni speciali',
+        text: `Le special functions associano funzioni speciali ai mob dell'area. Queste funzioni definiscono comportamenti particolari come combattimento, reazioni, interazione, ecc.
 
-- Seleziona un mob dalla lista qui sotto
-- Scegli la funzione speciale dal menu a tendina
-- La funzione verrà applicata al mob selezionato
+- Seleziona un mob dalla lista Mobiles (completo) o Specials (rapido).
+- Scegli la funzione speciale dal menu a tendina. Muovi il cursore sul nome (o selezionalo su cellulare) per vedere la descrizione.
 
-Le funzioni speciali sono definite nel codice sorgente del MUD. Solo le funzioni esistenti nel codice possono essere assegnate. Se non vedi la funzione che cerchi, potrebbe non essere ancora stata implementata.
+Le funzioni speciali sono definite nel codice sorgente del MUD. Se nessuna funzione speciale definisce correttamente un mob che hai creato, parlane con gli Antichi.
 
 **Nota:** ogni mob può avere solo una funzione speciale alla volta. Se ne assegni una nuova, quella precedente viene sostituita.`
     },
@@ -181,14 +173,10 @@ Le funzioni speciali sono definite nel codice sorgente del MUD. Solo le funzioni
         title: 'Stanza',
         text: `Questa è la scheda di una singola stanza. Da qui puoi modificare:
 
-- **Nome** — il nome breve della stanza, usato nei comandi e nelle descrizioni
-- **Descrizione** — il testo che i giocatori vedono quando entrano nella stanza
-- **Settore** — il tipo di ambiente (foresta, dungeon, città, acqua, ecc.)
-- **Flags** — attributi speciali della stanza (dark, no_magic, indoor, ecc.)
-- **Uscite** — le connessioni verso altre stanze in ogni direzione (nord, sud, est, ovest, ecc.)
-- **Descrizioni extra** — testi aggiuntivi visibili con il comando \`look <keyword>\`
-
-Ogni uscita ha un VNum di destinazione, una chiave, una descrizione e delle porte con flag. Le uscite inverse vengono create automaticamente con il pulsante **Inverti**.`
+- **Basic** - Nome, descrizione, tipo di settore ed attributi della stanza. Muovi il cursore (o seleziona su cellulare) sui nomi degli attributi per vedere la descrizione. **Reset Only** è utile per le stanze che non sono disponibili ai giocatori, ma contengono solo mob oppure oggetti utili per altro.
+- **Exits** - Definisce le connessioni tra le stanze. Ogni direzione può essere collegata ad un'altra stanza di questa o altre aree, definire la presenza di una porta ed impostarne gli attributi. Muovi il cursore (o seleziona su cellulare) sui nomi degli attributi per vedere la descrizione.  **Create/Update reverse exit** crea l'uscita corrispondente dalla stanza collegata a questa uscita.
+- **Extras** - Aggiungi descrizioni extra utili per l'esplorazione dei giocatori, approfondire l'ambiente, creare quest, ecc. Possono essere lette col comando \`esamina <keyword>\`.
+- **Contents** - Aggiungi oggetti o mob alla stanza. La stessa cosa può essere fatta dal menù **Resets**.`
     },
 
     'mob': {
@@ -196,18 +184,10 @@ Ogni uscita ha un VNum di destinazione, una chiave, una descrizione e delle port
         title: 'Mobile',
         text: `Questa è la scheda di un singolo mobile. Da qui puoi modificare:
 
-- **Nome lungo** — la frase completa che appare quando il mob viene esaminato (es. "il grande drago rosso")
-- **Nome corto** — il nome breve usato come intestazione (es. "un grande drago rosso")
-- **Descrizione** — il testo che i giocatori vedono quando guardano il mob
-- **Livello** — il livello del mob, determina forza e difficoltà
-- **Statistiche** — punti vita, punti danno, oro, esperienza
-- **Posizione** — la posizione in cui il mob viene caricato (stante, seduto, ecc.)
-- **Sesso** — genere del mob (maschile, femminile, neutro)
-- **Flags** — attributi speciali (aggressivo, assistance, sentinel, ecc.)
-- **Applicazioni** — effetti che il mob applica ai giocatori (parola, zona, ecc.)
-- **Resistenze** — resistenze e vulnerabilità del mob a danni e magie
-
-Il **Negozio** e il **Special** vengono configurati dalle schede dedicate.`
+- **Basic** - Parole chiave (per interagire), descrizione breve (visibile nelle azioni), descrizione lunga (visibile nella stanza) e descrizione dettagliata (visibile quando si guarda il mob). Inoltre è possibile configurare razza e sesso, nonchè la funzione speciale opzionale (visibile e modificabile in seguito anche dal menù **Specials**). Muovi il cursore sul nome della special function (o selezionalo su cellulare) per vedere la descrizione.
+- **Combat** - Livello del mob, allineamento, oro, reputazione e classe (attualmente la classe è inutilizzata).
+- **Flags** - Attributi del mob. Muovi il cursore (o seleziona su cellulare) sui nomi degli attributi per vedere la descrizione.
+- **Shop** - Se il mob è uno shop keeper, seleziona il tipo degli oggetti che vende e acquista, quanto varia il prezzo rispetto al valore dell'oggetto, e da che ora a che ora è aperto. I dettagli del negozio possono essere modificati anche nel menù **Shops**.`
     },
 
     'object': {
@@ -215,18 +195,13 @@ Il **Negozio** e il **Special** vengono configurati dalle schede dedicate.`
         title: 'Oggetto',
         text: `Questa è la scheda di un singolo oggetto. Da qui puoi modificare:
 
-- **Nome lungo** — la frase completa (es. "una spada di ferro rovinata")
-- **Nome corto** — il nome breve come intestazione (es. "una spada di ferro")
-- **Descrizione** — il testo che appare quando un giocatore esamina l'oggetto
-- **Tipo** — la categoria dell'oggetto (arma, armatura, scudo, cibo, pozione, ecc.)
-- **Peso e costo** — le proprietà fisiche e il valore economico
-- **Wear flags** — dove l'oggetto può essere equipaggiato (mano, testa, petto, ecc.)
-- **Flags** — attributi speciali (glow, hum, evil, invent, ecc.)
-- **Valori** — valori specifici per tipo (danni per armi, durata per cibo, ecc.)
-- **Applicazioni** — effetti che l'oggetto applica quando è equipaggiato
-- **Descrizioni extra** — testi aggiuntivi visibili con \`look <keyword>\`
+- **Basic** - Parole chiave (per interagire), descrizione breve (visibile nelle azioni e nell'equipaggiamento), descrizione lunga (visibile quando è a terra). E' possibile seleionare anche il tipo di oggetto, la funzione speciale opzionale, il peso ed il costo. L'**azione** è un messaggio visibile quando si attivano strumenti da caccia/battaglia. I messaggi wear on/off vengono mostrati quando l'oggetto viene indossato/rimosso (se indossabile).
+- **Values** - In base al tipo dell'oggetto, i values permettono di configurarne i dettagli (esempio, quante ora dura una luce, tipo di danno dell'arma, ecc.)
+- **Flags** - Attributi dell'oggetto. Muovi il cursore (o seleziona su cellulare) sui nomi degli attributi per vedere la descrizione. Se indossabile, qui viene definita la parte del corpo su cui l'oggetto può essere indossato.
+- **Applies** - Modifiche alle statistiche.
+- **Extras** - Descrizioni extra, visibili quando il giocatore esamina le parole  chiare ad esse associate.
 
-Gli oggetti vengono posizionati nell'area tramite i **Reset**.`
+Gli oggetti vengono posizionati nell'area o addosso ai mob tramite i **Reset**.`
     },
 
     'help': {
@@ -234,11 +209,11 @@ Gli oggetti vengono posizionati nell'area tramite i **Reset**.`
         title: 'Voce Help',
         text: `Questa è una voce della guida del gioco. Da qui puoi modificare:
 
-- **Livello** — il livello minimo richiesto per consultare questa voce (0 = tutti)
-- **Keyword** — le parole chiave che i giocatori usano con il comando \`help\` (es. "magic magiche incantesimi")
-- **Testo** — il contenuto della guida, mostrato al giocatore quando cerca aiuto
+- **Level** — Livello minimo richiesto per consultare questa voce (0 = tutti)
+- **Keyword** — Lista parole chiave che i giocatori usano con il comando \`aiuto\`.
+- **Text** — Contenuto della voce dell'help.
 
-Le keyword vengono separate da spazi. Quando un giocatore digita \`help <keyword>\`, il MUD cerca la voce con la keyword più lunga che corrisponde.
+Le keyword sono separate da spazi. Quando un giocatore digita \`aiuto <keyword>\`, il MUD cerca la voce con la keyword più lunga che corrisponde.
 
 **Nota:** il testo può essere multiparagrafo. Usa una riga vuota per separare i paragrafi.`
     },
@@ -246,15 +221,15 @@ Le keyword vengono separate da spazi. Quando un giocatore digita \`help <keyword
     'shop': {
         icon: '🏪',
         title: 'Negozio',
-        text: `Questa è la scheda negozio di un bottegaio. Da qui puoi configurare:
+        text: `Questa è la scheda di un negozio. Da qui puoi configurare:
 
-- **Profitto acquisto/vendita** — le percentuali di markup: quanto il negozio paga di meno quando compra e charge di più quando vende (100 = prezzo pieno)
-- **Ore di apertura** — l'intervallo orario in cui il negozio è aperto (0-23)
-- **Tipi commerciali** — le categorie di oggetti che il negozio accetta (armi, armature, cibo, ecc.)
+- **Trade Types** - Lista del tipo di merci.
+- **Profit buy/sell** — Percentuali di acquisto e vendita rispetto al valore originale dell'oggetto. Generalmente nessun negoziante vende con un buon margine!  (100 = prezzo pieno)
+- **Open/Clouse Hour** — Orario di apertura di un negozio (0-23)
 
-Un negozio è un mob con la proprietà "Negziante" attiva. Il mob deve esistere prima di poter configurare il negozio.
+Un negoziante è un mob con la proprietà "Shop Keeper" attiva. Il mob deve esistere prima di poter configurare il suo negozio.
 
-Per rimuovere un negozio, disattiva la proprietà "Negziante" nella scheda del mob.`
+Per rimuovere un negozio, disattiva la proprietà "Shop Keeper" nella scheda del mob.`
     }
 };
 

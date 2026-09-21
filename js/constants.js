@@ -754,7 +754,7 @@ export const itemExtraFlagsName = [
 ];
 
 export const itemWearFlagsName = [
-    { value: ITEM_TAKE, label: "Take", desc: "L'oggetto può essere raccolto e portato. (1)" },
+    { value: ITEM_TAKE, label: "Take", desc: "L'oggetto può essere raccolto e trasportato. Le luci hanno bisogno solo di questo flag. (1)" },
     { value: ITEM_WEAR_FINGER, label: "Finger", desc: "Può essere indossato a un dito (anelli). (2)" },
     { value: ITEM_WEAR_NECK, label: "Neck", desc: "Può essere indossato al collo (amuleti, collane). (4)" },
     { value: ITEM_WEAR_BODY, label: "Body", desc: "Può essere indossato sul corpo (armature, abiti). (8)" },
@@ -1500,7 +1500,7 @@ export function createMobile() {
         keywords: "nuovo mob",
         shortDescr: "un nuovo mob",
         longDescr: "Un nuovo mob sta vagando smarrito.",
-        descr: "Un mob privo di descrizione.",
+        descr: "Un mob si guarda intorno smarrito, privo di identita'.",
         actFlags: 0,
         affFlags: 0,
         align: 0,
