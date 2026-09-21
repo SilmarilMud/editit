@@ -808,13 +808,15 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_LIGHT, VALUE_IS_UNUSED],
         defaults: [0, 0, -1, 0],
         hint: ["", "", "-1 - infinite", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_SCROLL,
         descr: ["Level", "Spell 1", "Spell 2", "Spell 3"],
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL],
         defaults: [1, 0, 0, 0],
-        hint: ["", "", "", ""],
+        hint: ["", "", "optional", "optional"],
+        range: [{ min: 1, max: 50 }, null, null, null],
     },
     {
         itemType: ITEM_WAND,
@@ -822,6 +824,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL],
         defaults: [1, 1, 1, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_STAFF,
@@ -829,6 +832,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL],
         defaults: [1, 1, 1, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_WEAPON,
@@ -836,6 +840,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_WEAPON],
         defaults: [0, 0, 0, 0],
         hint: ["if shootable/throwable", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_INSTRUMENT,
@@ -843,6 +848,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL],
         defaults: [1, 1, 1, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_STATUE,
@@ -850,6 +856,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TREASURE,
@@ -857,6 +864,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_ARMOR,
@@ -864,13 +872,15 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_POTION,
         descr: ["Level", "Spell 1", "Spell 2", "Spell 3"],
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL],
         defaults: [1, 0, 0, 0],
-        hint: ["", "", "", ""],
+        hint: ["", "", "optional", "optional"],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_FURNITURE,
@@ -878,6 +888,7 @@ export const itemValues = [
         type: [VALUE_IS_FURNITURE_FLAGS, VALUE_IS_NUMBER, VALUE_IS_NUMBER, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TRASH,
@@ -885,13 +896,15 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_SCABBARD,
         descr: ["Weapon", "Weapon", "Weapon", "Weapon"],
         type: [VALUE_IS_WEAPON, VALUE_IS_WEAPON, VALUE_IS_WEAPON, VALUE_IS_WEAPON],
         defaults: [0, 0, 0, 0],
-        hint: ["", "", "", ""],
+        hint: ["", "optional", "optional", "optional"],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CONTAINER,
@@ -899,6 +912,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_VNUM, VALUE_IS_UNUSED],
         defaults: [10, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_QUIVER,
@@ -906,6 +920,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [10, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_DRINK_CON,
@@ -913,6 +928,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_LIQUID, VALUE_IS_POISON],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_KEY,
@@ -920,6 +936,7 @@ export const itemValues = [
         type: [VALUE_IS_VNUM, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["optional", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_FOOD,
@@ -927,6 +944,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_POISON],
         defaults: [1, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_MONEY,
@@ -934,6 +952,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [1, 0, 0, 0],
         hint: ["0 - 50000", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_WARSOUND,
@@ -941,6 +960,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_BOAT,
@@ -948,6 +968,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CORPSE_NPC,
@@ -955,6 +976,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CORPSE_PC,
@@ -962,6 +984,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_FOUNTAIN,
@@ -969,6 +992,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_PILL,
@@ -976,6 +1000,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL],
         defaults: [1, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_PROJECTILE,
@@ -983,6 +1008,7 @@ export const itemValues = [
         type: [VALUE_IS_WEAPON, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_BUILDING,
@@ -990,6 +1016,7 @@ export const itemValues = [
         type: [VALUE_IS_VNUM, VALUE_IS_NUMBER, VALUE_IS_VNUM, VALUE_IS_CONTAINER_FLAGS],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_PORTAL,
@@ -997,6 +1024,7 @@ export const itemValues = [
         type: [VALUE_IS_VNUM, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CAMERA,
@@ -1004,6 +1032,7 @@ export const itemValues = [
         type: [VALUE_IS_VNUM, VALUE_IS_VNUM, VALUE_IS_VNUM, VALUE_IS_VNUM],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TRAP,
@@ -1011,6 +1040,7 @@ export const itemValues = [
         type: [VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE, VALUE_IS_LIGHT, VALUE_IS_NUMBER_FROM_0],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_PAPER,
@@ -1018,6 +1048,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_BOOK,
@@ -1025,6 +1056,7 @@ export const itemValues = [
         type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TARGET,
@@ -1032,6 +1064,7 @@ export const itemValues = [
         type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
         defaults: [0, 0, 0, 0],
         hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
 ];
 

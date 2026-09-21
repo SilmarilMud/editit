@@ -375,6 +375,21 @@ function checkObjects(objs) {
                         }
                         break;
                 }
+                
+                // Check custom range if defined
+                const range = valueInfo.range && valueInfo.range[i];
+                if (range && typeof range === 'object') {
+                    if (range.min !== null && range.min !== undefined && val < range.min) {
+                        issues.push(issue('W-FIELD-RANGE', 'object', obj.VNum, `value[${i}]`, {
+                            message: `Value ${i + 1}: ${val} is below minimum (${range.min})`
+                        }));
+                    }
+                    if (range.max !== null && range.max !== undefined && val > range.max) {
+                        issues.push(issue('W-FIELD-RANGE', 'object', obj.VNum, `value[${i}]`, {
+                            message: `Value ${i + 1}: ${val} is above maximum (${range.max})`
+                        }));
+                    }
+                }
             }
         }
 
