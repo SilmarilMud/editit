@@ -452,7 +452,9 @@ export function expandAll() {
  */
 export function collapseAll() {
     nodes.forEach((node) => {
-        node.expanded = false;
+        if (node.type !== 'area') {
+            node.expanded = false;
+        }
     });
     renderNodes();
 }

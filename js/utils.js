@@ -3,6 +3,58 @@
 import { SOFT_MAX_COLS, HARD_MAX_COLS, MAX_VNUM } from './constants.js';
 
 /**
+ * Strip MUD color codes from text
+ * Color codes: {{nn (two digits) or {{c (single char)
+ * @param {string} text - Text with potential color codes
+ * @returns {string} Text with color codes removed
+ */
+export function stripColorCodes(text) {
+    if (!text) return '';
+    return text.replace(/\{\{[\d]{2}|\{\{[a-zA-Z]/g, '');
+}
+
+/**
+ * Get visible length of text (excluding color codes)
+ * @param {string} line - Text line
+ * @returns {number} Visible character count
+ */
+export function visibleLength(line) {
+    if (!line) return 0;
+    return stripColorCodes(line).length;
+}
+
+/**
+ * Get visible substring up to a certain visible length
+ * @param {string} line - Text line
+ * @param {number} maxVisible - Max visible characters to include
+ * @returns {string} Substring with color codes intact but limited visible length
+ */
+export function visibleSubstring(line, maxVisible) {
+    if (!line || maxVisible <= 0) return '';
+    let visibleCount = 0;
+    let i = 0;
+    while (i < line.length && visibleCount < maxVisible) {
+        // Check for color code at position i
+        if (line[i] === '{' && i + 1 < line.length && line[i + 1] === '{') {
+            // Skip {{nn or {{c
+            if (i + 3 < line.length && /[\d]/.test(line[i + 2]) && /[\d]/.test(line[i + 3])) {
+                i += 4;
+            } else if (i + 2 < line.length && /[a-zA-Z]/.test(line[i + 2])) {
+                i += 3;
+            } else {
+                // Not a valid color code, count the brace
+                visibleCount++;
+                i++;
+            }
+        } else {
+            visibleCount++;
+            i++;
+        }
+    }
+    return line.substring(0, i);
+}
+
+/**
  * Escape HTML special characters
  * @param {string} str - String to escape
  * @returns {string} Escaped string
@@ -90,16 +142,17 @@ export function wrapTextareaWithGuide(textarea, softMax = SOFT_MAX_COLS, hardMax
         const lines = text.split('\n');
         const lineCount = lines.length;
         
-        // Find cursor position (line:col)
+        // Find cursor position (line:col) using visible length
         const cursorPos = textarea.selectionStart;
         const textBeforeCursor = text.substring(0, cursorPos);
         const currentLine = textBeforeCursor.split('\n').length;
         const lastNewline = textBeforeCursor.lastIndexOf('\n');
-        const currentCol = cursorPos - lastNewline;
+        const lineBeforeCursor = textBeforeCursor.substring(lastNewline + 1);
+        const currentCol = visibleLength(lineBeforeCursor);
         
-        // Check for lines exceeding limits
-        const softOverLines = lines.filter(l => l.length > softMax);
-        const hardOverLines = lines.filter(l => l.length > hardMax);
+        // Check for lines exceeding limits (using visible length)
+        const softOverLines = lines.filter(l => visibleLength(l) > softMax);
+        const hardOverLines = lines.filter(l => visibleLength(l) > hardMax);
         const hasSoftOver = softOverLines.length > 0;
         const hasHardOver = hardOverLines.length > 0;
         
@@ -149,7 +202,7 @@ export function wrapTextareaWithGuide(textarea, softMax = SOFT_MAX_COLS, hardMax
         const maxMarkers = Math.min(lineCount, 30);
         for (let i = 0; i < maxMarkers; i++) {
             const marker = document.createElement('span');
-            const lineLen = lines[i] ? lines[i].length : 0;
+            const lineLen = lines[i] ? visibleLength(lines[i]) : 0;
             let state = 'ok';
             if (lineLen > hardMax) {
                 state = 'error';
@@ -195,13 +248,14 @@ export function arrangeText(text) {
     // Step 1: Detect intentional breaks (short lines between long lines)
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
+        const lineLen = visibleLength(line);
         
-        if (line.trim() === '' || line.length >= 60) continue;
+        if (line.trim() === '' || lineLen >= 60) continue;
         
         const prevLine = lines[i - 1];
         const nextLine = lines[i + 1];
         
-        if (prevLine && prevLine.length > 65 && nextLine && nextLine.trim() !== '' && nextLine.length > 65) {
+        if (prevLine && visibleLength(prevLine) > 65 && nextLine && nextLine.trim() !== '' && visibleLength(nextLine) > 65) {
             intentionalBreaks.add(i);
         }
     }
@@ -259,7 +313,7 @@ export function arrangeText(text) {
                 for (const word of words) {
                     if (currentLine === '') {
                         currentLine = word;
-                    } else if ((currentLine.length + 1 + word.length) <= HARD_MAX_COLS) {
+                    } else if ((visibleLength(currentLine) + 1 + visibleLength(word)) <= HARD_MAX_COLS) {
                         currentLine += ' ' + word;
                     } else {
                         result.push(currentLine);

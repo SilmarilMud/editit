@@ -5,10 +5,11 @@ import {
     VALUE_IS_NUMBER_FROM_0, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_LIQUID, VALUE_IS_POISON,
     VALUE_IS_VNUM, VALUE_IS_FURNITURE_FLAGS, VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE,
     ITEM_WAND, ITEM_STAFF, ITEM_INSTRUMENT, ITEM_WARSOUND, ITEM_TRAP,
+    ITEM_DONT_SET, AFF_OBJ_DONT_SET,
     itemTypeName, itemExtraFlagsName, itemWearFlagsName, applyName,
     itemValues, itemWeaponName, itemContainerFlagsName, itemLiquidName,
     itemPoisonName, itemFurnitureFlagsName, itemTrapType, itemTrapDamage,
-    spells, objSpecFuncs
+    spells, objSpecFuncs, wearAffsData
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
 import { escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
@@ -67,8 +68,7 @@ export function renderObjectForm(obj, onChange, options = {}) {
                 <div class="form-section">
                     <label>Special Function</label>
                     <select name="special" ${readonly ? 'disabled' : ''}>
-                        <option value="">-- None --</option>
-                        ${objSpecFuncs.filter(s => s !== '').map(s => `<option value="${s}" ${obj.special === s ? 'selected' : ''}>${s}</option>`).join('')}
+                        ${objSpecFuncs.map(s => `<option value="${s.value}" ${(obj.special === s.value) ? 'selected' : ''} title="${s.desc || ''}">${s.label}</option>`).join('')}
                     </select>
                 </div>
             </div>
@@ -179,20 +179,17 @@ function renderValues(container, obj, onChange, readonly) {
 }
 
 function renderFlags(container, obj, onChange, readonly) {
-    const makeFlags = (names) => names.map((n, i) => n ? { value: Math.pow(2, i), label: n } : null).filter(Boolean);
-    
     const extraEl = container.querySelector('#obj-extraflags');
     if (extraEl) {
-        extraEl.appendChild(createFlagGroup('extraFlags', makeFlags(itemExtraFlagsName), obj.extraFlags, v => { obj.extraFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
+        extraEl.appendChild(createFlagGroup('extraFlags', itemExtraFlagsName, obj.extraFlags, v => { obj.extraFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly, exclude: ITEM_DONT_SET }).container);
     }
     const wearEl = container.querySelector('#obj-wearflags');
     if (wearEl) {
-        wearEl.appendChild(createFlagGroup('wearFlags', makeFlags(itemWearFlagsName), obj.wearFlags, v => { obj.wearFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
+        wearEl.appendChild(createFlagGroup('wearFlags', itemWearFlagsName, obj.wearFlags, v => { obj.wearFlags = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
     }
     const affsEl = container.querySelector('#obj-wearaffs');
     if (affsEl) {
-        const affData = [{value:1,label:'Blind'},{value:2,label:'Invisible'},{value:4,label:'Detect Evil'},{value:8,label:'Detect Invis'},{value:16,label:'Detect Magic'},{value:32,label:'Detect Hidden'},{value:64,label:'Hold'},{value:128,label:'Sanctuary'},{value:256,label:'Faerie Fire'},{value:512,label:'Infrared'},{value:1024,label:'Curse'},{value:8192,label:'Protect'},{value:32768,label:'Sneak'},{value:65536,label:'Hide'},{value:131072,label:'Sleep'},{value:524288,label:'Flying'},{value:1048576,label:'Pass Door'},{value:2097152,label:'Waterwalk'},{value:8388608,label:'Mute'},{value:16777216,label:'Gills'},{value:134217728,label:'Flaming'}];
-        affsEl.appendChild(createFlagGroup('wearAffs', affData, obj.wearAffs, v => { obj.wearAffs = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly }).container);
+        affsEl.appendChild(createFlagGroup('wearAffs', wearAffsData, obj.wearAffs, v => { obj.wearAffs = v; if (onChange) onChange(obj); }, { columns: 3, disabled: readonly, exclude: AFF_OBJ_DONT_SET }).container);
     }
 }
 

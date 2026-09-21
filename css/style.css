@@ -494,9 +494,16 @@
 }
 
 #tree-header button {
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.35rem;
     margin: 0;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+#tree-header button img {
+    display: block;
+    width: 0.875em;
+    height: 0.875em;
 }
 
 #btn-toggle-help.help-off {
@@ -912,7 +919,14 @@
     line-height: 1.4;
 }
 
-.tidy-btn:hover:not(:disabled) {
+@media (hover: hover) and (pointer: fine) {
+    .tidy-btn:hover:not(:disabled) {
+        background: var(--pico-muted-color);
+        color: var(--pico-background);
+    }
+}
+
+.tidy-btn:active:not(:disabled) {
     background: var(--pico-muted-color);
     color: var(--pico-background);
 }
@@ -1528,7 +1542,7 @@ input[type="number"] {
 
 .flag-group-grid .flag-group-checkboxes {
     display: grid;
-    grid-template-columns: repeat(var(--flag-columns, 3), 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
     gap: 0.5rem;
 }
 
