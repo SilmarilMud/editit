@@ -5,6 +5,10 @@
 test-storage.js
 test-validation.js
 
+# Local data files
+eldamar.are
+flag-descriptions.txt
+
 # OS / junk files
 .DS_Store
 js/map.js.orig
