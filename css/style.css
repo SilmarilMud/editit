@@ -1261,10 +1261,28 @@ input[type="number"] {
     margin-bottom: 1rem;
 }
 
-.shop-form .form-row {
+.shop-form .form-row,
+.mobile-form .form-tab-content[data-tab="shop"] .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
+}
+
+/* Shop trade types: 3+2 per line */
+.shop-trade-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.shop-trade-row .form-section:nth-child(n+4) {
+    grid-column: span 1;
+}
+
+@media (max-width: 768px) {
+    .shop-trade-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Specials panel */

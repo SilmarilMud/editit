@@ -133,11 +133,13 @@ export function renderObjectForm(obj, onChange, options = {}) {
 function renderValues(container, obj, onChange, readonly) {
     const el = container.querySelector('#obj-values');
     if (!el) return;
-    const info = itemValues.find(v => v.itemType === obj.type) || { descr: ['','','',''], type: [0,0,0,0] };
+    const info = itemValues.find(v => v.itemType === obj.type) || { descr: ['','','',''], type: [0,0,0,0], hint: ['','','',''] };
     
     let html = '';
     for (let i = 0; i < 4; i++) {
-        const label = info.descr[i] || `Value ${i+1}`;
+        const labelText = info.descr[i] || `Value ${i+1}`;
+        const hint = info.hint && info.hint[i] ? ` <span class="hint">(${info.hint[i]})</span>` : '';
+        const label = `${labelText}${hint}`;
         const t = info.type[i];
         let input = '';
         
@@ -328,6 +330,11 @@ function attachChangeHandlers(container, obj, onChange, readonly) {
             }
             // Update field states when type changes
             if (e.target.name === 'type') {
+                // Apply defaults for the new type
+                const info = itemValues.find(v => v.itemType === obj.type);
+                if (info && info.defaults) {
+                    obj.value = [...info.defaults];
+                }
                 updateFieldStates(container, obj);
                 renderValues(container, obj, onChange, readonly);
             }

@@ -104,9 +104,9 @@ export function renderMobileForm(mob, onChange, options = {}) {
             
             <div class="form-row">
                 <div class="form-section">
-                    <label>Gold</label>
+                    <label>Gold <span class="hint">(0 - 500000)</span></label>
                     <input type="number" name="gold" value="${mob.gold}" 
-                           min="0"
+                           min="0" max="500000"
                            ${readonly ? 'disabled' : ''}>
                 </div>
                 
@@ -150,7 +150,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
             <div id="shop-settings" class="${mob.isShopKeeper ? '' : 'hidden'}">
                 <div class="form-section">
                     <h4>Trade Types</h4>
-                    <div class="form-row">
+                    <div class="shop-trade-row">
                         ${mob.buyType.map((bt, i) => `
                             <div class="form-section">
                                 <label>Slot ${i + 1}</label>
@@ -258,6 +258,7 @@ function attachChangeHandlers(container, mob, onChange) {
         const validationRules = {
             align: { min: -1000, max: 1000, warning: 'Alignment must be between -1000 and 1000' },
             level: { min: 1, max: 100, warning: 'Level must be between 0 and 100' },
+            gold: { min: 0, max: 500000, warning: 'Gold must be between 0 and 500000' },
             reputation: { min: -1000, max: 1000, warning: 'Reputation must be between -1000 and 1000' },
             openHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },
             closeHour: { min: 0, max: 23, warning: 'Hour must be between 0 and 23' },

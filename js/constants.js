@@ -804,168 +804,267 @@ export const applyName = [
 export const itemValues = [
     {
         itemType: ITEM_LIGHT,
-        descr: ["", "", "Durata (Ore)", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_LIGHT, VALUE_IS_UNUSED]
+        descr: ["", "", "Lasting (Hours)", ""],
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_LIGHT, VALUE_IS_UNUSED],
+        defaults: [0, 0, -1, 0],
+        hint: ["", "", "-1 - infinite", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_SCROLL,
-        descr: ["Livello", "Magia 1", "Magia 2", "Magia 3"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL]
+        descr: ["Level", "Spell 1", "Spell 2", "Spell 3"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL],
+        defaults: [1, 0, 0, 0],
+        hint: ["1 - 50", "", "optional", "optional"],
+        range: [{ min: 1, max: 50 }, null, null, null],
     },
     {
         itemType: ITEM_WAND,
-        descr: ["Livello", "Max Cariche", "Cur Cariche", "Magia"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL]
+        descr: ["Level", "Max. Charges", "Cur. Charges", "Spell"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL],
+        defaults: [1, 1, 1, 0],
+        hint: ["1 - 50", "1 - 15", "", ""],
+        range: [{ min: 1, max: 50 }, { min: 1, max: 15 }, null, null],
     },
     {
         itemType: ITEM_STAFF,
-        descr: ["Livello", "Max Cariche", "Cur Cariche", "Magia"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL]
+        descr: ["Level", "Max. Charges", "Cur. Charges", "Spell"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL],
+        defaults: [1, 1, 1, 0],
+        hint: ["1 - 50", "1 - 15", "", ""],
+        range: [{ min: 1, max: 50 }, { min: 1, max: 15 }, null, null],
     },
     {
         itemType: ITEM_WEAPON,
-        descr: ["Max Distanza", "", "", "Tipo"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_WEAPON]
+        descr: ["Max. distance", "", "", "Damage"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_WEAPON],
+        defaults: [0, 0, 0, 0],
+        hint: ["if shootable/throwable", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_INSTRUMENT,
-        descr: ["Livello", "Max Cariche", "Cur Cariche", "Magia"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL]
+        descr: ["Level", "Max. Charges", "Cur. Charges", "Spell"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL],
+        defaults: [1, 1, 1, 0],
+        hint: ["1 - 50", "1 - 15", "", ""],
+        range: [{ min: 1, max: 50 }, { min: 1, max: 15 }, null, null],
     },
     {
         itemType: ITEM_STATUE,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TREASURE,
-        descr: ["Valore", "", "", ""],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["", "", "", ""],
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_ARMOR,
-        descr: ["AC base", "", "", ""],
-        type: [VALUE_IS_NUMBER, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Base AC", "", "", ""],
+        type: [VALUE_IS_NUMBER, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_POTION,
-        descr: ["Livello", "Magia 1", "Magia 2", "Magia 3"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL]
+        descr: ["Level", "Spell 1", "Spell 2", "Spell 3"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL],
+        defaults: [1, 0, 0, 0],
+        hint: ["1 - 50", "", "optional", "optional"],
+        range: [{ min: 1, max: 50 }, null, null, null],
     },
     {
         itemType: ITEM_FURNITURE,
-        descr: ["Posizioni", "Max. Occupanti", "Max. Capienza", ""],
-        type: [VALUE_IS_FURNITURE_FLAGS, VALUE_IS_NUMBER, VALUE_IS_NUMBER, VALUE_IS_UNUSED]
+        descr: ["Position", "Max. People", "Max. Objects", ""],
+        type: [VALUE_IS_FURNITURE_FLAGS, VALUE_IS_NUMBER, VALUE_IS_NUMBER, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "1 - 10", "1 - 10", ""],
+        range: [null, { min: 1, max: 10 }, { min: 1, max: 10 }, null],
     },
     {
         itemType: ITEM_TRASH,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_SCABBARD,
-        descr: ["Arma", "Arma", "Arma", "Arma"],
-        type: [VALUE_IS_WEAPON, VALUE_IS_WEAPON, VALUE_IS_WEAPON, VALUE_IS_WEAPON]
+        descr: ["Weapon", "Weapon", "Weapon", "Weapon"],
+        type: [VALUE_IS_WEAPON, VALUE_IS_WEAPON, VALUE_IS_WEAPON, VALUE_IS_WEAPON],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "optional", "optional", "optional"],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CONTAINER,
-        descr: ["Capacita'", "Tipo", "Chiave", ""],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_VNUM, VALUE_IS_UNUSED]
+        descr: ["Weight Capacity", "Lock", "Key", ""],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_VNUM, VALUE_IS_UNUSED],
+        defaults: [10, 0, 0, 0],
+        hint: ["1 - 5000", "", "", ""],
+        range: [{ min: 1, max: 5000 }, null, null, null],
     },
     {
         itemType: ITEM_QUIVER,
-        descr: ["Capacita'", "", "", ""],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Capacity", "", "", ""],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [10, 0, 0, 0],
+        hint: ["1 - 100", "", "", ""],
+        range: [{ min: 1, max: 100 }, null, null, null],
     },
     {
         itemType: ITEM_DRINK_CON,
-        descr: ["Capacita'", "Quantita'", "Tipo", "Avvelenato"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_LIQUID, VALUE_IS_POISON]
+        descr: ["Capacity", "Cur. Quantity", "Liquid", "Poisoned"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_NUMBER_FROM_0, VALUE_IS_LIQUID, VALUE_IS_POISON],
+        defaults: [0, 0, 0, 0],
+        hint: ["1 - 50", "", "", ""],
+        range: [{ min: 1, max: 50 }, null, null, null],
     },
     {
         itemType: ITEM_KEY,
-        descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Vnum container/room", "", "", ""],
+        type: [VALUE_IS_VNUM, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["optional", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_FOOD,
-        descr: ["Sfama per (Ore)", "", "", "Avvelenato"],
-        type: [VALUE_IS_NUMBER, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_POISON]
+        descr: ["Food value (Hours)", "", "", "Poisoned"],
+        type: [VALUE_IS_NUMBER, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_POISON],
+        defaults: [1, 0, 0, 0],
+        hint: ["1 - 40", "", "", ""],
+        range: [{ min: 1, max: 40 }, null, null, null],
     },
     {
         itemType: ITEM_MONEY,
-        descr: ["Quantita'", "", "", ""],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Quantity", "", "", ""],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [1, 0, 0, 0],
+        hint: ["1 - 50000", "", "", ""],
+        range: [{ min: 1, max: 50000 }, null, null, null],
     },
     {
         itemType: ITEM_WARSOUND,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_BOAT,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CORPSE_NPC,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CORPSE_PC,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_FOUNTAIN,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_PILL,
-        descr: ["Livello", "Magia 1", "Magia 2", "Magia 3"],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL]
+        descr: ["Level", "Spell 1", "Spell 2", "Spell 3"],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_SPELL, VALUE_IS_SPELL, VALUE_IS_SPELL],
+        defaults: [1, 0, 0, 0],
+        hint: ["1 - 50", "", "optional", "optional"],
+        range: [{ min: 1, max: 50 }, null, null, null],
     },
     {
         itemType: ITEM_PROJECTILE,
-        descr: ["Tipo di arma", "", "", ""],
-        type: [VALUE_IS_WEAPON, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Weapon", "", "", ""],
+        type: [VALUE_IS_WEAPON, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_BUILDING,
-        descr: ["Locazione", "Porta", "Chiave", "Serratura"],
-        type: [VALUE_IS_VNUM, VALUE_IS_NUMBER, VALUE_IS_VNUM, VALUE_IS_CONTAINER_FLAGS]
+        descr: ["Destination", "Door", "Key", "Lock"],
+        type: [VALUE_IS_VNUM, VALUE_IS_NUMBER, VALUE_IS_VNUM, VALUE_IS_CONTAINER_FLAGS],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_PORTAL,
-        descr: ["Locazione", "", "", ""],
-        type: [VALUE_IS_VNUM, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Destination", "", "", ""],
+        type: [VALUE_IS_VNUM, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_CAMERA,
-        descr: ["Locazione", "Locazione", "Locazione", "Locazione"],
-        type: [VALUE_IS_VNUM, VALUE_IS_VNUM, VALUE_IS_VNUM, VALUE_IS_VNUM]
+        descr: ["Destination", "Destination", "Destination", "Destination"],
+        type: [VALUE_IS_VNUM, VALUE_IS_VNUM, VALUE_IS_VNUM, VALUE_IS_VNUM],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "optional", "optional", "optional"],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TRAP,
-        descr: ["Tipo", "Tipo di danno", "Cariche", "Danno"],
-        type: [VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE, VALUE_IS_LIGHT, VALUE_IS_NUMBER_FROM_0]
+        descr: ["Type", "Damage type", "Charges", "Damage"],
+        type: [VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE, VALUE_IS_LIGHT, VALUE_IS_NUMBER_FROM_0],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "1 - 10", ""],
+        range: [null, null, { min: 1, max: 10 }, null],
     },
     {
         itemType: ITEM_PAPER,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_BOOK,
         descr: ["", "", "", ""],
-        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        type: [VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
     {
         itemType: ITEM_TARGET,
-        descr: ["Distanza (metri)", "", "", ""],
-        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED]
+        descr: ["Distance (meters)", "", "", ""],
+        type: [VALUE_IS_NUMBER_FROM_0, VALUE_IS_UNUSED, VALUE_IS_UNUSED, VALUE_IS_UNUSED],
+        defaults: [0, 0, 0, 0],
+        hint: ["", "", "", ""],
+        range: [null, null, null, null],
     },
 ];
 
@@ -1537,17 +1636,19 @@ export function createApply() {
 }
 
 /** @returns {import('./types.js').AreaObject} */
-export function createObject() {
+export function createObject(type = ITEM_LIGHT) {
+    const info = itemValues.find(v => v.itemType === type);
+    const defaults = info && info.defaults ? info.defaults : [0, 0, 0, 0];
     return {
         VNum: 0,
         keywords: "nuovo oggetto",
         shortDescr: "un nuovo oggetto",
         longDescr: "Qui c'e' un nuovo oggetto.",
         action: "",
-        type: ITEM_LIGHT,
+        type: type,
         extraFlags: 0,
         wearFlags: 0,
-        value: [0, 0, 0, 0],
+        value: [...defaults],
         weight: 0,
         wearAffs: 0,
         cost: 0,

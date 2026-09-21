@@ -424,9 +424,8 @@ class Parser {
                 throw new Error(`LoadMobiles: VNum ${vnum} invalid sex (${mob.sex})`);
 
             mob.special = ''; mob.isShopKeeper = false;
-            mob.buyType = [0, 0, 0, 0, 0];
-            mob.profitBuy = 0; mob.profitSell = 0;
-            mob.openHour = 0; mob.closeHour = 0;
+            // Note: buyType, profitBuy, profitSell, openHour, closeHour are initialized
+            // by createMobile() and will be overwritten by loadShops() if this mob is a shopkeeper
             mobs.push(mob);
         }
     }
