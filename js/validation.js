@@ -74,6 +74,7 @@ export const RULES = {
     'W-INVALID-SECTOR':   { severity: SEVERITY_WARNING, category: CATEGORY_RANGE,     message: 'Invalid sector type' },
     'W-INVALID-LOCK':     { severity: SEVERITY_WARNING, category: CATEGORY_RANGE,     message: 'Invalid lock type' },
     'W-INVALID-DOOR-RESET': { severity: SEVERITY_WARNING, category: CATEGORY_RANGE,   message: 'Invalid door reset state' },
+    'W-SHOP-EMPTY':        { severity: SEVERITY_WARNING, category: CATEGORY_INTEGRITY, message: 'Shop has no trade types set' },
 
     // Info (suggestions)
     'I-ORPHAN-MOB':   { severity: SEVERITY_INFO, category: CATEGORY_INTEGRITY, message: 'Mob defined but never loaded by resets' },
@@ -226,9 +227,9 @@ function checkMobiles(mobs) {
         }
 
         // Gold range
-        if (mob.gold < 0 || mob.gold > 999999) {
+        if (mob.gold < 0 || mob.gold > 500000) {
             issues.push(issue('W-FIELD-RANGE', 'mob', mob.VNum, 'gold', {
-                message: `Gold ${mob.gold} outside range (0-999999)`
+                message: `Gold ${mob.gold} outside range (0-500000)`
             }));
         }
 
@@ -237,6 +238,16 @@ function checkMobiles(mobs) {
             if (!mobSpecFuncs.some(s => s.value === mob.special)) {
                 issues.push(issue('W-SPECIAL-REF', 'mob', mob.VNum, 'special', {
                     message: `Special function "${mob.special}" not in known list`
+                }));
+            }
+        }
+
+        // Shop validation: check if shopkeeper has no trade types
+        if (mob.isShopKeeper) {
+            const hasTradeType = mob.buyType && mob.buyType.some(bt => bt !== 0);
+            if (!hasTradeType) {
+                issues.push(issue('W-SHOP-EMPTY', 'mob', mob.VNum, 'buyType', {
+                    message: `Shopkeeper "${mob.shortDescr}" has all trade types set to none`
                 }));
             }
         }
