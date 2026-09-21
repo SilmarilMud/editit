@@ -234,7 +234,7 @@ function checkMobiles(mobs) {
 
         // Special function validation
         if (mob.special && mob.special !== '') {
-            if (!mobSpecFuncs.some(s => s === mob.special)) {
+            if (!mobSpecFuncs.some(s => s.value === mob.special)) {
                 issues.push(issue('W-SPECIAL-REF', 'mob', mob.VNum, 'special', {
                     message: `Special function "${mob.special}" not in known list`
                 }));
@@ -369,7 +369,7 @@ function checkObjects(objs) {
 
         // Special function validation
         if (obj.special && obj.special !== '') {
-            if (!objSpecFuncs.some(s => s === obj.special)) {
+            if (!objSpecFuncs.some(s => s.value === obj.special)) {
                 issues.push(issue('W-SPECIAL-REF', 'obj', obj.VNum, 'special', {
                     message: `Special function "${obj.special}" not in known list`
                 }));

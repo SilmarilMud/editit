@@ -135,26 +135,16 @@ export function renderAreaForm(area, onChange, options = {}) {
     // Add flags group
     const flagsContainer = container.querySelector('#area-flags-container');
     if (flagsContainer) {
-        const flagsData = areaFlagsName
-            .map((name, index) => {
-                if (!name) return null; // Skip empty entries
-                const value = Math.pow(2, index);
-                // Skip flags that shouldn't be set by user
-                if (value & AFLAG_DONT_SET) return null;
-                return { value, label: name };
-            })
-            .filter(Boolean);
-        
         const flagGroup = createFlagGroup(
             'areaFlags',
-            flagsData,
+            areaFlagsName,
             area.areaFlags,
             (newValue) => {
                 area.areaFlags = newValue;
                 updateFieldStates(container, area);
                 if (onChange) onChange(area);
             },
-            { columns: 2, disabled: readonly }
+            { columns: 2, disabled: readonly, exclude: AFLAG_DONT_SET }
         );
         
         flagsContainer.appendChild(flagGroup.container);

@@ -1,0 +1,873 @@
+================================================================================
+FLAG DESCRIPTIONS FOR EDITIT WEB TOOLTIPS
+================================================================================
+This file contains descriptions for all flags used in EditIt.
+Each description is intended for tooltip text in the GUI.
+
+Format: CONSTANT_NAME = bit_value
+  Description text...
+  Source: where it's defined/used
+
+Notes:
+  - Descriptions are in English (will be translated to Italian later)
+  - Flags marked [UNUSED] are defined but not functional in the code
+  - Flags marked [IMMORTAL] are only visible/usable by immortals
+  - Flags marked [WORN OBJ ONLY] apply only to worn object afflictions
+
+================================================================================
+SECTION 1: ACT_* - MOBILE ACTION FLAGS
+================================================================================
+
+ACT_IS_NPC = 1 (bit 0)
+  Auto-set for all mobile NPCs. Never set this manually.
+  Source: merc.h:843, used everywhere via IS_NPC() macro
+
+ACT_SENTINEL = 2 (bit 1)
+  The mobile stays in its assigned room and will not wander.
+  Used during area reset to keep guards and shopkeepers in place.
+  Source: merc.h:844, db.c:2087
+
+ACT_SCAVENGER = 4 (bit 2)
+  The mobile picks up valuable objects from the ground and keeps them.
+  Scavengers will take the most valuable item in the room.
+  Source: merc.h:845
+
+ACT_TO_VINDICATE = 8 (bit 3)
+  The players will acquire the wanted status when killing this mobile,
+  and will be hunted by mobile guards.
+  Source: merc.h:846, fight.c:920
+
+ACT_HUNTER = 16 (bit 4)
+  The mobile actively hunts wanted criminals (PLR_WANTED).
+  Hunters check a wanted list and pursue marked players across areas.
+  Source: merc.h:847, mspecial.c (spec_hunter)
+
+ACT_AGGRESSIVE = 32 (bit 5)
+  The mobile attacks players on sight without provocation.
+  Aggressive mobs will initiate combat when a player enters the room.
+  Source: merc.h:848, fight.c:1924
+
+ACT_STAY_AREA = 64 (bit 6)
+  The mobile will not leave its home area when chasing or wandering.
+  Prevents mobs from following players into other zones.
+  Source: merc.h:849, fight.c:2619
+
+ACT_WIMPY = 128 (bit 7)
+  The mobile flees when badly hurt (below 25% HP).
+  Wimpy mobs will attempt to flee from combat.
+  Source: merc.h:850, fight.c:997
+
+ACT_PET = 256 (bit 8)
+  Auto-set for tamed pets. Indicates the mobile is a player's companion.
+  Pets follow their master and share experience. Never set this manually.
+  Source: merc.h:851, act_obj.c:3019
+
+ACT_TRAIN = 512 (bit 9)
+  The mobile can train players in stats (strength, intelligence, etc.)
+  Immortals can use the "train" command near these mobs.
+  Source: merc.h:852, act_move.c:1944
+
+ACT_PRACTICE = 1024 (bit 10)
+  The mobile is a guildmaster who can teach skills/spells.
+  Players can use the "practice" command near these mobs.
+  Source: merc.h:853, act_info.c:2847
+
+ACT_GAMBLE = 2048 (bit 11)
+  The mobile runs a gambling game (cards, dice, etc.)
+  Croupiers with this flag can interact with each other. Unused.
+  Source: merc.h:854, act_move.c:2652
+
+ACT_VINDICATIVE = 4096 (bit 12)
+  The mobile actively tracks the player if they flee the combat.
+  Source: merc.h:855, fight.c:1274
+
+ACT_PEACEFUL = 8192 (bit 13)
+  The mobile ignores hated races and won't attack based on racial hatred.
+  Peaceful mobs are exempt from racial aggro behavior.
+  Source: merc.h:856
+
+ACT_GUARD = 16384 (bit 14)
+  The mobile is a city guard. It attacks criminals (PLR_KILLER, PLR_THIEF)
+  and warns players with weapons in lawful areas. Also greets hero-reputation
+  players and insults villains.
+  Source: merc.h:857, mspecial.c (spec_guard)
+
+ACT_MOVED = 131072 (bit 17)
+  [UNUSED] Internal flag, do not set. Originally for tracking mobile movement.
+  Source: merc.h:859
+
+ACT_SAVEMOB = 536870912 (bit 29)
+  The mobile's data is saved to disk. Used for persistent NPCs that retain
+  their state across reboots (e.g., shopkeepers with gold).
+  Source: merc.h:861, act_wiz.c:3286
+
+ACT_SPECIAL = 1073741824 (bit 30)
+  The mobile has a special function that must be always executed,
+  even if there are no players in the area (e.g. mayor).
+  Source: merc.h:862
+
+================================================================================
+SECTION 2: AFF_* - AFFECT FLAGS
+================================================================================
+These flags represent active magical effects or conditions on a character.
+
+AFF_BLIND = 1 (bit 0)
+  The character is blinded and cannot see. Reduces combat accuracy.
+  Source: merc.h:869, act_info.c:571
+
+AFF_INVISIBLE = 2 (bit 1)
+  The character is invisible to normal sight. Requires detect invis to see.
+  Source: merc.h:870, act_info.c:300
+
+AFF_DETECT_EVIL = 4 (bit 2)
+  The character can sense evil-aligned beings. Evil creatures glow red.
+  Source: merc.h:871, act_info.c:104
+
+AFF_DETECT_INVIS = 8 (bit 3)
+  The character can see invisible creatures and objects.
+  Source: merc.h:872, act_move.c:2187
+
+AFF_DETECT_MAGIC = 16 (bit 4)
+  The character can sense magical auras on objects and creatures.
+  Source: merc.h:873, act_info.c:107
+
+AFF_DETECT_HIDDEN = 32 (bit 5)
+  The character can detect hidden (sneaking/hiding) creatures.
+  Source: merc.h:874, act_move.c:2191
+
+AFF_HOLD = 64 (bit 6)
+  The character is held/paralyzed and cannot move or act.
+  Normally set only by fight skills, use with care.
+  Source: merc.h:875, act_move.c:120
+
+AFF_SANCTUARY = 128 (bit 7)
+  The character is protected by sanctuary. All damage is halved.
+  Source: merc.h:876, act_info.c:319
+
+AFF_FAERIE_FIRE = 256 (bit 8)
+  The character is outlined by faerie fire and cannot hide.
+  Also makes them vulnerable to additional damage.
+  Source: merc.h:877, act_info.c:311
+
+AFF_INFRARED = 512 (bit 9)
+  The character has infravision and can see in the dark.
+  Source: merc.h:878, act_info.c:553
+
+AFF_CURSE = 1024 (bit 10)
+  The character is cursed. Prevents recall and reduces stats.
+  Source: merc.h:879, act_move.c:1859
+
+AFF_CHANGE_SEX = 2048 (bit 11)
+  The character's apparent gender is changed.
+  Source: merc.h:880
+
+AFF_POISON = 4096 (bit 12)
+  The character is poisoned and takes periodic damage.
+  Source: merc.h:881, act_info.c:4212
+
+AFF_PROTECT = 8192 (bit 13)
+  The character is protected from evil. Evil attackers deal less damage.
+  Source: merc.h:882
+
+AFF_POLYMORPH = 16384 (bit 14)
+  The character has been polymorphed into a different form.
+  Never set this manually.
+  Source: merc.h:883
+
+AFF_SNEAK = 32768 (bit 15)
+  The character moves silently and is harder to detect.
+  Sneaking characters don't generate movement messages.
+  Source: merc.h:884, act_move.c:1758
+
+AFF_HIDE = 65536 (bit 16)
+  The character is hidden and cannot be seen without detect hidden.
+  Attacking or moving reveals hidden characters.
+  Source: merc.h:885, act_move.c:1784
+
+AFF_SLEEP = 131072 (bit 17)
+  The character is magically asleep and cannot act.
+  Waking requires damage or a wake spell.
+  Source: merc.h:886, act_move.c:1253
+
+AFF_CHARM = 262144 (bit 18)
+  The character is charmed and obeys the charm source.
+  Charmed mobs follow their master; charmed players lose some control.
+  Never set this manually.
+  Source: merc.h:887, act_comm.c:1648
+
+AFF_FLYING = 524288 (bit 19)
+  The character is flying and can cross water/chasms.
+  Also provides immunity to ground-based traps.
+  Source: merc.h:888, act_move.c:248
+
+AFF_PASS_DOOR = 1048576 (bit 20)
+  The character can pass through closed doors and walls.
+  Source: merc.h:889, act_move.c:207
+
+AFF_WATERWALK = 2097152 (bit 21)
+  [UNUSED] Marked as unused in source code.
+  Source: merc.h:890
+
+AFF_SUMMONED = 4194304 (bit 22)
+  The mobile was summoned by the character. Never set this manually.
+  Source: merc.h:891, act_comm.c:1859
+
+AFF_MUTE = 8388608 (bit 23)
+  The character cannot cast verbal spells or speak.
+  Blocks all spellcasting that requires verbal components.
+  Source: merc.h:892, merc.h:2035
+
+AFF_GILLS = 16777216 (bit 24)
+  The character can breathe underwater without drowning.
+  Source: merc.h:893, act_move.c:484
+
+AFF_VAMP_BITE = 33554432 (bit 25)
+  The character has been bitten by a vampire.
+  Causes periodic damage and can spread vampirism. Never set this manually.
+  Source: merc.h:894
+
+AFF_GHOUL = 67108864 (bit 26)
+  The character has been turned into a ghoul, so they can't
+  fight, die or wear items.
+  Source: merc.h:895, act_obj.c:1878
+
+AFF_FLAMING = 134217728 (bit 27)
+  The character is wreathed in flames.
+  Deals fire damage to attackers in melee combat.
+  Source: merc.h:896, act_info.c:322
+
+AFF_MORTAL_POISON = 268435456 (bit 28)
+  The character is afflicted with a deadly poison.
+  More severe than regular poison; can be lethal without treatment.
+  Source: merc.h:897, act_info.c:4214
+
+AFF_PARALYZED = 536870912 (bit 29)
+  [UNUSED] Marked as unused in source code.
+  Source: merc.h:898
+
+AFF_PIETRIFIED = 1073741824 (bit 30)
+  The character has been turned to stone (petrified).
+  Completely immobilizes the target. Can be cured by 'Stone to Flesh'.
+  Source: merc.h:899
+
+================================================================================
+SECTION 3: ROOM_* - ROOM FLAGS
+================================================================================
+
+ROOM_DARK = 1 (bit 0)
+  The room is dark. Characters without infravision cannot see.
+  A light source is needed to see in dark rooms.
+  Source: merc.h:1175, handler.c:1955
+
+ROOM_NO_MOB = 4 (bit 2)
+  Mobiles (except charmed pets and guards) cannot enter this room.
+  Used to protect quest NPCs or safe zones from mob intrusion.
+  Source: merc.h:1177, fight.c:2618
+
+ROOM_INDOORS = 8 (bit 3)
+  The room is indoors. Weather effects don't apply.
+  Source: merc.h:1178, act_obj.c:4524
+
+ROOM_UNDERGROUND = 16 (bit 4)
+  The room is underground. Similar to indoors but for caves/dungeons.
+  Prevents weather effects and requires light sources.
+  Prevents periodic damage to vampires.
+  Source: merc.h:1179, act_obj.c:4525
+
+ROOM_LOG = 32 (bit 5)
+  All commands spoken in this room are logged to file.
+  Used for monitoring player behavior in specific areas.
+  Source: merc.h:1180, interp.c:3731
+
+ROOM_NO_TELEPORT = 64 (bit 6)
+  Teleport spells and abilities cannot target or arrive in this room.
+  Prevents magical bypass of the room's defenses.
+  Source: merc.h:1181, act_wiz2.c:4902
+
+ROOM_FOGGY = 128 (bit 7)
+  The room is filled with fog. Reduces combat accuracy and visibility.
+  Attacks have a chance to miss due to obscured vision.
+  Source: merc.h:1182, fight.c:1033
+
+ROOM_NO_SUMMON = 256 (bit 8)
+  Summon spells cannot bring creatures into this room.
+  Prevents players from summoning help into protected areas.
+  Source: merc.h:1183
+
+ROOM_PRIVATE = 512 (bit 9)
+  Only 2 characters can be in this room at once.
+  Used for private meeting rooms or special encounter areas.
+  Source: merc.h:1184, handler.c:1988
+
+ROOM_SAFE = 1024 (bit 10)
+  No combat is allowed in this room. PvP and flagging are disabled.
+  Safe rooms are typically temples or learning areas.
+  Source: merc.h:1185, fight.c:1112
+
+ROOM_SOLITARY = 2048 (bit 11)
+  Only 1 character can be in this room at once.
+  Used for solo quest areas or personal chambers.
+  Source: merc.h:1186, handler.c:1991
+
+ROOM_PET_SHOP = 4096 (bit 12)
+  The room functions as a pet shop. Players can buy pets here.
+  The room behind (south) should contain the available pets.
+  Source: merc.h:1187, act_obj.c:2956
+
+ROOM_NO_RECALL = 8192 (bit 13)
+  Word of Recall spell does not work in this room.
+  Characters cannot teleport back to their temple from here.
+  Source: merc.h:1188, act_move.c:1858
+
+ROOM_CONE_OF_SILENCE = 16384 (bit 14)
+  Magical silence pervades the room. No verbal spells can be cast.
+  Also prevents speech between characters.
+  Source: merc.h:1189, magic.c:264
+
+ROOM_SAVE = 32768 (bit 15)
+  Objects on the ground in this room are saved to disk.
+  Items dropped here persist across reboots (like donation rooms).
+  Source: merc.h:1190, save.c:2090
+
+ROOM_DEATHTRAP = 65536 (bit 16)
+  Characters entering this room take lethal damage.
+  Anything that enters (including items) is destroyed.
+  Source: merc.h:1191, act_move.c:507
+
+ROOM_NO_COMBAT = 131072 (bit 17)
+  No combat of any kind is allowed. Even spells are blocked.
+  Guards will glare at criminals but cannot attack.
+  Source: merc.h:1192, fight.c:229
+
+ROOM_MINI_SAVE = 262144 (bit 18)
+  Like ROOM_SAVE but only saves non-takeable objects.
+  Items with ITEM_TAKE flag are not saved (to prevent clutter).
+  Source: merc.h:1193, save.c:396
+
+ROOM_THEATER = 524288 (bit 19)
+  The room is a theater, dispatching all messages to other rooms
+  configured in a (mandatory) camera item present in this room.
+  Source: merc.h:1194, comm.c:3708
+
+ROOM_SEATS = 1048576 (bit 20)
+  The room has stadium/theater seating. Characters seated here can
+  watch events unfold. Prevents some spammy conditions like players
+  private conversation messages, and stops players food/thirst
+  condition changes.
+  Source: merc.h:1195, act_comm.c:1169
+
+================================================================================
+SECTION 4: EX_* - EXIT FLAGS
+================================================================================
+
+EX_ISDOOR = 1 (bit 0)
+  The exit is a door. Required for any door-related behavior.
+  Without this flag, the exit is just an open passage.
+  Source: merc.h:1214
+
+EX_CLOSED = 2 (bit 1)
+  The door is closed. Characters cannot pass through.
+  Can be opened with the "open" command or by bashing.
+  Source: merc.h:1215
+
+EX_LOCKED = 4 (bit 2)
+  The door is locked. Requires a key or lockpick to open.
+  Characters cannot open it without the correct key or skill.
+  Source: merc.h:1216
+
+EX_BASHED = 8 (bit 3)
+  The door has been bashed open by force.
+  It remains open until repaired by a repairman NPC.
+  Source: merc.h:1217, mspecial.c (spec_repairman)
+
+EX_BASHPROOF = 16 (bit 4)
+  The door cannot be bashed open. Resists all brute force attempts.
+  Only lockpicking or keys can open this door.
+  Source: merc.h:1218
+
+EX_PICKPROOF = 32 (bit 5)
+  The door cannot be picked with lockpicks.
+  Only the correct key can open this door.
+  Source: merc.h:1219
+
+EX_PASSPROOF = 64 (bit 6)
+  The door cannot be passed through magically.
+  Pass Door spell and similar effects do not work on this door.
+  Source: merc.h:1220
+
+EX_HIDDEN = 128 (bit 7)
+  The exit is hidden and not visible in room descriptions.
+  Characters must find it through searching or special means.
+  Source: merc.h:1221
+
+EX_NOUN_MALE = 256 (bit 8)
+  The door uses masculine Italian noun forms.
+  Affects article usage in Italian (il/la, un/una).
+  Source: merc.h:1222
+
+EX_WINDOW = 512 (bit 9)
+  The exit is a window, not a door.
+  Cannot be bashed or locked like a regular door.
+  Has a special watch through mechanic.
+  Source: merc.h:1223
+
+EX_HEAVY = 1024 (bit 10)
+  [UNUSED] The door is heavier and harder to bash.
+  Marked as not yet implemented in source.
+  Source: merc.h:1224
+
+EX_COMPLEX = 2048 (bit 11)
+  [UNUSED] The door has a complex lock mechanism.
+  Marked as not yet implemented in source.
+  Source: merc.h:1225
+
+================================================================================
+SECTION 5: ITEM_* - OBJECT EXTRA FLAGS
+================================================================================
+
+ITEM_GLOW = 1 (bit 0)
+  The object emits a soft glow of light.
+  Illuminates the room when carried or in a room.
+  Source: merc.h:1011, act_move.c:1798
+
+ITEM_HUM = 2 (bit 1)
+  The object emits a low humming sound.
+  Cannot be used while hiding or sneaking effectively.
+  Source: merc.h:1012, act_move.c:1740
+
+ITEM_DARK = 4 (bit 2)
+  [UNUSED] Marked as unused in source code.
+  Source: merc.h:1013
+
+ITEM_LOCK = 8 (bit 3)
+  [UNUSED] Marked as unused in source code.
+  Source: merc.h:1014
+
+ITEM_EVIL = 16 (bit 4)
+  The object radiates evil auras.
+  Detect Evil spell holders will see it glow red. No effects in game.
+  Source: merc.h:1015, act_info.c:106
+
+ITEM_INVIS = 32 (bit 5)
+  The object is invisible. Requires Detect Invis to see.
+  Source: merc.h:1016, act_info.c:103
+
+ITEM_MAGIC = 64 (bit 6)
+  The object is magical. Requires Detect Magic to identify.
+  More resistant to corrosion.
+  Source: merc.h:1017, act_info.c:108
+
+ITEM_NODROP = 128 (bit 7)
+  The object is cursed and cannot be dropped. It stays in inventory.
+  Cursed items often have this flag.
+  Source: merc.h:1018, magic.c:2730
+
+ITEM_BLESS = 256 (bit 8)
+  The object is blessed. Provides bonus against evil.
+  More resistant to corrosion.
+  Source: merc.h:1019, act_obj.c:3588
+
+ITEM_ANTI_GOOD = 512 (bit 9)
+  Good-aligned characters cannot wear/wield this object.
+  Source: merc.h:1020
+
+ITEM_ANTI_EVIL = 1024 (bit 10)
+  Evil-aligned characters cannot wear/wield this object.
+  Source: merc.h:1021
+
+ITEM_ANTI_NEUTRAL = 2048 (bit 11)
+  Neutral-aligned characters cannot wear/wield this object.
+  Source: merc.h:1022
+
+ITEM_NOREMOVE = 4096 (bit 12)
+  The object is cursed and cannot be removed once equipped.
+  Source: merc.h:1023, act_obj.c:1443
+
+ITEM_INVENTORY = 8192 (bit 13)
+  Infinite shop supply item, disappears when owner dies.
+  Never set this manually unless sure.
+  Source: merc.h:1024, db.c:2272
+
+ITEM_POISONED = 16384 (bit 14)
+  The object is coated with poison.
+  Attacks with this weapon may poison the target.
+  Normally set by skills that also give a timer to the
+  weapon. Never set this manually unless sure.
+  Source: merc.h:1025, act_obj.c:3582
+
+ITEM_VAMPIRE_BANE = 32768 (bit 15)
+  When set on HOLD item, effective against vampiric bite.
+  Source: merc.h:1026, fight.c:3469
+
+ITEM_HOLY = 65536 (bit 16)
+  The object is sanctified and holy. Causes small damage
+  when gathered. When set on HOLD item, effective against
+  vampiric bite.
+  Source: merc.h:1027, fight.c:3474
+
+ITEM_CAN_SHOOT = 131072 (bit 17)
+  The object can fire projectile weapons (bows, crossbows).
+  Must be wielded to shoot SHOOTABLE items.
+  Source: merc.h:1028, mspecial.c (spec_bowman)
+
+ITEM_SHOOTABLE = 262144 (bit 18)
+  The object can be shot from a CAN_SHOOT weapon.
+  Projectiles with this flag can be loaded and fired.
+  Source: merc.h:1029
+
+ITEM_THROWABLE = 524288 (bit 19)
+  The object can be thrown at enemies.
+  Dealt as a ranged attack with the "throw" command.
+  Source: merc.h:1030, db.c:990
+
+ITEM_BOOMERANG_STYLE = 1048576 (bit 20)
+  A throwable object that returns to the thrower.
+  The object flies back after being thrown.
+  Source: merc.h:1031
+
+ITEM_MORTAL_POISONED = 2097152 (bit 21)
+  The object is coated with deadly mortal poison.
+  Attacks with this weapon may poison the target
+  and can be lethal.
+  Normally set by skills that also give a timer to the
+  weapon. Never set this manually unless sure.
+  Source: merc.h:1032, act_obj.c:4027
+
+ITEM_RARE = 4194304 (bit 22)
+  The object is rare and cannot quit the game.
+  Must be kept in special storage or carried.
+  Source: merc.h:1033, act_obj.c:3348
+
+ITEM_CAN_QUIT = 8388608 (bit 23)
+  Allow to quit items that normally can't quit (e.g. keys)
+  Source: merc.h:1034, guild.c:2935
+
+ITEM_HIDDEN = 16777216 (bit 24)
+  The object is hidden in the room.
+  Requires special detection to find.
+  Source: merc.h:1035, act_obj.c:5197
+
+ITEM_LOGGET = 33554432 (bit 25)
+  Logging flag for object get/drop actions.
+  When set, all get/drop of this object is logged.
+  Source: merc.h:1036, act_obj.c:158
+
+ITEM_IMMORTAL = 67108864 (bit 26)
+  Only immortal players can take this object.
+  Regular players cannot pick it up.
+  Source: merc.h:1037, act_obj.c:105
+
+ITEM_NO_LOCATE = 134217728 (bit 27)
+  The object cannot be found by Locate Object spell.
+  Provides magical concealment from divination.
+  Source: merc.h:1038
+
+================================================================================
+SECTION 6: WEAR FLAGS (ITEM_WEAR_*)
+================================================================================
+These flags indicate where an object can be worn.
+
+ITEM_TAKE = 1 (bit 0)
+  The object can be picked up and carried.
+  Without this flag, the object stays on the ground.
+  Source: merc.h:1045
+
+ITEM_WEAR_FINGER = 2 (bit 1)
+  Can be worn on a finger (rings).
+  Source: merc.h:1046
+
+ITEM_WEAR_NECK = 4 (bit 2)
+  Can be worn around the neck (amulets, necklaces).
+  Source: merc.h:1047
+
+ITEM_WEAR_BODY = 8 (bit 3)
+  Can be worn on the body (armor, robes).
+  Source: merc.h:1048
+
+ITEM_WEAR_HEAD = 16 (bit 4)
+  Can be worn on the head (helmets, crowns).
+  Source: merc.h:1049
+
+ITEM_WEAR_LEGS = 32 (bit 5)
+  Can be worn on the legs (pants, greaves).
+  Source: merc.h:1050
+
+ITEM_WEAR_FEET = 64 (bit 6)
+  Can be worn on the feet (boots, sandals).
+  Source: merc.h:1051
+
+ITEM_WEAR_HANDS = 128 (bit 7)
+  Can be worn on the hands (gloves, gauntlets).
+  Source: merc.h:1052
+
+ITEM_WEAR_ARMS = 256 (bit 8)
+  Can be worn on the arms (bracers, vambraces).
+  Source: merc.h:1053
+
+ITEM_WEAR_SHIELD = 512 (bit 9)
+  Can be worn as a shield.
+  Source: merc.h:1054
+
+ITEM_WEAR_ABOUT = 1024 (bit 10)
+  Can be worn about the body (cloaks, capes).
+  Source: merc.h:1055
+
+ITEM_WEAR_WAIST = 2048 (bit 11)
+  Can be worn around the waist (belts, sashes).
+  Source: merc.h:1056
+
+ITEM_WEAR_WRIST = 4096 (bit 12)
+  Can be worn on the wrist (bracelets, watches).
+  Source: merc.h:1057
+
+ITEM_WIELD = 8192 (bit 13)
+  Can be wielded as a weapon.
+  Source: merc.h:1058
+
+ITEM_HOLD = 16384 (bit 14)
+  Can be held in hand (torches, books, instruments).
+  Source: merc.h:1059
+
+ITEM_WEAR_EYES = 32768 (bit 15)
+  Can be worn on the eyes (glasses, goggles).
+  Source: merc.h:1060
+
+ITEM_WEAR_SHOULDERS = 65536 (bit 16)
+  Can be worn on the shoulders (pauldrons, mantles).
+  Source: merc.h:1061
+
+ITEM_WEAR_EARS = 131072 (bit 17)
+  Can be worn on the ears (earrings, studs).
+  Source: merc.h:1062
+
+ITEM_WEAR_FOREHEAD = 262144 (bit 18)
+  Can be worn on the forehead (headbands, tiaras).
+  Source: merc.h (added by EnvyIt)
+
+ITEM_WEAR_CHEST = 524288 (bit 19)
+  Can be worn on the chest (brooches, medallions).
+  Source: merc.h (added by EnvyIt)
+
+ITEM_WEAR_SIDE = 1048576 (bit 20)
+  Can be worn at the side (scabbards, holsters).
+  Source: merc.h (added by EnvyIt)
+
+================================================================================
+SECTION 7: MOBILE SPECIAL FUNCTIONS (mobSpecFuncs)
+================================================================================
+
+spec_breath_any
+  Dragon breath attack. Randomly selects one breath type (fire, frost,
+  acid, gas, or lightning) when fighting.
+  Source: mspecial.c
+
+spec_breath_acid
+  Dragon breathes acid. Deals acid damage to the target.
+  Source: mspecial.c
+
+spec_breath_fire
+  Dragon breathes fire. Deals fire damage to the target.
+  Source: mspecial.c
+
+spec_breath_frost
+  Dragon breathes frost. Deals cold damage to the target.
+  Source: mspecial.c
+
+spec_breath_gas
+  Dragon breathes poisonous gas. Area-of-effect damage.
+  Source: mspecial.c
+
+spec_breath_lightning
+  Dragon breathes lightning. Deals electrical damage to the target.
+  Source: mspecial.c
+
+spec_cast_adept
+  The mob casts helpful spells on low-level players (armor, bless,
+  cure light, cure blindness, cure poison, refresh, combat mind).
+  Only targets players below level 5.
+  Source: mspecial.c
+
+spec_cast_cleric
+  The mob casts cleric spells. Heals self when hurt, buffs when idle,
+  and attacks with offensive spells (blindness, faerie fire, cause
+  critical, earthquake, curse, flamestrike, harm, dispel magic).
+  Source: mspecial.c
+
+spec_cast_ghost
+  The mob casts undead spells but is destroyed by sunlight.
+  Uses curse, weaken, chill touch, blindness, poison, energy drain,
+  harm, teleport, and summon.
+  Source: mspecial.c
+
+spec_cast_judge
+  The mob casts "high explosive" on its target when fighting.
+  Source: mspecial.c
+
+spec_cast_mage
+  The mob casts mage spells. Buffs self (armor, giant strength,
+  stone skin) and attacks with offensive magic (blindness, chill
+  touch, weaken, teleport, colour spray, energy drain, fireball,
+  polymorph other, acid blast).
+  Source: mspecial.c
+
+spec_cast_psionicist
+  The mob uses psionic powers. Heals with cell adjustment and
+  psychic healing, buffs with mental barrier and combat mind,
+  and attacks with mind thrust, psychic drain, ego whip, psionic
+  blast, ultrablast.
+  Source: mspecial.c
+
+spec_cast_undead
+  The mob casts undead-themed spells: curse, weaken, chill touch,
+  blindness, poison, energy drain, harm, teleport, vampiric bite
+  (for vampires), and summon.
+  Source: mspecial.c
+
+spec_executioner
+  The mob attacks criminals (PLR_KILLER, PLR_THIEF) on sight.
+  Yells an alert and summons guards to assist. Does not attack
+  in ROOM_NO_COMBAT areas (just glares).
+  Source: mspecial.c
+
+spec_fido
+  The mob devours NPC corpses on the ground, by scattering items
+  on the floor.
+  Source: mspecial.c
+
+spec_guard
+  The mob is a city guard. Attacks criminals, defends against
+  evil-aligned attackers, warns about weapons in lawful areas,
+  and comments on player reputation.
+  Source: mspecial.c
+
+spec_janitor
+  The mob cleans up trash from the ground. Picks up drink
+  containers, trash items, and cheap objects (cost
+  < 10 silver).
+  Source: mspecial.c
+
+spec_mayor
+  The mob follows a daily routine, opening and closing city gates
+  at specific times. Also casts cleric spells when fighting.
+  Reserved for midgaard mayor.
+  Source: mspecial.c
+
+spec_poison
+  The mob poisons its target with a bite attack during combat.
+  Success chance is based on mob level.
+  Source: mspecial.c
+
+spec_repairman
+  The mob repairs bashed doors. Checks random directions for
+  bashed exits and restores them to normal state.
+  Source: mspecial.c
+
+spec_thief
+  The mob steals gold from players and uses snare ability
+  in combat. Can pickpocket sleeping or unaware targets.
+  Source: mspecial.c
+
+spec_cast_beholder
+  The mob casts beholder-specific spells: charm person, sleep,
+  telekinesis, flesh to stone, disintegrate, fear, chill touch,
+  cause critical, death spell, and dispel magic.
+  Source: mspecial.c
+
+spec_hunter
+  The mob hunts wanted criminals using a wanted list. Pursues
+  targets across rooms and attacks when found. Speaks about
+  searching for targets.
+  Reserved for Aquila Novae.
+  Source: mspecial.c
+
+spec_gate_repair
+  The mob follows a path to repair city gates. Similar to
+  spec_mayor but focused on gate maintenance. Repairs bashed
+  gates along its route.
+  Reserved for midgaard blacksmith.
+  Source: mspecial.c
+
+spec_cast_medusa
+  The mob casts medusa-themed spells: shocking grasp, chill touch,
+  acid blast, fear, curse, energy drain, cause critical, and
+  high chance to use flesh to stone.
+  Source: mspecial.c
+
+spec_cast_anidead
+  The mob casts anti-dead spells: cause light/serious/critical,
+  curse, weaken, blindness, poison, energy drain, and chill touch.
+  Source: mspecial.c
+
+spec_assassin
+  The mob assassinates targets. Uses backstab from hiding, and
+  can instant-kill if level difference is large enough while hidden.
+  Needs piercing weapons.
+  Source: mspecial.c
+
+spec_bowman
+  The mob uses ranged attacks with bow/crossbow weapons. Looks
+  in random directions for targets and shoots through open exits.
+  Range is based on weapon value[0].
+  Source: mspecial.c
+
+spec_balder_judge
+  The mob conducts legal hearings. Checks for a hearing book
+  with petitioners, waits for private room, then closes doors
+  to begin proceedings.
+  Source: mspecial.c
+
+================================================================================
+SECTION 8: OBJECT SPECIAL FUNCTIONS (objSpecFuncs)
+================================================================================
+
+obj_spec_guillotine
+  A furniture object that decapitates victims. Must be activated
+  with the "activate" command. When triggered, the guillotine
+  blade falls and kills anyone standing on it. Creates a
+  severed head object.
+  Reserved, don't use.
+  Source: ospecial.c
+
+obj_spec_cauldron
+  A container that cooks NPC corpses into stew. Slowly processes
+  corpses over time, creating food items. Different races produce
+  different amounts of stew. Some stew may be poisoned.
+  Reserved, don't use.
+  Source: ospecial.c
+
+obj_spec_event_heroes
+  A special object that triggers a scripted hero event sequence.
+  Must be activated by an immortal. Plays through a multi-stage
+  narrative with character appearances and dialogues.
+  Reserved, don't use.
+  Source: ospecial.c
+
+================================================================================
+SECTION 9: UNCERTAIN/NEEDS REVIEW
+================================================================================
+The following items need further investigation:
+
+1. ROOM_LOG (bit 5) - How exactly is it used? Is it only for staff monitoring?
+   Source indicates it logs commands in interp.c
+
+2. AFF_WATERWALK (bit 21) - Explicitly marked as unused, but is there
+   any partial implementation?
+
+3. AFF_PARALYZED (bit 29) - Marked unused, but the constant exists.
+   Is there any code path that uses it?
+
+4. ITEM_DARK (bit 2) and ITEM_LOCK (bit 3) - Both marked unused.
+   Are these legacy flags from an earlier MUD version?
+
+5. EX_HEAVY (bit 10) and EX_COMPLEX (bit 11) - Both marked as "not yet
+   implemented". Is there any partial code for these?
+
+6. spec_balder_judge - The implementation seems incomplete with a FIXME
+   comment about the original design intent.
+
+7. The Italian names in constants.js (roomFlagsName, etc.) should be
+   verified against the English descriptions in this file for accuracy.
+
+================================================================================
+END OF FLAG DESCRIPTIONS
+================================================================================

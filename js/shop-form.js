@@ -1,6 +1,6 @@
 /* shop-form.js - Shop editor form for EditIt */
 
-import { itemTypeName, wearName } from './constants.js';
+import { itemTypeName } from './constants.js';
 import { esc } from './utils.js';
 
 /**

@@ -1,8 +1,9 @@
 /* mobile-form.js - Mobile (NPC) editor form for EditIt */
 
 import {
-    ACT_IS_NPC, ACT_DONT_SET, AFF_DONT_SET,
-    sexName, races, guildName, mobSpecFuncs, itemTypeName
+    ACT_DONT_SET, AFF_MOB_DONT_SET,
+    sexName, races, guildName, mobSpecFuncs, itemTypeName,
+    actFlagsData, affFlagsData
 } from './constants.js';
 import { createFlagGroup } from './flags.js';
 import { showToast, escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
@@ -19,52 +20,6 @@ export function renderMobileForm(mob, onChange, options = {}) {
     
     const container = document.createElement('div');
     container.className = 'mobile-form form-entity';
-    
-    // Build basic info flags data (exclude ACT_IS_NPC and DONT_SET flags)
-    const actFlagsData = [
-        { value: 2, label: 'Sentinel' },
-        { value: 4, label: 'Scavenger' },
-        { value: 8, label: 'To Vindicate' },
-        { value: 32, label: 'Aggressive' },
-        { value: 64, label: 'Stay Area' },
-        { value: 128, label: 'Wimpy' },
-        { value: 512, label: 'Train' },
-        { value: 1024, label: 'Practice' },
-        { value: 2048, label: 'Gamble' },
-        { value: 4096, label: 'Vindicative' },
-        { value: 8192, label: 'Peaceful' },
-        { value: 16384, label: 'Guard' },
-        { value: 536870912, label: 'Save Mob' },
-        { value: 1073741824, label: 'Special' }
-    ];
-    
-    const affFlagsData = [
-        { value: 1, label: 'Blind' },
-        { value: 2, label: 'Invisible' },
-        { value: 4, label: 'Detect Evil' },
-        { value: 8, label: 'Detect Invis' },
-        { value: 16, label: 'Detect Magic' },
-        { value: 32, label: 'Detect Hidden' },
-        { value: 64, label: 'Hold' },
-        { value: 128, label: 'Sanctuary' },
-        { value: 256, label: 'Faerie Fire' },
-        { value: 512, label: 'Infrared' },
-        { value: 1024, label: 'Curse' },
-        { value: 4096, label: 'Poison' },
-        { value: 8192, label: 'Protect' },
-        { value: 32768, label: 'Sneak' },
-        { value: 65536, label: 'Hide' },
-        { value: 131072, label: 'Sleep' },
-        { value: 262144, label: 'Charm' },
-        { value: 524288, label: 'Flying' },
-        { value: 1048576, label: 'Pass Door' },
-        { value: 2097152, label: 'Waterwalk' },
-        { value: 8388608, label: 'Mute' },
-        { value: 16777216, label: 'Gills' },
-        { value: 134217728, label: 'Flaming' },
-        { value: 536870912, label: 'Paralyzed' },
-        { value: 1073741824, label: 'Petrified' }
-    ];
     
     container.innerHTML = `
         <div class="form-header">
@@ -125,8 +80,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
             <div class="form-section">
                 <label>Special Function</label>
                 <select name="special" ${readonly ? 'disabled' : ''}>
-                    <option value="">-- None --</option>
-                    ${mobSpecFuncs.filter(s => s !== '').map(s => `<option value="${s}" ${mob.special === s ? 'selected' : ''}>${s}</option>`).join('')}
+                    ${mobSpecFuncs.map(s => `<option value="${s.value}" ${(mob.special === s.value) ? 'selected' : ''} title="${s.desc || ''}">${s.label}</option>`).join('')}
                 </select>
             </div>
         </div>
@@ -165,7 +119,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
             </div>
             
             <div class="form-section">
-                <label>Guild</label>
+                <label>Class</label>
                 <select name="guild" ${readonly ? 'disabled' : ''}>
                     ${guildName.map(g => `<option value="${g.number}" ${mob.guild === g.number ? 'selected' : ''}>${g.name}</option>`).join('')}
                 </select>
@@ -250,7 +204,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
         const flagGroup = createFlagGroup('actFlags', actFlagsData, mob.actFlags, (val) => {
             mob.actFlags = val;
             if (onChange) onChange(mob);
-        }, { columns: 3, disabled: readonly });
+        }, { columns: 3, disabled: readonly, exclude: ACT_DONT_SET });
         actContainer.appendChild(flagGroup.container);
     }
     
@@ -259,7 +213,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
         const flagGroup = createFlagGroup('affFlags', affFlagsData, mob.affFlags, (val) => {
             mob.affFlags = val;
             if (onChange) onChange(mob);
-        }, { columns: 3, disabled: readonly });
+        }, { columns: 3, disabled: readonly, exclude: AFF_MOB_DONT_SET });
         affContainer.appendChild(flagGroup.container);
     }
     
