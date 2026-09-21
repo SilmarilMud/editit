@@ -66,14 +66,14 @@ const SECTION_HELP_TEXT = {
         title: 'Impostazioni Area',
         text: `Questa è la scheda delle impostazioni generali dell'area. Da qui puoi configurare:
 
-- **Nome e autore** — il nome apparisce nella lista delle aree del MUD e nel comando \`areas\`
-- **VNum iniziale** — il primo numero VNum assegnato a stanze, mob e oggetti di questa area. Tutti gli enti devono avere VNum univoci
-- **VNum richiamo** — la stanza dove i giocatori risalgono quando usano il comando \`recall\` (0 = usa il default del MUD)
-- **Fascia di livello** — il livello minimo e massimo consigliato per questa area, usato dal comando \`areas\`
-- **Flag area** — controlla comportamenti speciali come battlefield, no-quit, o invisibile nella mappa
-- **Piano** — il "piano dimensionale" dell'area (es. Terra, Aether, Inferno)
-
-Usa **Shift VNums** in basso per spostare tutti i numeri VNum di un offset, utile quando due aree si sovrappongono.`
+**Area name e Author** — I nomi indicati compaiono nel comando \`aree\`.
+**Starting VNum** — Questo numero va concordato con gli Antichi.
+**Recall VNum** — E' la stanza in cui vanno i giocatori che usano ritorna. Usare \`0\` se non serve.
+**Level Range** — Il livello minimo e massimo consigliato per questa area, mostrato nel comando \`aree\`. Indica la difficoltà, in genere dipende dai livello minimo e massimo dei mob creati.
+**Plane** — Il piano dimensionale dell'area.
+**Music File** - Nome dell'eventuale file colonna sonora dell'area.
+**Reset Message** - Messaggio opzionale che compare quando l'area si rinnova.
+**Area Flags** — Muovere il cursore sui nomi (o selezionarli su cellulare) per avere informazioni.`
     },
 
     'rooms-stats': {
