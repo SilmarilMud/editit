@@ -79,9 +79,12 @@ export function renderMobileForm(mob, onChange, options = {}) {
             
             <div class="form-section">
                 <label>Special Function</label>
-                <select name="special" ${readonly ? 'disabled' : ''}>
-                    ${mobSpecFuncs.map(s => `<option value="${s.value}" ${(mob.special === s.value) ? 'selected' : ''} title="${s.desc || ''}">${s.label}</option>`).join('')}
-                </select>
+                <div class="select-with-info">
+                    <select name="special" ${readonly ? 'disabled' : ''}>
+                        ${mobSpecFuncs.map(s => `<option value="${s.value}" ${(mob.special === s.value) ? 'selected' : ''} data-desc="${(s.desc || '').replace(/"/g, '&quot;')}" title="${(s.desc || '').replace(/"/g, '&quot;')}">${s.label}</option>`).join('')}
+                    </select>
+                    <span class="info-icon-wrap"><span class="info-icon" tabindex="0">ⓘ</span></span>
+                </div>
             </div>
         </div>
         

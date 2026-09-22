@@ -61,7 +61,7 @@ import { renderShopForm } from './shop-form.js';
 import { renderSpecialsPanel } from './specials-panel.js';
 import { renderStatsPanel } from './stats-panel.js';
 import { showSectionHelp, isSectionHelpEnabled, setSectionHelpEnabled } from './section-help.js';
-import { showToast, getMobByVNum, getObjByVNum, getRoomByVNum, escapeHtml } from './utils.js';
+import { showToast, getMobByVNum, getObjByVNum, getRoomByVNum, escapeHtml, isMobileDevice, setupInfoIcons } from './utils.js';
 import {
     validateAll,
     hasBlockingErrors,
@@ -318,6 +318,11 @@ function toggleShortcutsDialog() {
 
 // Setup shortcuts dialog close button
 document.addEventListener('DOMContentLoaded', () => {
+    // Set data-mobile attribute for CSS
+    if (isMobileDevice()) {
+        document.documentElement.dataset.mobile = 'true';
+    }
+
     const dialog = document.getElementById('shortcuts-dialog');
     const closeBtn = dialog?.querySelector('.close');
     if (closeBtn) {
@@ -1077,6 +1082,7 @@ function renderTabContent(container, type, tabId) {
                         recordChangesFromSnapshot(tabId, tabId);
                         onEntityChange(m, 'mob', tabId);
                     }));
+                    setupInfoIcons(container);
                 } else {
                     renderTabError(container, new Error(`Mobile #${vnum} not found`), 'mob');
                 }
@@ -1105,6 +1111,7 @@ function renderTabContent(container, type, tabId) {
                         recordChangesFromSnapshot(tabId, tabId);
                         onEntityChange(o, 'object', tabId);
                     }));
+                    setupInfoIcons(container);
                 } else {
                     renderTabError(container, new Error(`Object #${vnum} not found`), 'object');
                 }
@@ -2214,6 +2221,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(mob, 'mob', node.id);
             }));
+            setupInfoIcons(container);
             addFormHelpButton(container, 'mob');
             break;
         }
@@ -2225,6 +2233,7 @@ function renderForm(container, node) {
                 recordChangesFromSnapshot(key, node.id);
                 onEntityChange(obj, 'object', node.id);
             }));
+            setupInfoIcons(container);
             addFormHelpButton(container, 'object');
             break;
         }
