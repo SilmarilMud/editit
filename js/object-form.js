@@ -67,9 +67,12 @@ export function renderObjectForm(obj, onChange, options = {}) {
                 </div>
                 <div class="form-section">
                     <label>Special Function</label>
-                    <select name="special" ${readonly ? 'disabled' : ''}>
-                        ${objSpecFuncs.map(s => `<option value="${s.value}" ${(obj.special === s.value) ? 'selected' : ''} title="${s.desc || ''}">${s.label}</option>`).join('')}
-                    </select>
+                    <div class="select-with-info">
+                        <select name="special" ${readonly ? 'disabled' : ''}>
+                            ${objSpecFuncs.map(s => `<option value="${s.value}" ${(obj.special === s.value) ? 'selected' : ''} data-desc="${(s.desc || '').replace(/"/g, '&quot;')}" title="${(s.desc || '').replace(/"/g, '&quot;')}">${s.label}</option>`).join('')}
+                        </select>
+                        <span class="info-icon-wrap"><span class="info-icon" tabindex="0">ⓘ</span></span>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
@@ -133,11 +136,13 @@ export function renderObjectForm(obj, onChange, options = {}) {
 function renderValues(container, obj, onChange, readonly) {
     const el = container.querySelector('#obj-values');
     if (!el) return;
-    const info = itemValues.find(v => v.itemType === obj.type) || { descr: ['','','',''], type: [0,0,0,0] };
+    const info = itemValues.find(v => v.itemType === obj.type) || { descr: ['','','',''], type: [0,0,0,0], hint: ['','','',''] };
     
     let html = '';
     for (let i = 0; i < 4; i++) {
-        const label = info.descr[i] || `Value ${i+1}`;
+        const labelText = info.descr[i] || `Value ${i+1}`;
+        const hint = info.hint && info.hint[i] ? ` <span class="hint">(${info.hint[i]})</span>` : '';
+        const label = `${labelText}${hint}`;
         const t = info.type[i];
         let input = '';
         
@@ -328,6 +333,11 @@ function attachChangeHandlers(container, obj, onChange, readonly) {
             }
             // Update field states when type changes
             if (e.target.name === 'type') {
+                // Apply defaults for the new type
+                const info = itemValues.find(v => v.itemType === obj.type);
+                if (info && info.defaults) {
+                    obj.value = [...info.defaults];
+                }
                 updateFieldStates(container, obj);
                 renderValues(container, obj, onChange, readonly);
             }

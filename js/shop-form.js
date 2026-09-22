@@ -38,41 +38,33 @@ export function renderShopForm(mob, onChange, options = {}) {
         
         <div class="form-row">
             <div class="form-section">
-                <label>Profit Buy (%)
-                    <input type="number" name="profitBuy" value="${mob.profitBuy}" 
-                           min="1" max="1000000"
-                           ${readonly ? 'disabled' : ''}>
-                </label>
-                <small>Multiplier when buying from players</small>
+                <label>Profit Buy (%) <span class="hint">(10 - 200)</span></label>
+                <input type="number" name="profitBuy" value="${mob.profitBuy}" 
+                       min="10" max="200"
+                       ${readonly ? 'disabled' : ''}>
             </div>
             
             <div class="form-section">
-                <label>Profit Sell (%)
-                    <input type="number" name="profitSell" value="${mob.profitSell}" 
-                           min="1" max="1000000"
-                           ${readonly ? 'disabled' : ''}>
-                </label>
-                <small>Multiplier when selling to players</small>
+                <label>Profit Sell (%) <span class="hint">(10 - 200)</span></label>
+                <input type="number" name="profitSell" value="${mob.profitSell}" 
+                       min="10" max="200"
+                       ${readonly ? 'disabled' : ''}>
             </div>
         </div>
         
         <div class="form-row">
             <div class="form-section">
-                <label>Open Hour
-                    <input type="number" name="openHour" value="${mob.openHour}" 
-                           min="0" max="23"
-                           ${readonly ? 'disabled' : ''}>
-                </label>
-                <small>Shop opens at this hour</small>
+                <label>Open Hour <span class="hint">(0-23)</span></label>
+                <input type="number" name="openHour" value="${mob.openHour}" 
+                       min="0" max="23"
+                       ${readonly ? 'disabled' : ''}>
             </div>
             
             <div class="form-section">
-                <label>Close Hour
-                    <input type="number" name="closeHour" value="${mob.closeHour}" 
-                           min="0" max="23"
-                           ${readonly ? 'disabled' : ''}>
-                </label>
-                <small>Shop closes at this hour</small>
+                <label>Close Hour <span class="hint">(0-23)</span></label>
+                <input type="number" name="closeHour" value="${mob.closeHour}" 
+                       min="0" max="23"
+                       ${readonly ? 'disabled' : ''}>
             </div>
         </div>
     `;
