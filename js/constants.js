@@ -1525,7 +1525,7 @@ export const mobSpecFuncs = [
     { value: 'spec_breath_gas', label: 'spec_breath_gas', desc: 'Il drago sputa gas velenoso. Danni ed effetti ad area.' },
     { value: 'spec_breath_lightning', label: 'spec_breath_lightning', desc: 'Il drago sputa fulmini. Infligge danni elettrici al bersaglio.' },
     { value: 'spec_cast_adept', label: 'spec_cast_adept', desc: 'Lancia incantesimi utili sui giocatori di basso livello (armatura, benedizione, cura leggera, ecc). Punta solo i giocatori sotto il livello 13.' },
-    { value: 'spec_cast_cleric', label: 'spec_cast_cleric', desc: 'Lancia incantesimi da clerico. Si cura quando ferito, si protegge quando inattivo, attacca con incantesimi offensivi.' },
+    { value: 'spec_cast_cleric', label: 'spec_cast_cleric', desc: 'Lancia incantesimi da chierico. Si cura quando ferito, si protegge quando inattivo, attacca con incantesimi offensivi.' },
     { value: 'spec_cast_ghost', label: 'spec_cast_ghost', desc: 'Lancia incantesimi da non morto ma viene distrutto dalla luce del sole.' },
     { value: 'spec_cast_judge', label: 'spec_cast_judge', desc: 'Lancia high explosive sul bersaglio durante il combattimento.' },
     { value: 'spec_cast_mage', label: 'spec_cast_mage', desc: 'Lancia incantesimi da mago. Si protegge e attacca con magia offensiva.' },
