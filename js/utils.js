@@ -513,3 +513,127 @@ export function setupTabs(container) {
         });
     });
 }
+
+// ============================================================================
+// Mobile detection and tooltips
+// ============================================================================
+
+/**
+ * Check if the device is mobile (touch-based, no hover)
+ * @returns {boolean}
+ */
+export function isMobileDevice() {
+    return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+}
+
+// Shared tooltip element (created once)
+let tooltipEl = null;
+
+/**
+ * Show a tooltip below a target element
+ * @param {string} text - Tooltip text
+ * @param {HTMLElement} targetEl - Element to position below
+ */
+export function showTooltip(text, targetEl, position = 'below') {
+    if (!text) return;
+    
+    if (!tooltipEl) {
+        tooltipEl = document.createElement('div');
+        tooltipEl.id = 'flag-tooltip';
+        tooltipEl.className = 'flag-tooltip';
+        document.body.appendChild(tooltipEl);
+    }
+    
+    tooltipEl.textContent = text;
+    tooltipEl.style.display = 'block';
+    
+    // Position relative to target
+    const rect = targetEl.getBoundingClientRect();
+    if (position === 'above') {
+        tooltipEl.style.top = `${rect.top - 4}px`;
+        tooltipEl.style.left = `${rect.left}px`;
+        tooltipEl.style.transform = 'translateY(-100%)';
+    } else {
+        tooltipEl.style.top = `${rect.bottom + 4}px`;
+        tooltipEl.style.left = `${rect.left}px`;
+        tooltipEl.style.transform = 'none';
+    }
+    
+    // Keep in viewport
+    const tipRect = tooltipEl.getBoundingClientRect();
+    if (tipRect.right > window.innerWidth) {
+        tooltipEl.style.left = `${window.innerWidth - tipRect.width - 8}px`;
+    }
+    if (tipRect.left < 0) {
+        tooltipEl.style.left = '8px';
+    }
+}
+
+/**
+ * Hide the shared tooltip
+ */
+export function hideTooltip() {
+    if (tooltipEl) tooltipEl.style.display = 'none';
+}
+
+/**
+ * Setup info icons for select elements (mobile only)
+ * Call this after rendering a form with .info-icon elements
+ * @param {HTMLElement} container - Form container to search in
+ */
+export function setupInfoIcons(container) {
+    if (!isMobileDevice()) return;
+    
+    // Abort any prior listeners on this container
+    if (container._infoIconsAC) container._infoIconsAC.abort();
+    const ac = new AbortController();
+    container._infoIconsAC = ac;
+    const signal = ac.signal;
+    
+    container.querySelectorAll('.select-with-info').forEach(wrapper => {
+        const select = wrapper.querySelector('select');
+        const icon = wrapper.querySelector('.info-icon');
+        if (!select || !icon) return;
+        
+        // Update icon state when selection changes
+        const updateIconState = () => {
+            const selectedOption = select.options[select.selectedIndex];
+            const hasDesc = selectedOption?.dataset?.desc && selectedOption.dataset.desc.trim();
+            icon.classList.toggle('disabled', !hasDesc);
+        };
+        
+        updateIconState();
+        select.addEventListener('change', updateIconState, { signal });
+        
+        // Show tooltip on click/tap
+        icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const selectedOption = select.options[select.selectedIndex];
+            const desc = selectedOption?.dataset?.desc;
+            if (desc && desc.trim()) {
+                showTooltip(desc, select, 'above');
+                // Auto-hide after 3 seconds (clear any prior timer)
+                if (hideTooltip._timer) clearTimeout(hideTooltip._timer);
+                hideTooltip._timer = setTimeout(hideTooltip, 3000);
+            }
+        }, { signal });
+        
+        // Also handle keyboard
+        icon.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                icon.click();
+            }
+        }, { signal });
+    });
+    
+    // Hide tooltip when clicking anywhere else (only once)
+    if (!setupInfoIcons._listenerAdded) {
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.flag-checkbox-wrapper, .select-with-info')) {
+                hideTooltip();
+            }
+        });
+        setupInfoIcons._listenerAdded = true;
+    }
+}

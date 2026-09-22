@@ -1,5 +1,7 @@
 /* flags.js - Reusable flag checkbox group component for EditIt */
 
+import { isMobileDevice, showTooltip, hideTooltip } from './utils.js';
+
 /**
  * Flag group structure
  * @typedef {Object} FlagGroup
@@ -56,6 +58,8 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
     
     // Store checkbox elements for updates
     const checkboxElements = new Map();
+    const ac = new AbortController();
+    const signal = ac.signal;
     
     // Create each checkbox
     flags.forEach(flag => {
@@ -67,17 +71,26 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
         const wrapper = document.createElement('label');
         wrapper.className = 'flag-checkbox-wrapper';
         
-        // Add tooltip if desc is provided
-        if (flag.desc) {
-            wrapper.title = flag.desc;
-        }
-        
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = `${name}_${flag.value}`;
         checkbox.value = flag.value;
         checkbox.checked = (currentValue & flag.value) !== 0;
         checkbox.disabled = disabled;
+        
+        // Add tooltip if desc is provided
+        if (flag.desc) {
+            if (isMobileDevice()) {
+                // Mobile: listen on wrapper (label captures the tap on Android Chrome)
+                wrapper.addEventListener('pointerdown', () => {
+                    hideTooltip();
+                    showTooltip(flag.desc, wrapper);
+                }, { signal });
+            } else {
+                // Desktop: use native title attribute
+                wrapper.title = flag.desc;
+            }
+        }
         
         const span = document.createElement('span');
         span.className = 'flag-checkbox-label';
@@ -97,7 +110,7 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
                 currentValue &= ~flag.value;
             }
             if (onChange) onChange(currentValue);
-        });
+        }, { signal });
     });
     
     container.appendChild(checkboxesContainer);
@@ -132,6 +145,7 @@ export function createFlagGroup(name, flags, value, onChange, options = {}) {
      * Clean up event listeners and remove from active groups
      */
     function destroy() {
+        ac.abort();
         flagGroups.delete(name);
         container.remove();
     }
