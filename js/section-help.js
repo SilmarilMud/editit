@@ -186,7 +186,7 @@ Le funzioni speciali sono definite nel codice sorgente del MUD. Se nessuna funzi
         text: `Questa è la scheda di un singolo mob. Da qui puoi modificare:
 
 - **Basic** - Parole chiave (per interagire), descrizione breve (visibile nelle azioni), descrizione lunga (visibile nella stanza) e descrizione dettagliata (visibile quando si guarda il mob). Inoltre è possibile configurare razza e sesso, nonchè la funzione speciale opzionale (visibile e modificabile in seguito anche dal menù **Specials**). Muovi il cursore sul nome della special function (o selezionalo e premi l'icona info su cellulare) per vedere la descrizione.
-- **Combat** - Livello del mob, allineamento, oro, reputazione e classe. Per molto mob, reputazione e classe non sono necessarie.
+- **Combat** - Livello del mob, allineamento, oro, reputazione e classe. Per molti mob, reputazione e classe non sono necessarie.
 - **Flags** - Attributi del mob. Muovi il cursore sui nomi degli attributi (o selezionali su cellulare) per vedere la descrizione.
 - **Shop** - Se il mob è uno shop keeper, seleziona il tipo degli oggetti che vende e acquista, quanto varia il prezzo rispetto al valore dell'oggetto, e da che ora a che ora è aperto. I dettagli del negozio possono essere modificati anche nel menù **Shops**.`
     },

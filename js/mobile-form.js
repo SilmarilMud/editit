@@ -50,9 +50,9 @@ export function renderMobileForm(mob, onChange, options = {}) {
             
             <div class="form-section">
                 <label>Long Description <span class="hint">(shown in room)</span></label>
-                <textarea name="longDescr" rows="6"
-                          placeholder="A shopkeeper stands here."
-                          ${readonly ? 'disabled' : ''}>${escapeHtml(mob.longDescr)}</textarea>
+                <input type="text" name="longDescr" value="${escapeHtml(mob.longDescr)}"
+                       placeholder="A shopkeeper stands here."
+                       ${readonly ? 'disabled' : ''}>
             </div>
             
             <div class="form-section">
@@ -114,7 +114,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
                 </div>
                 
                 <div class="form-section">
-                    <label>Reputation <span class="hint">(-1000 - 1000)</span></label>
+                    <label>Reputation <span class="hint">(-1000 - 1000) (optional)</span></label>
                     <input type="number" name="reputation" value="${mob.reputation}" 
                            min="-1000" max="1000"
                            ${readonly ? 'disabled' : ''}>
@@ -122,7 +122,7 @@ export function renderMobileForm(mob, onChange, options = {}) {
             </div>
             
             <div class="form-section">
-                <label>Class</label>
+                <label>Class <span class="hint">(optional)</span></label>
                 <select name="guild" ${readonly ? 'disabled' : ''}>
                     ${guildName.map(g => `<option value="${g.number}" ${mob.guild === g.number ? 'selected' : ''}>${g.name}</option>`).join('')}
                 </select>
@@ -224,9 +224,6 @@ export function renderMobileForm(mob, onChange, options = {}) {
     setupTabs(container);
     
     // Wrap description textareas with column guide
-    container.querySelectorAll('textarea[name="longDescr"]').forEach(ta => {
-        wrapTextareaWithGuide(ta);
-    });
     container.querySelectorAll('textarea[name="descr"]').forEach(ta => {
         wrapTextareaWithGuide(ta);
     });
