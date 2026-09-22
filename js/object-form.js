@@ -5,7 +5,7 @@ import {
     VALUE_IS_NUMBER_FROM_0, VALUE_IS_CONTAINER_FLAGS, VALUE_IS_LIQUID, VALUE_IS_POISON,
     VALUE_IS_VNUM, VALUE_IS_FURNITURE_FLAGS, VALUE_IS_TRAPTYPE, VALUE_IS_TRAPDAMAGE,
     ITEM_WAND, ITEM_STAFF, ITEM_INSTRUMENT, ITEM_WARSOUND, ITEM_TRAP,
-    ITEM_DONT_SET, AFF_OBJ_DONT_SET,
+    ITEM_DONT_SET, AFF_OBJ_DONT_SET, EQUIPPABLE_TYPES,
     itemTypeName, itemExtraFlagsName, itemWearFlagsName, applyName,
     itemValues, itemWeaponName, itemContainerFlagsName, itemLiquidName,
     itemPoisonName, itemFurnitureFlagsName, itemTrapType, itemTrapDamage,
@@ -20,8 +20,7 @@ import { escapeHtml, wrapTextareaWithGuide, setupTabs } from './utils.js';
  * @returns {boolean}
  */
 function ObjTypeUsesAction(type) {
-    return type === ITEM_WAND || type === ITEM_STAFF || 
-           type === ITEM_INSTRUMENT || type === ITEM_WARSOUND || type === ITEM_TRAP;
+    return type === ITEM_WARSOUND;
 }
 
 export function renderObjectForm(obj, onChange, options = {}) {
@@ -43,20 +42,16 @@ export function renderObjectForm(obj, onChange, options = {}) {
         </div>
         <div class="form-tab-content active" data-tab="basic">
             <div class="form-section">
-                <label>Keywords</label>
+                <label>Keywords <span class="hint">(space-separated)</span></label>
                 <input type="text" name="keywords" value="${escapeHtml(obj.keywords)}" ${readonly ? 'disabled' : ''}>
             </div>
             <div class="form-section">
-                <label>Short Description</label>
+                <label>Short Description <span class="hint">(shown in equip/inventory)</span></label>
                 <input type="text" name="shortDescr" value="${escapeHtml(obj.shortDescr)}" ${readonly ? 'disabled' : ''}>
             </div>
             <div class="form-section">
-                <label>Long Description</label>
-                <textarea name="longDescr" rows="6" ${readonly ? 'disabled' : ''}>${escapeHtml(obj.longDescr)}</textarea>
-            </div>
-            <div class="form-section">
-                <label>Action Description <span class="hint">(play/activate)</span></label>
-                <textarea name="action" rows="3" ${readonly ? 'disabled' : ''}>${escapeHtml(obj.action)}</textarea>
+                <label>Long Description <span class="hint">(shown in room)</span></label>
+                <input type="text" name="longDescr" value="${escapeHtml(obj.longDescr)}" ${readonly ? 'disabled' : ''}>
             </div>
             <div class="form-row">
                 <div class="form-section">
@@ -85,15 +80,17 @@ export function renderObjectForm(obj, onChange, options = {}) {
                     <input type="number" name="cost" value="${obj.cost}" min="0" ${readonly ? 'disabled' : ''}>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-section">
-                    <label>Wear Message (on)</label>
-                    <input type="text" name="wearOnMsg" value="${escapeHtml(obj.wearOnMsg)}" ${readonly ? 'disabled' : ''}>
-                </div>
-                <div class="form-section">
-                    <label>Wear Message (off)</label>
-                    <input type="text" name="wearOffMsg" value="${escapeHtml(obj.wearOffMsg)}" ${readonly ? 'disabled' : ''}>
-                </div>
+            <div class="form-section">
+                <label>Action Description <span class="hint">(play/activate) (optional)</span></label>
+                <input type="text" name="action" value="${escapeHtml(obj.action)}" ${readonly ? 'disabled' : ''}>
+            </div>
+            <div class="form-section">
+                <label>Wear Message (on) <span class="hint">(optional)</span></label>
+                <input type="text" name="wearOnMsg" value="${escapeHtml(obj.wearOnMsg)}" ${readonly ? 'disabled' : ''}>
+            </div>
+            <div class="form-section">
+                <label>Wear Message (off) <span class="hint">(optional)</span></label>
+                <input type="text" name="wearOffMsg" value="${escapeHtml(obj.wearOffMsg)}" ${readonly ? 'disabled' : ''}>
             </div>
         </div>
         <div class="form-tab-content" data-tab="values">
@@ -123,9 +120,7 @@ export function renderObjectForm(obj, onChange, options = {}) {
     setupTabs(container);
     
     // Wrap description textareas with column guide
-    container.querySelectorAll('textarea[name="longDescr"], textarea[name="action"]').forEach(ta => {
-        wrapTextareaWithGuide(ta);
-    });
+
     // Note: extra_descr textareas are wrapped in renderExtras > renderList
     
     if (!readonly) attachChangeHandlers(container, obj, onChange, readonly);
@@ -315,6 +310,12 @@ function updateFieldStates(container, obj) {
     if (actionField) {
         actionField.disabled = !ObjTypeUsesAction(obj.type);
     }
+
+    const isEquippable = EQUIPPABLE_TYPES.includes(obj.type);
+    const wearOnField = container.querySelector('[name="wearOnMsg"]');
+    const wearOffField = container.querySelector('[name="wearOffMsg"]');
+    if (wearOnField) wearOnField.disabled = !isEquippable;
+    if (wearOffField) wearOffField.disabled = !isEquippable;
 }
 
 function attachChangeHandlers(container, obj, onChange, readonly) {

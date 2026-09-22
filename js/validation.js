@@ -5,7 +5,7 @@ import {
     SECT_ROAD, EX_ISDOOR, EX_WINDOW, EFLAG_FOR_DOOR,
 
     DOOR_NOT_RESET, DOOR_CLOSED_LOCKED,
-    ITEM_CONTAINER, ITEM_LIGHT,
+    ITEM_CONTAINER, ITEM_LIGHT, EQUIPPABLE_TYPES,
     SEX_NEUTRAL, SEX_FEMALE, WEAR_NONE,
     spells, mobSpecFuncs, objSpecFuncs, races,
     itemTypeName, itemWeaponName, itemContainerFlagsName,
@@ -75,12 +75,15 @@ export const RULES = {
     'W-INVALID-LOCK':     { severity: SEVERITY_WARNING, category: CATEGORY_RANGE,     message: 'Invalid lock type' },
     'W-INVALID-DOOR-RESET': { severity: SEVERITY_WARNING, category: CATEGORY_RANGE,   message: 'Invalid door reset state' },
     'W-SHOP-EMPTY':        { severity: SEVERITY_WARNING, category: CATEGORY_INTEGRITY, message: 'Shop has no trade types set' },
+    'W-NO-WEAR-FLAGS':     { severity: SEVERITY_WARNING, category: CATEGORY_INTEGRITY, message: 'Equippable item has no wear flags set' },
+    'W-HELP-EMPTY-TEXT':   { severity: SEVERITY_WARNING, category: CATEGORY_FORMAT,    message: 'Help entry has empty text' },
 
     // Info (suggestions)
     'I-ORPHAN-MOB':   { severity: SEVERITY_INFO, category: CATEGORY_INTEGRITY, message: 'Mob defined but never loaded by resets' },
     'I-ORPHAN-OBJ':   { severity: SEVERITY_INFO, category: CATEGORY_INTEGRITY, message: 'Object defined but never placed in resets' },
     'I-ORPHAN-ROOM':  { severity: SEVERITY_INFO, category: CATEGORY_INTEGRITY, message: 'Room with no mobs, objects, or exits' },
     'I-EMPTY-DESC':   { severity: SEVERITY_INFO, category: CATEGORY_FORMAT,    message: 'Entity has empty description field' },
+    'W-EXTRA-EMPTY':  { severity: SEVERITY_WARNING, category: CATEGORY_FORMAT,  message: 'Extra description has empty keywords or text' },
     'I-AREA-RECALL':  { severity: SEVERITY_INFO, category: CATEGORY_INTEGRITY, message: 'Recall VNum is 0 (no recall point)' },
 };
 
@@ -401,6 +404,29 @@ function checkObjects(objs) {
                 }));
             }
         }
+
+        // Check if equippable item type has wear flags set
+        if (EQUIPPABLE_TYPES.includes(obj.type) && obj.wearFlags === 0) {
+            issues.push(issue('W-NO-WEAR-FLAGS', 'object', obj.VNum, 'wearFlags', {
+                message: `${itemTypeName.find(t => t.number === obj.type)?.name || 'Item'} has no wear flags set`
+            }));
+        }
+
+        // Extra description validation
+        if (obj.extraDescr && Array.isArray(obj.extraDescr)) {
+            for (const ed of obj.extraDescr) {
+                if (!ed.keywords || ed.keywords.trim() === '') {
+                    issues.push(issue('W-EXTRA-EMPTY', 'object', obj.VNum, 'extraDescr', {
+                        message: `Object #${obj.VNum} has extra description with empty keywords`
+                    }));
+                }
+                if (!ed.descr || ed.descr.trim() === '') {
+                    issues.push(issue('W-EXTRA-EMPTY', 'object', obj.VNum, 'extraDescr', {
+                        message: `Object #${obj.VNum} has extra description with empty text`
+                    }));
+                }
+            }
+        }
     }
 
     return issues;
@@ -472,8 +498,22 @@ function checkRooms(rooms) {
                     message: `Direction ${dirStr(dir)}: Door has no keywords defined`
                 }));
             }
+        }
 
-
+        // Extra description validation
+        if (room.extraDescr && Array.isArray(room.extraDescr)) {
+            for (const ed of room.extraDescr) {
+                if (!ed.keywords || ed.keywords.trim() === '') {
+                    issues.push(issue('W-EXTRA-EMPTY', 'room', room.VNum, 'extraDescr', {
+                        message: `Room #${room.VNum} has extra description with empty keywords`
+                    }));
+                }
+                if (!ed.descr || ed.descr.trim() === '') {
+                    issues.push(issue('W-EXTRA-EMPTY', 'room', room.VNum, 'extraDescr', {
+                        message: `Room #${room.VNum} has extra description with empty text`
+                    }));
+                }
+            }
         }
     }
 
@@ -602,6 +642,25 @@ function checkResets(area) {
                     }));
                 }
             }
+        }
+    }
+
+    return issues;
+}
+
+// ============================================================================
+// Help Validation
+// ============================================================================
+
+function checkHelps(helps) {
+    const issues = [];
+    if (!helps || !Array.isArray(helps)) return issues;
+
+    for (const help of helps) {
+        if (!help.text || help.text.trim() === '') {
+            issues.push(issue('W-HELP-EMPTY-TEXT', 'help', help.level, 'text', {
+                message: `Help "${help.keywords}" has empty text`
+            }));
         }
     }
 
@@ -759,7 +818,10 @@ export function validateAll(area) {
     // 8. Area general validation
     allIssues.push(...checkAreaGeneral(area));
 
-    // 9. Integrity checks
+    // 9. Help validation
+    if (area.helps) allIssues.push(...checkHelps(area.helps));
+
+    // 10. Integrity checks
     allIssues.push(...checkIntegrity(area));
 
     // Sort by severity (errors first, then warnings, then info)

@@ -102,7 +102,8 @@ export const AFF_MOB_MASK =
 export const AFF_MOB_DONT_SET = AFF_HOLD | AFF_PIETRIFIED | AFF_CHARM |
                                 AFF_WATERWALK | AFF_MORTAL_POISON |
                                 AFF_SUMMONED | AFF_VAMP_BITE | AFF_PARALYZED |
-                                AFF_FAERIE_FIRE | AFF_CHANGE_SEX;
+                                AFF_FAERIE_FIRE | AFF_CHANGE_SEX | AFF_SLEEP |
+                                AFF_CURSE;
 
 export const AFF_OBJ_MASK =
     AFF_BLIND | AFF_INVISIBLE | AFF_DETECT_EVIL | AFF_DETECT_INVIS |
@@ -113,7 +114,7 @@ export const AFF_OBJ_MASK =
     AFF_MUTE | AFF_GILLS | AFF_FLAMING;
 
 export const AFF_OBJ_DONT_SET =
-    AFF_POLYMORPH | AFF_WATERWALK;
+    AFF_POLYMORPH | AFF_WATERWALK | AFF_SLEEP | AFF_CHANGE_SEX ;
 
 // ============================================================================
 // SEX_* - Gender constants
@@ -160,6 +161,23 @@ export const ITEM_TRAP = 31;
 export const ITEM_PAPER = 32;
 export const ITEM_BOOK = 33;
 export const ITEM_TARGET = 34;
+
+// Item types that can be equipped (worn, wielded, held)
+export const EQUIPPABLE_TYPES = [
+    ITEM_LIGHT,
+    ITEM_SCROLL,
+    ITEM_WAND,
+    ITEM_STAFF,
+    ITEM_WEAPON,
+    ITEM_INSTRUMENT,
+    ITEM_ARMOR,
+    ITEM_POTION,
+    ITEM_CONTAINER,
+    ITEM_SCABBARD,
+    ITEM_QUIVER,
+    ITEM_DRINK_CON,
+    ITEM_PROJECTILE,
+];
 
 // ============================================================================
 // ITEM_* extra flags
@@ -522,7 +540,7 @@ export const LOOKUPNOTFOUND = -10000;
 // UI-ready flag data arrays with tooltips
 // These are used by the forms to create checkbox groups
 
-/** Action flags for mobile editor (excludes ACT_IS_NPC and DONT_SET flags) */
+/** Action flags for mobile editor */
 export const actFlagsData = [
     { value: ACT_SENTINEL, label: 'Sentinel',
       desc: 'Il mob rimane nella sua assegnata stanza e non vaga. Usato durante il reset dell\'area per mantenere guardie e negozianti al loro posto. (2)' },
@@ -622,16 +640,10 @@ export const wearAffsData = [
       desc: 'Il personaggio può percepire le aure magiche su oggetti e creature. (16)' },
     { value: AFF_DETECT_HIDDEN, label: 'Detect Hidden',
       desc: 'Il personaggio può rilevare creature nascoste. (32)' },
-    { value: AFF_HOLD, label: 'Hold',
-      desc: 'Il personaggio è trattenuto/paralizzato e non può muoversi o agire. Normalmente impostato solo da abilità di combattimento, usare con cautela. (64)' },
     { value: AFF_SANCTUARY, label: 'Sanctuary',
       desc: 'Il personaggio è protetto. Tutti i danni vengono dimezzati. (128)' },
-    { value: AFF_FAERIE_FIRE, label: 'Faerie Fire',
-      desc: 'Il personaggio non può nascondersi. Rende anche vulnerabile a danni aggiuntivi. (256)' },
     { value: AFF_INFRARED, label: 'Infrared',
       desc: 'Il personaggio ha l\'infravisione e può vedere al buio. (512)' },
-    { value: AFF_CURSE, label: 'Curse',
-      desc: 'Il personaggio è maledetto. Impedisce il ritorno e riduce le statistiche. (1024)' },
     { value: AFF_PROTECT, label: 'Protect',
       desc: 'Il personaggio è protetto dal male. Gli attaccanti malvagi infliggono meno danni. (8192)' },
     { value: AFF_SNEAK, label: 'Sneak',
@@ -738,7 +750,7 @@ export const itemExtraFlagsName = [
     { value: ITEM_BOOMERANG_STYLE, label: "Boomerang style",
       desc: "Un oggetto lanciabile che torna al lanciatore. L'oggetto vola indietro dopo essere stato lanciato. (1048576)" },
     { value: ITEM_MORTAL_POISONED, label: "Mortal poisoned",
-      desc: "L'oggetto è rivestito di veleno mortale. Gli attacchi con quest'arma possono avvelenare il bersaglio e possono essere letali. Normalmente impostato da abilità che danno anche un timer all'arma. Non impostare mai manualmente a meno che non si sia sicuri. (2097152)" },
+      desc: "L'oggetto è rivestito di veleno mortale. Gli attacchi con quest'arma possono avvelenare ed uccidere il bersaglio. Normalmente impostato da abilità che danno anche un timer all'arma. Non impostare mai manualmente a meno che non si sia sicuri. (2097152)" },
     { value: ITEM_RARE, label: "Rare",
       desc: "L'oggetto è raro e non può uscire dal gioco. Deve essere tenuto in un deposito speciale o portato con sé. (4194304)" },
     { value: ITEM_CAN_QUIT, label: "Can quit",
@@ -1204,9 +1216,9 @@ export const roomFlagsName = [
     { value: ROOM_SAFE, label: "Safe",
       desc: "Non è consentito alcun combattimento in questa stanza. PvP e segnalazioni sono disabilitati. Le stanze sicure sono tipicamente templi o aree di apprendimento. (1024)" },
     { value: ROOM_SOLITARY, label: "Solitary",
-      desc: "Solo 1 personaggio può essere in questa stanza alla volta. Usato per aree di missione solitarie o camere personali. (2048)" },
+      desc: "Solo 1 personaggio alla volta può essere in questa stanza. Usato per aree di missione solitarie o camere personali. (2048)" },
     { value: ROOM_PET_SHOP, label: "Pet shop",
-      desc: "La stanza funge da negozio di animali. Una stanza non collegatai (vnum + 1) deve contenere gli animali disponibili. (4096)" },
+      desc: "La stanza funge da negozio di animali. Una stanza non collegata (vnum + 1) deve contenere gli animali disponibili. (4096)" },
     { value: ROOM_NO_RECALL, label: "No recall",
       desc: "L'incantesimo Word of Recall non funziona in questa stanza. (8192)" },
     { value: ROOM_CONE_OF_SILENCE, label: "Cone Of Silence",
@@ -1600,7 +1612,7 @@ export function createMobile() {
         shortDescr: "un nuovo mob",
         longDescr: "Un nuovo mob sta vagando smarrito.",
         descr: "Un mob si guarda intorno smarrito, privo di identita'.",
-        actFlags: 0,
+        actFlags: ACT_IS_NPC,
         affFlags: 0,
         align: 0,
         level: 1,
@@ -1643,7 +1655,7 @@ export function createObject(type = ITEM_LIGHT) {
         VNum: 0,
         keywords: "nuovo oggetto",
         shortDescr: "un nuovo oggetto",
-        longDescr: "Qui c'e' un nuovo oggetto.",
+        longDescr: "Un nuovo oggetto e' qui per terra.",
         action: "",
         type: type,
         extraFlags: 0,

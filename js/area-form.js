@@ -101,17 +101,17 @@ export function renderAreaForm(area, onChange, options = {}) {
                 ${planeName.map(p => `<option value="${p}" ${area.planeName === p ? 'selected' : ''}>${p}</option>`).join('')}
             </select>
             
-            <label>Music File</label>
+            <label>Music File <span class="hint">(optional)</span></label>
             <input type="text" 
                    name="areaMusic" 
                    value="${escapeHtml(area.areaMusic)}" 
                    placeholder="Path to music file"
                    ${readonly ? 'disabled' : ''}>
             
-            <label>Reset Message</label>
+            <label>Reset Message <span class="hint">(optional)</span> </label>
             <textarea name="resetMsg" 
                       rows="3" 
-                      placeholder="Message shown when area resets"
+                      placeholder="Senti il calpestio di piccoli piedi."
                       ${readonly ? 'disabled' : ''}>${escapeHtml(area.resetMsg)}</textarea>
         </div>
         

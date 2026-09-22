@@ -88,7 +88,6 @@ function renderSpecialsList(container) {
     }
     
     html += '</div>';
-    html += '<div class="special-edit-form hidden"></div>';
     
     el.innerHTML = html;
 }
@@ -136,14 +135,16 @@ function showEditForm(container, item) {
         : currentArea.objs.find(o => o.VNum === vnum);
     if (!entity) return;
     
-    const formEl = container.querySelector('.special-edit-form');
-    if (!formEl) return;
+    // Close any other open edit forms
+    container.querySelectorAll('.special-edit-form').forEach(f => f.remove());
     
-    formEl.classList.remove('hidden');
+    // Create form element and insert after the clicked item
+    const formEl = document.createElement('div');
+    formEl.className = 'special-edit-form';
+    item.after(formEl);
     
     const specOpts = (type === 'M' ? mobSpecFuncs : objSpecFuncs)
-        .filter(s => s !== '')
-        .map(s => `<option value="${s}" ${entity.special === s ? 'selected' : ''}>${s}</option>`)
+        .map(s => `<option value="${s.value}" ${entity.special === s.value ? 'selected' : ''}>${s.label}</option>`)
         .join('');
     
     formEl.innerHTML = `
@@ -167,7 +168,7 @@ function showEditForm(container, item) {
     });
     
     formEl.querySelector('.reset-cancel-btn').addEventListener('click', () => {
-        formEl.classList.add('hidden');
+        formEl.remove();
     });
 }
 
