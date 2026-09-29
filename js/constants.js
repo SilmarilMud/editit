@@ -1233,6 +1233,8 @@ export const roomFlagsName = [
       desc: "Come Save, ma salva solo oggetti non prendibili. Gli oggetti con il flag ITEM_TAKE non vengono salvati. (262144)" },
     { value: ROOM_THEATER, label: "Theater",
       desc: "La stanza è un teatro, inviando tutti i messaggi ad altre stanze configurate in un oggetto ITEM_CAMERA (obbligatorio) presente in questa stanza. (524288)" },
+    { value: ROOM_SEATS, label: "Seats",
+      desc: "Spalti di un teatro/arena, dove vengono ricevuti i messaggi di un oggetto ITEM_CAMERA. I giocatori in questa stanza non subiscono gli effetti di fame e sete. (1048576)" },
 ];
 
 export const sectTypeName = [
